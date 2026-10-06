@@ -1,4 +1,4 @@
-﻿# ==============================================================================
+# ==============================================================================
 # Dockerfile cho Test Runner — Đồ án Kiểm thử Phần mềm (Nhóm 6)
 # Mealie v3.28.0 + Property-Based Testing (Hypothesis)
 #
@@ -16,8 +16,8 @@
 #   docker compose -f docker-compose.test.yml run --rm test-runner pytest tests/ -v --tb=long
 # ==============================================================================
 
-# Dùng Python 3.12-slim; phiên bản gần với Mealie v3.28.0 backend (Python 3.12)
-FROM python:3.12-slim
+# Dùng Python 3.14-slim đồng bộ chính xác với Mealie v3.28.0 (requires-python >=3.14,<3.15)
+FROM python:3.14-slim
 
 LABEL maintainer="2312695-netizen"
 LABEL description="KTPM Nhom6 - PBT Test Runner for Mealie v3.28.0"

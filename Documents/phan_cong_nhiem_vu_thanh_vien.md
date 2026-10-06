@@ -199,7 +199,7 @@
 - [x] N4.1.2 Xác định Invariant: Khi phân số dạng chuỗi (ví dụ `"1/2"`, `"3/4"`, hỗn số `"2 1/2"`) được bóc tách sang số thực, giá trị toán học phải được bảo toàn chính xác trong sai số $\epsilon \le 10^{-4}$.
 
 ### N4.2 — Viết mã kiểm thử tự động PBT Property 5
-- [x] N4.2.1 Tạo nhánh `feat/nam-property-5-fraction` từ `develop`.
+- [x] N4.2.1 Tạo nhánh riêng `2312695-NguyenPhamPhuNam-N4-Property5` (và nhánh lưu trữ `feat/nam-property-5-fraction`) từ `develop`.
 - [x] N4.2.2 Tạo file `tests/unit_tests/test_pbt_fraction.py`.
 - [x] N4.2.3 Viết kiểm thử bảo toàn giá trị toán học cho phân số:
   ```python
@@ -220,7 +220,7 @@
       assert abs(parsed_val - expected_val) < 1e-6
   ```
 - [x] N4.2.4 Đóng gói container chạy test độc lập: Tạo file `docker-compose.test.yml` để chạy toàn bộ suite test bên trong Docker.
-- [x] N4.2.5 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_fraction.py -v` — **23 passed, 0 failed** (1.09s, Python 3.14.7, profile dev).
+- [x] N4.2.5 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_fraction.py -v` — **23 passed, 0 failed** trên cả host (Python 3.14.7, 0.79s) và Docker container độc lập (`ktpm_nhom6_test_runner`, Linux Python 3.14.8, exit code 0, 1.61s).
 - [ ] N4.2.6 Commit & tạo Pull Request vào `develop`: `feat(test): add PBT Property 5 fraction normalization and docker runner`.
 
 ---
