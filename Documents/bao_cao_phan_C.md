@@ -9,16 +9,16 @@
 
 ## C.1 — Yêu cầu môi trường
 
-### Hệ điều hành đã kiểm chứng
+### Hệ điều hành và môi trường máy thật đã kiểm chứng
 
-| Thành phần | Phiên bản đã thử | Ghi chú |
+| Thành phần | Phiên bản máy thật đã kiểm chứng | Ghi chú kỹ thuật |
 |---|---|---|
-| Windows | 11 (Build 22H2 trở lên) | Môi trường chính đã kiểm chứng |
-| Docker Desktop for Windows | 4.28.0+ | Cần WSL 2 backend hoặc Hyper-V |
-| Docker Engine | 26.0+ | Đi kèm Docker Desktop |
-| Docker Compose | v2 (plugin) | Đi kèm Docker Desktop |
-| Git | 2.40+ | Để clone repo và quản lý nhánh |
-| Python | 3.14 (môi trường Mealie gốc); tương thích 3.11+ cho script | Mealie v3.28.0 yêu cầu Python 3.14 (`>=3.14,<3.15`, image `python:3.14-slim`). Đã kiểm chứng thực tế với Python 3.14.7 trên host. Khuyến nghị chuẩn hóa dùng Python 3.14 |
+| Hệ điều hành | Windows 11 Home Single Language (Build 26300) | Môi trường máy trạm thực tế của thành viên |
+| Docker Engine | 29.7.2 (Client & Server) | Đi kèm Docker Desktop 29.7.2 (WSL 2 backend) |
+| Docker Compose | v5.5.1 | Docker Compose v2 plugin |
+| Git | 2.55.0.windows.3 | Quản lý mã nguồn và nhánh GitHub |
+| Python (Host) | Python 3.14.7 | Môi trường ảo `.venv` chạy script seed & test trên host |
+| Python (Container) | Python 3.14.8 (`python:3.14-slim`) | Base image chuẩn của Mealie v3.28.0 và Test Runner |
 
 > **Lưu ý Linux:** Nếu dùng Linux, thay `host.docker.internal` trong `HTTP_ALLOW_LIST` bằng địa chỉ IP cầu nội bộ Docker (`172.17.0.1` hoặc output của `ip route | grep default | awk '{print $3}'`). Cấu hình này chưa được kiểm chứng trong dự án.
 
@@ -71,7 +71,7 @@ git checkout feat/nam-property-5-fraction
 ### Bước 2: Tạo file `.env` từ mẫu
 
 ```powershell
-# Chuyển vào thư mục mealie_docker
+# Từ thư mục gốc repo, chuyển vào thư mục mealie_docker
 cd mealie_docker
 
 # Sao chép mẫu cấu hình
@@ -94,11 +94,11 @@ HTTP_ALLOW_LIST=host.docker.internal
 ### Bước 3: Khởi động Mealie bằng Docker Compose
 
 ```powershell
-# Phải đứng trong thư mục mealie_docker/
-cd mealie_docker
-
-# Kéo image và khởi động container
+# Tiếp tục thực thi trong thư mục mealie_docker/ (đã cd từ Bước 2, không cd lần hai)
+# Khởi động container ở chế độ nền
 docker compose up -d
+
+# (Lưu ý: Chỉ chạy 'cd mealie_docker' nếu đang mở một terminal mới tại thư mục gốc repo)
 
 # Kiểm tra container đang chạy
 docker compose ps
@@ -291,15 +291,13 @@ Seed data completed successfully!
 
 ### Kiểm tra kết quả seed
 
-**Tài khoản người dùng thường — tạo từ Admin:**
+**Tài khoản người dùng thường (đã chuẩn bị ở N2.1.1):**
 
-1. Đăng nhập Admin → **Admin Panel** → **Manage Users** → **Create User**
-2. Điền Email: `test@nhom6.test`, Password: `User123@`, Role: User
-3. Nhấn **Save**
+Tài khoản `test@nhom6.test` / `User123@` đã được khởi tạo trong bước chuẩn bị N2.1.1 qua **Admin Panel** (`/admin/manage/users`). Script `seed_data.py` tập trung tự động hóa nạp công thức và thực đơn, không can thiệp hay tạo trùng tài khoản người dùng để đảm bảo tính an toàn dữ liệu.
 
-**10 công thức NAM-01 đến NAM-10:**
+**10 công thức NAM-01 đến NAM-10 (do seed script nạp):**
 
-Vào **Recipes** → kiểm tra 10 công thức có tiền tố `[NAM-` trong tên.
+Vào **Recipes** → kiểm tra danh sách 10 công thức có tiền tố `[NAM-01]` đến `[NAM-10]` đã được nạp tự động thành công.
 
 **Thực đơn 7 ngày:**
 
