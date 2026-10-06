@@ -30,7 +30,7 @@
 - [x] Q1.1.1 Tạo repository trên GitHub: `https://github.com/2312726-collab/KTPM-nhom6-R02-K01.git`.
 - [x] Q1.1.2 Thiết lập file `README.md` ban đầu: Thông tin nhóm, đề tài Mealie + Hypothesis, bảng phân vai 5 thành viên.
 - [x] Q1.1.3 Tạo file `.gitignore` chặn các thư mục môi trường và file tạm (`.venv`, `__pycache__`, `mealie-data`, `logs/`).
-- [ ] Q1.1.4 Mời 4 thành viên vào repo (Settings → Collaborators → Add people) và xác nhận cả 4 bạn đã Accept.
+- [x] Q1.1.4 Mời 4 thành viên vào repo (Settings → Collaborators → Add people) và xác nhận cả 4 bạn đã Accept.
 
 ### Q1.2 — Thiết lập quy tắc nhánh & Quy chuẩn phối hợp
 - [x] Q1.2.1 Tạo nhánh `develop` từ `main` và đẩy cả 2 nhánh lên GitHub.
