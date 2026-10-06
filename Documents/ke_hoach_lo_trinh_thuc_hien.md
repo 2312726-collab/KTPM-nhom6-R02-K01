@@ -146,7 +146,8 @@ gantt
 | **Viết Script Automation Property 1 (Idempotence)** | Sprint 4 (F) | C | I | C | **A / R** | C |
 | **Viết Script Automation Property 2 (Round-trip)** | Sprint 4 (F) | C | I | **A / R** | C | C |
 | **Viết Script Automation Property 3 (Crash-free)** | Sprint 4 (F) | C | I | C | C | **A / R** |
-| **Viết Script Automation Property 4 & Docker Test** | Sprint 4 (F) | C | **A / R** | C | C | C |
+| **Viết Script Automation Property 4 (Scaling)** | Sprint 4 (F) | **A / R** | I | C | C | C |
+| **Viết Script Automation Property 5 & Docker Test** | Sprint 4 (F) | C | **A / R** | C | C | C |
 | **Xây dựng Test Harness & Hướng dẫn (README)** | Sprint 4 (F, H) | A | C | I | **A / R** | R |
 | **Chạy test, Log/Metrics & Đo Coverage** | Sprint 5 (G) | A | I | C | R | **A / R** |
 | **Phân tích lỗi (Root Cause Analysis - RCA)** | Sprint 5 (G) | C | I | C | C | **A / R** |

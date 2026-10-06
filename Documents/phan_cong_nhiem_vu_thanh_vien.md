@@ -1,6 +1,7 @@
 # BẢNG PHÂN CÔNG NHIỆM VỤ NGUYÊN TỬ — NHÓM 6
 **Đề tài:** Mealie (R02) + Property-Based Testing với Hypothesis (K01)  
-**Môn:** Kiểm thử phần mềm | **GVHD:** Nguyễn Thế Lâm
+**Môn:** Kiểm thử phần mềm | **GVHD:** Nguyễn Thế Lâm  
+**Kho lưu trữ GitHub:** [https://github.com/2312726-collab/KTPM-nhom6-K02-R01](https://github.com/2312726-collab/KTPM-nhom6-K02-R01)
 
 ---
 
@@ -8,235 +9,85 @@
 > - Mỗi ô checkbox `[ ]` = 1 bước công việc độc lập, kiểm tra được ngay.
 > - Mỗi nhóm bước lớn = 1 `git commit` riêng biệt.
 > - Commit message chuẩn: `feat(test):`, `docs:`, `chore:`, `fix(test):`, `test:`.
-> - **Nguyên tắc phân công:** Khối lượng và độ phức tạp kỹ thuật được chia đều cho 4 thành viên (Nam, Hiếu, Phước, Mạnh) ở cả 2 giai đoạn (Giữa kỳ và Cuối kỳ); công việc quản trị, kiến trúc và điều phối của Trưởng nhóm Quân giữ nguyên vẹn.
+> - **Nguyên tắc phân công cân bằng 5 thành viên:**
+>   - **Trưởng nhóm Trần Quốc Quân** giữ vai trò kiến trúc sư chủ chốt: khởi tạo dự án ban đầu, định hình kiến trúc (Phần A, B), trực tiếp lập trình mã kiểm thử PBT (Property 4) và đóng gói nghiệm thu cuối kỳ (Phần H, Slide).
+>   - **Cả 5 thành viên** đều có trách nhiệm rõ ràng ở cả 2 giai đoạn (Giữa kỳ và Cuối kỳ), mỗi người chủ biên 1 phần báo cáo lớn và trực tiếp tự tay lập trình đúng 1 kịch bản kiểm thử PBT độc lập (đảm bảo 100% thành viên đều có commit code test trên Git).
 
 ---
 ---
 
 # 👤 THÀNH VIÊN 1: TRẦN QUỐC QUÂN
-> **Vai trò:** Trưởng nhóm — Quản trị dự án, Phân tích kiến trúc, Tổng hợp báo cáo  
-> **Báo cáo phụ trách chính:** Phần A, Phần B, Phần H + Điều phối toàn bộ
+> **Vai trò:** Trưởng nhóm — Quản trị dự án, Kiến trúc sư hệ thống & Lập trình kiểm thử Property 4  
+> **Báo cáo phụ trách chính:** Phần A, Phần B, Phần H + Slide thuyết trình  
+> **Kịch bản Code PBT trực tiếp:** **Property 4 (Servings Scaling Monotonicity & Reversibility)** trong `tests/unit_tests/test_pbt_scaling.py`
 
 ---
 
-## ✅ NHÓM VIỆC Q1: KHỞI ĐỘNG DỰ ÁN & THIẾT LẬP GIT
-**Deadline: 30/9**
+## ✅ NHÓM VIỆC Q1: KHỞI TẠO NỀN TẢNG DỰ ÁN & THIẾT LẬP GIT
+**Deadline: 30/9** *(Đã hoàn thành)*
 
-### Q1.1 — Tạo kho chứa Git của nhóm
-- [x] Q1.1.1 Tạo repository mới trên GitHub: `https://github.com/2312726-collab/KTPM-nhom6-K02-R01.git`.
-- [x] Q1.1.2 Thêm file `README.md` ban đầu: Tên nhóm, đề tài, danh sách 5 thành viên, link repo Mealie.
-- [ ] Q1.1.3 Mời 4 thành viên còn lại vào repo (Settings → Collaborators → Add people).
-- [ ] Q1.1.4 Xác nhận cả 5 thành viên đã Accept lời mời và thấy repo trên tài khoản GitHub của mình.
+### Q1.1 — Khởi tạo kho lưu trữ GitHub của nhóm
+- [x] Q1.1.1 Tạo repository trên GitHub: `https://github.com/2312726-collab/KTPM-nhom6-K02-R01.git`.
+- [x] Q1.1.2 Thiết lập file `README.md` ban đầu: Thông tin nhóm, đề tài Mealie + Hypothesis, bảng phân vai 5 thành viên.
+- [x] Q1.1.3 Tạo file `.gitignore` chặn các thư mục môi trường và file tạm (`.venv`, `__pycache__`, `mealie-data`, `logs/`).
+- [ ] Q1.1.4 Mời 4 thành viên vào repo (Settings → Collaborators → Add people) và xác nhận cả 4 bạn đã Accept.
 
-### Q1.2 — Thiết lập quy tắc nhánh Git
-- [x] Q1.2.1 Tạo nhánh `develop` từ `main` và đẩy lên GitHub:
-  ```bash
-  git checkout -b develop
-  git push -u origin develop
-  ```
-- [ ] Q1.2.2 Bảo vệ nhánh `main`: Settings → Branches → Add Rule → chọn `main` → tick *"Require pull request before merging"*.
-- [x] Q1.2.3 Tạo file `.github/COMMIT_CONVENTION.md` với nội dung quy ước commit:
-  - `docs: ...` — Thêm/sửa tài liệu
-  - `feat(test): ...` — Thêm kịch bản kiểm thử mới
-  - `fix(test): ...` — Sửa lỗi trong mã kiểm thử
-  - `chore: ...` — Cấu hình, setup môi trường
-  - `test: ...` — Chạy test, thu thập log/artifacts
-- [x] Q1.2.4 Commit & push: `docs: add commit convention`.
-- [ ] Q1.2.5 Gửi link repo cho cả nhóm qua chat: `https://github.com/2312726-collab/KTPM-nhom6-K02-R01`.
+### Q1.2 — Thiết lập quy tắc nhánh & Quy chuẩn phối hợp
+- [x] Q1.2.1 Tạo nhánh `develop` từ `main` và đẩy cả 2 nhánh lên GitHub.
+- [ ] Q1.2.2 Cấu hình bảo vệ nhánh `main`: Settings → Branches → Add classic branch protection rule → tick *"Require a pull request before merging"*.
+- [x] Q1.2.3 Tạo file `.github/COMMIT_CONVENTION.md` quy định chuẩn Conventional Commits cho cả nhóm (`docs:`, `feat(test):`, `chore:`, `fix(test):`, `test:`).
+- [ ] Q1.2.4 Phổ biến quy trình làm việc 4 bước (tạo nhánh `feat/*` từ `develop`, commit, push, tạo PR) cho các thành viên.
 
 ### Q1.3 — Cố định phiên bản Mealie (Pin Version)
-- [x] Q1.3.1 Tạo file `Documents/mealie_version.md` ghi lại:
-  - Repository: `https://github.com/mealie-recipes/mealie`
-  - Release Tag: **`v3.28.0`**
-  - Commit SHA: `0552eaa4a80031b8572849cca0ed95d07f1be001`
-  - Ngày chốt phiên bản: 06/10/2026
-- [x] Q1.3.2 Kiểm tra tag còn tồn tại: mở `https://github.com/mealie-recipes/mealie/tree/v3.28.0`.
-- [x] Q1.3.3 Commit: `docs: pin mealie version v3.28.0`.
+- [x] Q1.3.1 Tạo file `Documents/mealie_version.md` ghim cố định: Release Tag **`v3.28.0`** và Commit SHA **`0552eaa4a80031b8572849cca0ed95d07f1be001`**.
+- [x] Q1.3.2 Xác minh tag tồn tại trên repo chính thức của Mealie.
+- [x] Q1.3.3 Tạo initial commit đứng tên tác giả Trưởng nhóm trên nhánh `main` và `develop`.
 
-### Q1.4 — Thiết lập bảng quản lý công việc
-- [ ] Q1.4.1 Tạo GitHub Project Board: Projects → New Project → Board view.
-- [ ] Q1.4.2 Tạo 4 cột: **Todo | In Progress | Review | Done**.
-- [ ] Q1.4.3 Tạo Issues tương ứng với các nhóm việc (Q1→Q3, N1→N5, H1→H4, P1→P4, M1→M4).
-- [ ] Q1.4.4 Assign đúng Issue cho đúng thành viên phụ trách.
-- [ ] Q1.4.5 Họp nhóm online 15 phút mỗi thứ Hai để cập nhật tiến độ thẻ.
+### Q1.4 — Thiết lập bảng Kanban theo dõi tiến độ
+- [ ] Q1.4.1 Tạo GitHub Projects Board (Board view: Todo | In Progress | Review | Done).
+- [ ] Q1.4.2 Tạo các Issues tương ứng cho 5 thành viên (Q1→Q4, N1→N4, H1→H4, P1→P4, M1→M4) và gán assignee.
+- [ ] Q1.4.3 Điều phối cuộc họp nhóm ngắn 15 phút đầu tuần để kiểm tra tiến độ thẻ.
 
 ---
 
-## ✅ NHÓM VIỆC Q2: PHÂN TÍCH KIẾN TRÚC HỆ THỐNG MEALIE
+## ✅ NHÓM VIỆC Q2: PHÂN TÍCH KIẾN TRÚC HỆ THỐNG MEALIE (PHẦN A & B)
 **Deadline: 18/10** | Đầu ra: `Documents/bao_cao_phan_A.md` + `Documents/bao_cao_phan_B.md`
 
-### Q2.1 — Clone mã nguồn và đọc cấu trúc thư mục
-- [ ] Q2.1.1 Clone Mealie đúng tag về máy cá nhân:
+### Q2.1 — Khảo sát cấu trúc mã nguồn Mealie
+- [ ] Q2.1.1 Clone Mealie đúng tag `v3.28.0` về máy cá nhân:
   ```bash
   git clone --branch v3.28.0 --depth 1 https://github.com/mealie-recipes/mealie.git mealie_src
   ```
-- [ ] Q2.1.2 Mở `mealie_src/` bằng VS Code, đọc qua toàn bộ thư mục gốc.
-- [ ] Q2.1.3 Đọc `mealie/app.py` và `mealie/main.py` để hiểu điểm khởi động ứng dụng.
-- [ ] Q2.1.4 Đọc `mealie/routes/` để liệt kê các nhóm API endpoint chính.
-- [ ] Q2.1.5 Đọc `pyproject.toml` để liệt kê các dependency quan trọng (FastAPI, SQLAlchemy, Pydantic...).
+- [ ] Q2.1.2 Đọc các file cấu trúc chính: `mealie/app.py`, `mealie/main.py`, `mealie/routes/`, `pyproject.toml`.
 
-### Q2.2 — Soạn thảo Phần A: Mô tả hệ thống
-- [ ] Q2.2.1 Tạo file `Documents/bao_cao_phan_A.md`.
-- [ ] Q2.2.2 Viết mô tả mục tiêu hệ thống Mealie (3–5 câu).
-- [ ] Q2.2.3 Liệt kê 2 Actor: **Home User** (xem công thức, lập thực đơn) và **Admin** (quản lý người dùng, cài đặt).
-- [ ] Q2.2.4 Liệt kê 5 Use Case chính:
-  1. Thêm/import công thức nấu ăn.
-  2. Phân tích chuỗi nguyên liệu (Ingredient Parsing).
-  3. Nhân chia tỉ lệ khẩu phần ăn (Servings Scaling).
-  4. Lập kế hoạch thực đơn (Meal Planning).
-  5. Quy đổi đơn vị đo lường (Unit Conversion).
-- [ ] Q2.2.5 Ghi lại cây thư mục chính của Mealie (tập trung vào `mealie/`, `frontend/`, `tests/`, `docker/`).
-- [ ] Q2.2.6 Commit: `docs: add system description Phan A`.
+### Q2.2 — Soạn thảo Phần A: Mô tả hệ thống (`Documents/bao_cao_phan_A.md`)
+- [ ] Q2.2.1 Viết mục tiêu hệ thống Mealie, các Actor chính (**Home User**, **Admin**) và 5 Use Case cốt lõi.
+- [ ] Q2.2.2 Mô tả cây thư mục tổng thể của Mealie, tập trung vào `mealie/services/parser_services/`.
+- [ ] Q2.2.3 Commit: `docs: add system description Phan A`.
 
-### Q2.3 — Soạn thảo Phần B: Kiến trúc & Luồng dữ liệu
-- [ ] Q2.3.1 Tạo file `Documents/bao_cao_phan_B.md`.
-- [ ] Q2.3.2 Vẽ **sơ đồ kiến trúc tổng thể** (dùng draw.io hoặc Mermaid): `Browser → Frontend Vue → FastAPI Backend → SQLite/PostgreSQL`. Xuất ảnh lưu `Documents/assets/kien_truc_container.png`.
-- [ ] Q2.3.3 Vẽ **Data Flow của nghiệp vụ Ingredient Parsing**:
-  ```
-  [User nhập chuỗi] → [API /parse] → [IngredientParserService]
-  → [parser_utils: string_utils, unit_utils] → [Kết quả JSON]
-  ```
-- [ ] Q2.3.4 Vẽ **Data Flow của nghiệp vụ Servings Scaling**.
-- [ ] Q2.3.5 Vẽ **Data Flow của nghiệp vụ Meal Planning**.
-- [ ] Q2.3.6 Phân tích mô tả 3 module trọng tâm (mỗi module ~150 chữ):
-  - `mealie/services/parser_services/ingredient_parser.py`
-  - `mealie/services/parser_services/parser_utils/string_utils.py`
-  - `mealie/services/parser_services/parser_utils/unit_utils.py`
-- [ ] Q2.3.7 Chèn tất cả sơ đồ + mô tả vào `bao_cao_phan_B.md`.
-- [ ] Q2.3.8 Commit: `docs: add architecture diagrams Phan B`.
+### Q2.3 — Soạn thảo Phần B: Kiến trúc & Luồng dữ liệu (`Documents/bao_cao_phan_B.md`)
+- [ ] Q2.3.1 Vẽ sơ đồ kiến trúc tổng thể C4 Container (`Browser → Vue Frontend → FastAPI Backend → SQLite`) lưu ảnh vào `Documents/assets/kien_truc_container.png`.
+- [ ] Q2.3.2 Vẽ Data Flow 1: Nghiệp vụ bóc tách nguyên liệu (Ingredient Parsing).
+- [ ] Q2.3.3 Vẽ Data Flow 2: Nghiệp vụ nhân chia tỉ lệ khẩu phần ăn (Servings Scaling).
+- [ ] Q2.3.4 Vẽ Data Flow 3: Nghiệp vụ lên lịch thực đơn (Meal Planning).
+- [ ] Q2.3.5 Phân tích chi tiết 3 module trọng tâm liên quan trực tiếp đến kiểm thử: `ingredient_parser.py`, `string_utils.py`, `unit_utils.py`.
+- [ ] Q2.3.6 Commit: `docs: add architecture diagrams and data flows Phan B`.
 
 ---
 
-## ✅ NHÓM VIỆC Q3: TỔNG HỢP BÁO CÁO & SLIDE
-**Deadline: 19/10 (Giữa kỳ)** | **12/12 (Cuối kỳ)**
+## ✅ NHÓM VIỆC Q3: LẬP TRÌNH KIỂM THỬ PBT — PROPERTY 4 (SERVINGS SCALING)
+**Deadline: 25/11** | File code: `tests/unit_tests/test_pbt_scaling.py`
 
-### Q3.1 — Báo cáo Giữa kỳ (20/10)
-- [ ] Q3.1.1 Thu nhận `bao_cao_phan_C.md` từ **Nam** (hạn 18/10).
-- [ ] Q3.1.2 Thu nhận đề cương kế hoạch kiểm thử từ **Hiếu** (hạn 18/10).
-- [ ] Q3.1.3 Gộp thành 1 file `Documents/bao_cao_giua_ky.md`.
-- [ ] Q3.1.4 Soạn Slide giữa kỳ (tối thiểu 12 slide): Bìa, Mục tiêu hệ thống, Kiến trúc, Data Flow, Demo hệ thống chạy, On-boarding tóm tắt, Kế hoạch PBT, Phân công nhóm, Timeline.
+### Q3.1 — Nghiên cứu thuật toán Scaling trong Mealie
+- [ ] Q3.1.1 Đọc hàm scale khẩu phần trong `mealie/services/recipe/recipe_service.py` và schema `mealie/schema/recipe/recipe_ingredient.py`.
+- [ ] Q3.1.2 Xác định Invariant toán học:
+  - *Tính đơn điệu (Monotonicity):* Với số lượng $Q > 0$, nếu tỉ lệ $k > 1$ thì $Q \times k > Q$; nếu $k < 1$ thì $Q \times k < Q$.
+  - *Tính bảo toàn nghịch đảo (Reversibility):* $(Q \times k) / k \approx Q$ với sai số dấu phẩy động $\epsilon \le 10^{-4}$.
 
-### Q3.2 — Báo cáo Cuối kỳ & Phần H (Tháng 12)
-- [ ] Q3.2.1 Thu nhận toàn bộ Phần D, E từ **Hiếu** (hạn 10/11).
-- [ ] Q3.2.2 Thu nhận Phần F từ **Phước** (hạn 30/11).
-- [ ] Q3.2.3 Thu nhận Phần G từ **Mạnh** (hạn 10/12).
-- [ ] Q3.2.4 Biên tập cuốn báo cáo cuối kỳ đầy đủ 8 phần A→H.
-- [ ] Q3.2.5 Viết Phần H: Ghi lại Commit SHA của repo nhóm, tag `v1.0-final`, hướng dẫn người khác tái lập test từ đầu.
-- [ ] Q3.2.6 Tạo Git Tag: `git tag v1.0-final && git push origin v1.0-final`.
-- [ ] Q3.2.7 Soạn Slide cuối kỳ + điều phối buổi bảo vệ (phân vai thuyết trình cho từng thành viên).
-
----
----
-
-# 👤 THÀNH VIÊN 2: NGUYỄN PHẠM PHÚ NAM
-> **Vai trò:** DevOps & System On-boarding Specialist  
-> **Báo cáo phụ trách chính:** Phần C (Tài liệu On-boarding & Bằng chứng hệ thống) + Mã kiểm thử Property 4 + Dockerized Test Runner
-
----
-
-## ✅ NHÓM VIỆC N1: THIẾT LẬP MÔI TRƯỜNG CHẠY MEALIE (DOCKER COMPOSE)
-**Deadline: 15/10**
-
-### N1.1 — Cài đặt và xác minh Docker Desktop
-- [ ] N1.1.1 Tải và cài đặt Docker Desktop từ [https://www.docker.com/products/docker-desktop/](https://www.docker.com/products/docker-desktop/).
-- [ ] N1.1.2 Mở terminal kiểm tra: `docker --version` (yêu cầu Docker version 24.x trở lên).
-- [ ] N1.1.3 Chạy container kiểm tra: `docker run hello-world` → in ra `Hello from Docker!`.
-
-### N1.2 — Dựng Mealie bằng Docker Compose
-- [ ] N1.2.1 Tạo thư mục `mealie_docker/` trong repo nhóm.
-- [ ] N1.2.2 Tạo file `mealie_docker/docker-compose.yml` (bản SQLite chính thức của Mealie):
-  ```yaml
-  version: "3.8"
-  services:
-    mealie:
-      image: ghcr.io/mealie-recipes/mealie:v3.28.0
-      container_name: mealie_service
-      restart: always
-      ports:
-        - "9925:9000"
-      deploy:
-        resources:
-          limits:
-            memory: 1000M
-      volumes:
-        - mealie-data:/app/data/
-      environment:
-        - ALLOW_SIGNUP=true
-        - PUID=1000
-        - PGID=1000
-        - TZ=Asia/Ho_Chi_Minh
-        - BASE_URL=http://localhost:9925
-  volumes:
-    mealie-data:
-  ```
-- [ ] N1.2.3 Tạo file `mealie_docker/.env` lưu biến cấu hình chuẩn.
-- [ ] N1.2.4 Thêm `mealie-data/` vào `.gitignore`.
-- [ ] N1.2.5 Khởi chạy dịch vụ: `docker-compose up -d`.
-- [ ] N1.2.6 Kiểm tra log container: `docker-compose logs -f mealie` để đảm bảo FastAPI khởi động không lỗi.
-- [ ] N1.2.7 Mở trình duyệt truy cập `http://localhost:9925`. Chụp ảnh màn hình Landing page → lưu `Documents/assets/01_mealie_landing.png`.
-
-### N1.3 — Đăng ký tài khoản Admin và xác nhận Dashboard
-- [ ] N1.3.1 Đăng ký tài khoản Admin đầu tiên: Email `admin@nhom6.test`, Password `Admin123@`.
-- [ ] N1.3.2 Đăng nhập vào Dashboard quản trị thành công. Chụp ảnh màn hình Dashboard → lưu `Documents/assets/02_mealie_dashboard.png`.
-- [ ] N1.3.3 Commit: `chore: setup docker-compose environment and initial admin credentials`.
-
----
-
-## ✅ NHÓM VIỆC N2: CHUẨN BỊ SEED DATA & THỰC THI 3 LUỒNG NGHIỆP VỤ
-**Deadline: 17/10**
-
-### N2.1 — Tạo tài khoản kiểm thử và nạp dữ liệu mẫu
-- [ ] N2.1.1 Tạo tài khoản người dùng kiểm thử thông thường: Settings → Manage Users → Add User (Email: `test@nhom6.test`, Password: `User123@`).
-- [ ] N2.1.2 Tạo 10 công thức mẫu (Recipes) có độ phức tạp tăng dần:
-  - Công thức 1–2: Nguyên liệu đơn giản (`2 cups flour`, `3 eggs`).
-  - Công thức 3–4: Phân số thông thường (`1/2 tsp salt`, `2/3 cup sugar`).
-  - Công thức 5–6: Phân số unicode đặc thù (`½ cup milk`, `¼ tsp pepper`, `¾ cup water`).
-  - Công thức 7–8: Nguyên liệu kèm ghi chú trong ngoặc đơn (`2 cups flour (sifted)`, `1 egg (beaten)`).
-  - Công thức 9–10: Công thức phức tạp nhiều bước nấu, nhiều đơn vị đo lường đan xen.
-- [ ] N2.1.3 Tạo kế hoạch thực đơn (Meal Plan) cho 7 ngày trong tuần từ 06/10 đến 12/10. Chụp ảnh Meal Plan → lưu `Documents/assets/03_meal_plan.png`.
-
-### N2.2 — Thực thi và thu thập bằng chứng 3 luồng nghiệp vụ cốt lõi
-- [ ] N2.2.1 **Luồng 1 — Import công thức từ URL ngoài:**
-  - Vào Recipes → Add Recipe → Import from URL. Nhập URL công thức chuẩn và thực hiện Import.
-  - Chụp ảnh công thức đã import thành công → lưu `Documents/assets/04_recipe_import.png`.
-- [ ] N2.2.2 **Luồng 2 — Phân tích chuỗi nguyên liệu (Ingredient Parsing):**
-  - Trong Recipe Editor, nhập chuỗi `2 1/2 cups all-purpose flour, sifted` vào mục Ingredients.
-  - Xác nhận Mealie tự động bóc tách thành: Quantity = `2.5`, Unit = `cup`, Food = `all-purpose flour`, Note = `sifted`.
-  - Chụp ảnh kết quả phân tích → lưu `Documents/assets/05_ingredient_parse.png`.
-- [ ] N2.2.3 **Luồng 3 — Nhân chia tỉ lệ khẩu phần ăn (Servings Scaling):**
-  - Mở chi tiết 1 công thức đang có khẩu phần 4 servings. Thay đổi khẩu phần thành 8 servings.
-  - Xác nhận số lượng các nguyên liệu tự động nhân gấp đôi theo đúng tỉ lệ.
-  - Chụp ảnh kết quả nhân tỉ lệ → lưu `Documents/assets/06_servings_scale.png`.
-- [ ] N2.2.4 Commit: `docs: seed test recipes and capture evidence for 3 core business flows`.
-
----
-
-## ✅ NHÓM VIỆC N3: SOẠN THẢO TÀI LIỆU ON-BOARDING (PHẦN C)
-**Deadline: 18/10**
-
-### N3.1 — Soạn thảo `Documents/bao_cao_phan_C.md`
-- [ ] N3.1.1 Tạo file `Documents/bao_cao_phan_C.md` gồm 5 nội dung chuẩn theo quy định:
-  - **Mục C.1: Yêu cầu môi trường tối thiểu** (Hệ điều hành, Docker >= 24.0, Docker Compose >= 2.0, RAM >= 4GB, Dung lượng đĩa >= 5GB).
-  - **Mục C.2: Quy trình cài đặt từng bước** (Clone mã nguồn, cấu hình `.env`, lệnh khởi chạy).
-  - **Mục C.3: Quản lý dịch vụ** (Lệnh bật, dừng, khởi động lại, kiểm tra trạng thái và xem log container).
-  - **Mục C.4: Hướng dẫn nạp Seed Data** (Cách tạo user, nhập 10 công thức mẫu và tạo Meal Plan).
-  - **Mục C.5: Xử lý sự cố thường gặp** (Xung đột cổng 9925, lỗi cấp quyền thư mục volume, lỗi hết bộ nhớ).
-- [ ] N3.1.2 Nhúng toàn bộ 6 ảnh minh chứng (`01_mealie_landing.png` đến `06_servings_scale.png`) vào các mục tương ứng trong báo cáo.
-- [ ] N3.1.3 Bàn giao file cho **Hiếu** để kiểm thử chéo trên máy sạch độc lập. Tiếp nhận ý kiến đóng góp và chỉnh sửa hoàn thiện.
-- [ ] N3.1.4 Commit: `docs: complete onboarding guide Phan C with verified evidence`.
-
----
-
-## ✅ NHÓM VIỆC N4: CODE TEST PBT — PROPERTY 4 (SERVINGS SCALING MONOTONICITY)
-**Deadline: 25/11**
-
-### N4.1 — Nghiên cứu logic Scaling và thiết lập file test
-- [ ] N4.1.1 Đọc logic nhân tỉ lệ khẩu phần trong `mealie/services/recipe/recipe_service.py` và schema `mealie/schema/recipe/recipe_ingredient.py`.
-- [ ] N4.1.2 Xác định quy tắc: Khi scale factor $k > 1$, số lượng nguyên liệu mới $Q_{new} = Q \times k$ phải lớn hơn $Q$; khi $k < 1$, $Q_{new}$ phải nhỏ hơn $Q$; phép nghịch đảo $Q_{new} / k$ phải xấp xỉ bằng $Q$ ban đầu.
-- [ ] N4.1.3 Tạo file `tests/unit_tests/test_pbt_scaling.py`.
-
-### N4.2 — Hiện thực kịch bản kiểm thử Property 4
-- [ ] N4.2.1 Viết kiểm thử tính đơn điệu (Monotonicity) khi scale khẩu phần:
+### Q3.2 — Viết mã kiểm thử tự động PBT Property 4
+- [ ] Q3.2.1 Tạo nhánh `feat/quan-property-4-scaling` từ `develop`.
+- [ ] Q3.2.2 Tạo file `tests/unit_tests/test_pbt_scaling.py`.
+- [ ] Q3.2.3 Viết test tính đơn điệu khi nhân khẩu phần:
   ```python
   from hypothesis import given, strategies as st, assume, settings
 
@@ -247,13 +98,13 @@
   @settings(max_examples=300)
   def test_servings_scaling_monotonicity(qty, scale):
       assume(scale > 0 and qty > 0)
-      scaled_qty = qty * scale
+      scaled = qty * scale
       if scale > 1.0:
-          assert scaled_qty > qty, f"Scale {scale} > 1 nhưng {scaled_qty} <= {qty}"
+          assert scaled > qty, f"Scale {scale} > 1 nhưng {scaled} <= {qty}"
       elif scale < 1.0:
-          assert scaled_qty < qty, f"Scale {scale} < 1 nhưng {scaled_qty} >= {qty}"
+          assert scaled < qty, f"Scale {scale} < 1 nhưng {scaled} >= {qty}"
   ```
-- [ ] N4.2.2 Viết kiểm thử tính bảo toàn nghịch đảo (Reversibility of Scaling):
+- [ ] Q3.2.4 Viết test tính bảo toàn nghịch đảo khi scale:
   ```python
   @given(
       qty=st.floats(min_value=0.01, max_value=1000, allow_nan=False, allow_infinity=False),
@@ -264,79 +115,153 @@
       assume(scale > 0 and qty > 0)
       scaled = qty * scale
       reverted = scaled / scale
-      assert abs(reverted - qty) < 1e-4, f"Sai lệch nghịch đảo: ban đầu={qty}, phục hồi={reverted}"
+      assert abs(reverted - qty) < 1e-4, f"Sai lệch nghịch đảo: gốc={qty}, phục hồi={reverted}"
   ```
-- [ ] N4.2.3 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_scaling.py -v`.
-- [ ] N4.2.4 Ghi nhận phản ví dụ nếu phát hiện sai số làm tròn số thực dấu phẩy động vào `Documents/ket_qua_test.md` và thông báo cho **Mạnh**.
-- [ ] N4.2.5 Commit: `feat(test): add PBT Property 4 scaling monotonicity and reversibility`.
+- [ ] Q3.2.5 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_scaling.py -v`.
+- [ ] Q3.2.6 Commit & tạo Pull Request vào `develop`: `feat(test): add PBT Property 4 servings scaling monotonicity`.
 
 ---
 
-## ✅ NHÓM VIỆC N5: ĐÓNG GÓI DOCKERIZED TEST RUNNER ĐẢM BẢO TÁI LẬP
-**Deadline: 02/12**
+## ✅ NHÓM VIỆC Q4: TỔNG HỢP BÁO CÁO, PHẦN H & SLIDE BẢO VỆ
+**Deadline: 19/10 (Giữa kỳ) | 12/12 (Cuối kỳ)**
 
-### N5.1 — Xây dựng môi trường chạy test biệt lập trong Docker
-- [ ] N5.1.1 Tạo file `docker-compose.test.yml` để chạy toàn bộ suite test Python độc lập trên mọi máy tính mà không cần cài đặt Python thủ công:
-  ```yaml
-  version: "3.8"
-  services:
-    test-runner:
-      image: python:3.11-slim
-      working_dir: /workspace
-      volumes:
-        - .:/workspace
-      command: >
-        sh -c "pip install -e '.[dev]' hypothesis pytest pytest-cov &&
-               pytest tests/unit_tests/test_pbt_*.py -v --tb=short"
+### Q4.1 — Tổng hợp Báo cáo Giữa kỳ (20/10)
+- [ ] Q4.1.1 Thu nhận `bao_cao_phan_C.md` từ **Nam** và Đề cương kiểm thử từ **Hiếu**.
+- [ ] Q4.1.2 Biên tập file `Documents/bao_cao_giua_ky.md`.
+- [ ] Q4.1.3 Soạn Slide báo cáo Giữa kỳ (tối thiểu 12 slides).
+
+### Q4.2 — Tổng hợp Báo cáo Cuối kỳ, Phần H & Điều phối Bảo vệ (Tháng 12)
+- [ ] Q4.2.1 Thu nhận Phần D & E từ **Hiếu**, Phần F từ **Phước**, Phần G từ **Mạnh**.
+- [ ] Q4.2.2 Biên tập cuốn Báo cáo Cuối kỳ hoàn chỉnh 8 phần từ A đến H.
+- [ ] Q4.2.3 Soạn thảo Phần H: Lưu trữ commit SHA, gắn Git Tag `v1.0-final`, hướng dẫn nghiệm thu tái lập.
+- [ ] Q4.2.4 Gắn Git Tag chính thức: `git tag v1.0-final && git push origin v1.0-final`.
+- [ ] Q4.2.5 Soạn Slide bảo vệ cuối kỳ, phân vai thuyết trình và kịch bản demo live script kiểm thử.
+
+---
+---
+
+# 👤 THÀNH VIÊN 2: NGUYỄN PHẠM PHÚ NAM
+> **Vai trò:** DevOps & Automation QA — Môi trường Docker, Seed Data & Lập trình kiểm thử Property 5  
+> **Báo cáo phụ trách chính:** Phần C (Tài liệu On-boarding & Bằng chứng hệ thống) + Dockerized Test Runner  
+> **Kịch bản Code PBT trực tiếp:** **Property 5 (Fraction Normalization & Numeric Preservation)** trong `tests/unit_tests/test_pbt_fraction.py`
+
+---
+
+## ✅ NHÓM VIỆC N1: THIẾT LẬP MÔI TRƯỜNG DOCKER MEALIE
+**Deadline: 15/10**
+
+### N1.1 — Dựng Mealie bằng Docker Compose
+- [ ] N1.1.1 Tạo thư mục `mealie_docker/` trong repo.
+- [ ] N1.1.2 Tạo file `mealie_docker/docker-compose.yml` (phiên bản SQLite chuẩn) và `mealie_docker/.env` mở cổng `9925`.
+- [ ] N1.1.3 Chạy container: `docker-compose up -d`.
+- [ ] N1.1.4 Kiểm tra log: `docker-compose logs -f mealie` xác nhận FastAPI khởi động mượt mà.
+- [ ] N1.1.5 Truy cập `http://localhost:9925`, chụp ảnh Landing Page → lưu `Documents/assets/01_mealie_landing.png`.
+
+### N1.2 — Đăng ký tài khoản Admin & Xác nhận Dashboard
+- [ ] N1.2.1 Đăng ký tài khoản Admin (`admin@nhom6.test` / `Admin123@`).
+- [ ] N1.2.2 Đăng nhập Dashboard thành công, chụp ảnh Dashboard → lưu `Documents/assets/02_mealie_dashboard.png`.
+- [ ] N1.2.3 Commit: `chore: setup docker-compose environment and initial admin credentials`.
+
+---
+
+## ✅ NHÓM VIỆC N2: CHUẨN BỊ SEED DATA & THỰC THI 3 LUỒNG NGHIỆP VỤ
+**Deadline: 17/10**
+
+### N2.1 — Nạp dữ liệu mẫu (Seed Data)
+- [ ] N2.1.1 Tạo tài khoản kiểm thử thường (`test@nhom6.test` / `User123@`).
+- [ ] N2.1.2 Tạo 10 công thức mẫu đa dạng (nguyên liệu đơn giản, phân số thường, phân số unicode `½`, chú thích trong ngoặc, công thức dài nhiều bước).
+- [ ] N2.1.3 Tạo kế hoạch thực đơn (Meal Plan) 7 ngày tuần 06/10–12/10, chụp ảnh → lưu `Documents/assets/03_meal_plan.png`.
+
+### N2.2 — Thu thập bằng chứng 3 luồng nghiệp vụ cốt lõi
+- [ ] N2.2.1 Luồng 1 — Import công thức từ URL: Chụp ảnh công thức đã import → lưu `04_recipe_import.png`.
+- [ ] N2.2.2 Luồng 2 — Phân tích nguyên liệu (Ingredient Parsing): Nhập chuỗi bóc tách Qty, Unit, Food, Note → chụp `05_ingredient_parse.png`.
+- [ ] N2.2.3 Luồng 3 — Nhân tỉ lệ khẩu phần ăn (Servings Scaling): Đổi 4 thành 8 servings, kiểm tra nhân đôi → chụp `06_servings_scale.png`.
+- [ ] N2.2.4 Commit: `docs: seed test recipes and capture evidence for 3 core business flows`.
+
+---
+
+## ✅ NHÓM VIỆC N3: SOẠN THẢO TÀI LIỆU ON-BOARDING (PHẦN C)
+**Deadline: 18/10**
+
+### N3.1 — Soạn thảo `Documents/bao_cao_phan_C.md`
+- [ ] N3.1.1 Soạn thảo đầy đủ 5 mục chuẩn: C.1 Yêu cầu môi trường, C.2 Các bước cài đặt chi tiết, C.3 Quản lý dịch vụ docker, C.4 Hướng dẫn nạp Seed Data, C.5 Xử lý sự cố (xung đột port 9925, cấp quyền thư mục).
+- [ ] N3.1.2 Nhúng toàn bộ 6 ảnh minh chứng vào đúng vị trí trong báo cáo.
+- [ ] N3.1.3 Bàn giao cho **Hiếu** cài đặt thẩm định chéo trên máy sạch, tiếp thu góp ý để hoàn thiện.
+- [ ] N3.1.4 Commit: `docs: complete onboarding guide Phan C with verified evidence`.
+
+---
+
+## ✅ NHÓM VIỆC N4: LẬP TRÌNH KIỂM THỬ PBT — PROPERTY 5 (FRACTION NORMALIZATION)
+**Deadline: 25/11** | File code: `tests/unit_tests/test_pbt_fraction.py`
+
+### N4.1 — Nghiên cứu logic xử lý phân số trong Mealie
+- [ ] N4.1.1 Đọc hàm chuẩn hóa phân số trong `mealie/services/parser_services/parser_utils/string_utils.py`.
+- [ ] N4.1.2 Xác định Invariant: Khi phân số dạng chuỗi (ví dụ `"1/2"`, `"3/4"`, hỗn số `"2 1/2"`) được bóc tách sang số thực, giá trị toán học phải được bảo toàn chính xác trong sai số $\epsilon \le 10^{-4}$.
+
+### N4.2 — Viết mã kiểm thử tự động PBT Property 5
+- [ ] N4.2.1 Tạo nhánh `feat/nam-property-5-fraction` từ `develop`.
+- [ ] N4.2.2 Tạo file `tests/unit_tests/test_pbt_fraction.py`.
+- [ ] N4.2.3 Viết kiểm thử bảo toàn giá trị toán học cho phân số:
+  ```python
+  from hypothesis import given, strategies as st, assume, settings
+  from fractions import Fraction
+  from mealie.services.parser_services.parser_utils.string_utils import convert_vulgar_fractions_to_regular_fractions
+
+  @given(
+      numerator=st.integers(min_value=1, max_value=99),
+      denominator=st.integers(min_value=1, max_value=99)
+  )
+  @settings(max_examples=300)
+  def test_fraction_numeric_preservation(numerator, denominator):
+      assume(denominator != 0)
+      fraction_str = f"{numerator}/{denominator}"
+      expected_val = numerator / denominator
+      parsed_val = float(Fraction(fraction_str))
+      assert abs(parsed_val - expected_val) < 1e-6
   ```
-- [ ] N5.1.2 Chạy thử nghiệm container kiểm thử: `docker compose -f docker-compose.test.yml run --rm test-runner`.
-- [ ] N5.1.3 Xác nhận kết quả test chạy thành công và báo cáo được xuất đúng vào thư mục `logs/` tại máy host.
-- [ ] N5.1.4 Bổ sung phần hướng dẫn chạy test qua Docker vào `tests/README.md` (phối hợp với Phước).
-- [ ] N5.1.5 Commit: `chore: add docker-compose test runner for isolated reproducible testing`.
+- [ ] N4.2.4 Đóng gói container chạy test độc lập: Tạo file `docker-compose.test.yml` để chạy toàn bộ suite test bên trong Docker.
+- [ ] N4.2.5 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_fraction.py -v`.
+- [ ] N4.2.6 Commit & tạo Pull Request vào `develop`: `feat(test): add PBT Property 5 fraction normalization and docker runner`.
 
 ---
 ---
 
 # 👤 THÀNH VIÊN 3: BÙI TRUNG HIẾU
 > **Vai trò:** Test Architect & PBT Methodology Specialist  
-> **Báo cáo phụ trách chính:** Phần D (Cơ sở lý thuyết PBT & Kế hoạch kiểm thử) + Phần E (Thiết kế kịch bản kiểm thử) + Mã kiểm thử Property 2 (Unit Conversion Round-trip)
+> **Báo cáo phụ trách chính:** Phần D (Cơ sở lý thuyết PBT) + Phần E (Thiết kế kịch bản kiểm thử)  
+> **Kịch bản Code PBT trực tiếp:** **Property 2 (Unit Conversion Round-trip)** trong `tests/unit_tests/test_pbt_unit_converter.py`
 
 ---
 
-## ✅ NHÓM VIỆC H1: NGHIÊN CỨU MODULE, ĐỀ CƯƠNG GIỮA KỲ & THẨM ĐỊNH PHẦN C
+## ✅ NHÓM VIỆC H1: KHẢO SÁT MODULE, ĐỀ CƯƠNG GIỮA KỲ & THẨM ĐỊNH PHẦN C
 **Deadline: 18/10**
 
-### H1.1 — Khảo sát module mục tiêu và lập đề cương kiểm thử
-- [ ] H1.1.1 Đọc cấu trúc mã nguồn trong thư mục `mealie/services/parser_services/`.
-- [ ] H1.1.2 Xác định rõ phạm vi kiểm thử: 3 file cốt lõi (`ingredient_parser.py`, `string_utils.py`, `unit_utils.py`).
-- [ ] H1.1.3 Soạn thảo đề cương kế hoạch kiểm thử PBT sơ bộ cho mốc Giữa kỳ (mục tiêu PBT, công cụ Hypothesis, 3 properties dự kiến) bàn giao cho Trưởng nhóm Quân.
+### H1.1 — Khảo sát module mục tiêu & Lập đề cương kiểm thử
+- [ ] H1.1.1 Đọc cấu trúc module `mealie/services/parser_services/`.
+- [ ] H1.1.2 Xác định phạm vi kiểm thử: 3 file cốt lõi (`ingredient_parser.py`, `string_utils.py`, `unit_utils.py`).
+- [ ] H1.1.3 Soạn thảo đề cương kế hoạch kiểm thử PBT sơ bộ nộp Trưởng nhóm Quân đưa vào Báo cáo Giữa kỳ.
 
 ### H1.2 — Thẩm định chéo (Cross-validation) tài liệu On-boarding
-- [ ] H1.2.1 Tiếp nhận file `Documents/bao_cao_phan_C.md` từ **Nam**.
-- [ ] H1.2.2 Thực hiện cài đặt Mealie từ đầu trên máy cá nhân theo đúng từng dòng lệnh trong tài liệu On-boarding.
-- [ ] H1.2.3 Xác nhận thời gian cài đặt, tính chính xác của các cổng mạng và khả năng đăng nhập Dashboard.
-- [ ] H1.2.4 Lập bảng ghi nhận góp ý (lệnh nào thiếu, bước nào cần chú thích thêm) gửi lại Nam cập nhật.
-- [ ] H1.2.5 Commit: `docs: outline midterm PBT test strategy and cross-validate onboarding`.
+- [ ] H1.2.1 Tiếp nhận `bao_cao_phan_C.md` từ **Nam**.
+- [ ] H1.2.2 Cài đặt thử nghiệm Mealie từ đầu trên máy cá nhân theo đúng từng dòng lệnh trong tài liệu.
+- [ ] H1.2.3 Lập biên bản phản hồi (lỗi phát sinh, lệnh còn thiếu) gửi lại Nam cập nhật.
+- [ ] H1.2.4 Commit: `docs: outline midterm PBT test strategy and cross-validate onboarding`.
 
 ---
 
-## ✅ NHÓM VIỆC H2: NGHIÊN CỨU LÝ THUYẾT HYPOTHESIS & SOẠN THẢO PHẦN D
+## ✅ NHÓM VIỆC H2: NGHIÊN CỨU LÝ THUYẾT HYPOTHESIS & SOẠN PHẦN D
 **Deadline: 30/10**
 
-### H2.1 — Nghiên cứu tài liệu chính thức của Hypothesis
-- [ ] H2.1.1 Đọc [Hypothesis Quickstart](https://hypothesis.readthedocs.io/en/latest/quickstart.html): Nắm vững decorator `@given`, các `strategies`, cú pháp `assume()`, và cấu hình `@settings`.
-- [ ] H2.1.2 Đọc [Strategies Reference](https://hypothesis.readthedocs.io/en/latest/data.html): Ghi chép 10 strategies cốt lõi (`st.text`, `st.integers`, `st.floats`, `st.lists`, `st.sampled_from`, `st.composite`,...).
-- [ ] H2.1.3 Đọc [Shrinking Mechanism](https://hypothesis.readthedocs.io/en/latest/details.html#shrinking): Hiểu cách Hypothesis tự động tối giản hóa ca lỗi (counterexample) để báo cáo input ngắn nhất.
+### H2.1 — Nghiên cứu tài liệu chính thức Hypothesis
+- [ ] H2.1.1 Đọc Hypothesis Quickstart & Strategies Reference: `@given`, `strategies`, `assume()`, `@settings`.
+- [ ] H2.1.2 Đọc cơ chế Shrinking: Hiểu cách Hypothesis tự động thu nhỏ phản ví dụ gây lỗi về dạng ngắn nhất.
 
 ### H2.2 — Soạn thảo `Documents/bao_cao_phan_D.md`
-- [ ] H2.2.1 Tạo file `Documents/bao_cao_phan_D.md`.
-- [ ] H2.2.2 Viết **Mục D.1: Bản chất của Property-Based Testing**: So sánh chi tiết EBT vs PBT bằng bảng đối chiếu (nguồn dữ liệu, số lượng ca test, khả năng phát hiện lỗi biên, chi phí viết test).
-- [ ] H2.2.3 Viết **Mục D.2: Cơ chế vận hành của Hypothesis**: Sơ đồ hóa 4 bước (Generate Data → Run Invariant Check → Shrink on Failure → Report Counterexample).
-- [ ] H2.2.4 Viết **Mục D.3: Lý do chọn module `parser_services`**: Xử lý dữ liệu chuỗi phi cấu trúc, độ phức tạp cao, dễ phát sinh lỗi với input bất thường.
-- [ ] H2.2.5 Viết **Mục D.4: Ranh giới phạm vi kiểm thử (Scope Boundary)**: Tập trung vào chuỗi nguyên liệu và quy đổi đơn vị theo triết lý Ponytail.
-- [ ] H2.2.6 Viết **Mục D.5: Giả định kỹ thuật & Điều kiện tiên quyết** (Số lượng thực dương, độ dài chuỗi tối đa 500 ký tự).
-- [ ] H2.2.7 Viết **Mục D.6 & D.7: Tiêu chí nghiệm thu Pass/Fail & Quản lý rủi ro** (Cách khắc phục Flaky test do floating-point, độ trễ sinh chuỗi unicode).
-- [ ] H2.2.8 Commit: `docs: complete theoretical foundation and test methodology Phan D`.
+- [ ] H2.2.1 Viết Mục D.1: Bản chất của PBT và bảng so sánh chi tiết giữa Example-Based Testing và PBT.
+- [ ] H2.2.2 Viết Mục D.2: Sơ đồ hóa 4 bước vận hành của Hypothesis (Generate → Check Invariant → Shrink → Report).
+- [ ] H2.2.3 Viết Mục D.3 & D.4: Lý do chọn `parser_services` và ranh giới kiểm thử theo triết lý Ponytail.
+- [ ] H2.2.4 Viết Mục D.5, D.6 & D.7: Giả định kỹ thuật, tiêu chí Pass/Fail và quản lý rủi ro Flaky test.
+- [ ] H2.2.5 Commit: `docs: complete theoretical foundation and test methodology Phan D`.
 
 ---
 
@@ -344,41 +269,27 @@
 **Deadline: 10/11**
 
 ### H3.1 — Soạn thảo `Documents/bao_cao_phan_E.md`
-- [ ] H3.1.1 Tạo file `Documents/bao_cao_phan_E.md`.
-- [ ] H3.1.2 Thiết kế bảng đặc tả chuẩn hóa cho **Property 1 — Tính lũy đẳng (Idempotence)**:
-  - Hàm mục tiêu: `remove_footnote_markers(s)` và `move_parens_to_end(s)` trong `string_utils.py`.
-  - Invariant toán học: $f(f(x)) == f(x)$ với mọi chuỗi văn bản $x$.
-  - Hypothesis Strategy: `st.text()`.
-  - Tiêu chí vi phạm: $f(f(x)) \neq f(x)$.
-- [ ] H3.1.3 Thiết kế bảng đặc tả chuẩn hóa cho **Property 2 — Tính bảo toàn hai chiều (Round-trip)**:
-  - Hàm mục tiêu: `UnitConverter.convert(val, from_unit, to_unit)` trong `unit_utils.py`.
-  - Invariant toán học: $\text{convert}(\text{convert}(x, u_1, u_2), u_2, u_1) \approx x$ với sai số $\epsilon \le 10^{-4}$.
-  - Hypothesis Strategy: `st.floats(min_value=0.001, max_value=100000, allow_nan=False)`.
-  - Pre-condition: $x > 0$.
-  - Tiêu chí vi phạm: $|\text{reverted} - x| > 10^{-4}$ hoặc phát sinh Exception.
-- [ ] H3.1.4 Thiết kế bảng đặc tả chuẩn hóa cho **Property 3 — Tính bền bỉ / Bất khả sập (Crash-free Invariant)**:
-  - Hàm mục tiêu: `BruteForceParser.parse_one(text)` trong `ingredient_parser.py`.
-  - Invariant: Không bao giờ quăng ra Unhandled Exception với bất kỳ chuỗi Unicode nào.
-  - Hypothesis Strategy: `st.text(max_size=500)`.
-  - Tiêu chí vi phạm: Xuất hiện unhandled exception (500 Error, AttributeError, Regex error).
-- [ ] H3.1.5 Thiết kế bảng đặc tả chuẩn hóa cho **Property 4 — Tính đơn điệu & Bảo toàn tỉ lệ (Scaling Monotonicity)**:
-  - Hàm mục tiêu: Quy trình tính toán nhân khẩu phần ăn.
-  - Invariant: Tính đơn điệu theo tỉ lệ scale và tính nghịch đảo $(Q \times k) / k \approx Q$.
-- [ ] H3.1.6 Bàn giao tài liệu Phần E cho Phước, Nam và Mạnh làm căn cứ lập trình test.
-- [ ] H3.1.7 Commit: `docs: design standardized PBT test scenarios for all 4 properties Phan E`.
+- [ ] H3.1.1 Thiết kế bảng đặc tả chuẩn hóa cho **Property 1 — Tính lũy đẳng (Idempotence)** (Phước code).
+- [ ] H3.1.2 Thiết kế bảng đặc tả chuẩn hóa cho **Property 2 — Tính bảo toàn hai chiều (Round-trip)** (Hiếu code).
+- [ ] H3.1.3 Thiết kế bảng đặc tả chuẩn hóa cho **Property 3 — Tính bền bỉ / Crash-free** (Mạnh code).
+- [ ] H3.1.4 Thiết kế bảng đặc tả chuẩn hóa cho **Property 4 — Tính đơn điệu khi Scaling** (Quân code).
+- [ ] H3.1.5 Thiết kế bảng đặc tả chuẩn hóa cho **Property 5 — Tính bảo toàn phân số** (Nam code).
+- [ ] H3.1.6 Bàn giao tài liệu Phần E cho cả nhóm làm căn cứ viết code test.
+- [ ] H3.1.7 Commit: `docs: design standardized PBT test scenarios for all 5 properties Phan E`.
 
 ---
 
-## ✅ NHÓM VIỆC H4: CODE TEST PBT — PROPERTY 2 (UNIT CONVERSION ROUND-TRIP)
-**Deadline: 25/11**
+## ✅ NHÓM VIỆC H4: LẬP TRÌNH KIỂM THỬ PBT — PROPERTY 2 (UNIT CONVERSION ROUND-TRIP)
+**Deadline: 25/11** | File code: `tests/unit_tests/test_pbt_unit_converter.py`
 
 ### H4.1 — Nghiên cứu mã nguồn UnitConverter
-- [ ] H4.1.1 Đọc file `mealie/services/parser_services/parser_utils/unit_utils.py`.
-- [ ] H4.1.2 Xác định class `UnitConverter` và danh sách các bảng quy đổi đơn vị (khối lượng, thể tích).
-- [ ] H4.1.3 Tạo file `tests/unit_tests/test_pbt_unit_converter.py`.
+- [ ] H4.1.1 Đọc class `UnitConverter` trong `mealie/services/parser_services/parser_utils/unit_utils.py`.
+- [ ] H4.1.2 Xác định bảng danh mục các đơn vị đo lường (khối lượng: gram, kg; thể tích: ml, liter, tsp, tbsp).
 
-### H4.2 — Hiện thực kịch bản kiểm thử Property 2
-- [ ] H4.2.1 Viết kiểm thử Round-trip cho đơn vị khối lượng (`gram` $\leftrightarrow$ `kilogram`):
+### H4.2 — Viết mã kiểm thử tự động PBT Property 2
+- [ ] H4.2.1 Tạo nhánh `feat/hieu-property-2-converter` từ `develop`.
+- [ ] H4.2.2 Tạo file `tests/unit_tests/test_pbt_unit_converter.py`.
+- [ ] H4.2.3 Viết kiểm thử Round-trip khối lượng (`gram` $\leftrightarrow$ `kilogram`):
   ```python
   from hypothesis import given, strategies as st, assume, settings
   from mealie.services.parser_services.parser_utils.unit_utils import UnitConverter
@@ -393,18 +304,18 @@
       back = converter.convert(kg, "kilogram", "gram")
       assert abs(back - value) < 1e-4, f"Lỗi Round-trip: {value} -> {kg} -> {back}"
   ```
-- [ ] H4.2.2 Viết kiểm thử Round-trip cho các đơn vị thể tích thông dụng (`milliliter` $\leftrightarrow$ `liter`, `teaspoon` $\leftrightarrow$ `tablespoon`).
-- [ ] H4.2.3 Viết kiểm thử xác nhận ngoại lệ có kiểm soát: Quy đổi giữa 2 đơn vị không cùng hệ đo lường (ví dụ `gram` sang `milliliter` khi không khai báo khối lượng riêng) phải ném ngoại lệ rõ ràng, không gây crash bất thường.
-- [ ] H4.2.4 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_unit_converter.py -v`.
-- [ ] H4.2.5 Ghi lại kết quả và phản ví dụ (nếu có lỗi sai số làm tròn số thực) vào `Documents/ket_qua_test.md` cho **Mạnh**.
-- [ ] H4.2.6 Commit: `feat(test): add PBT Property 2 unit conversion round-trip`.
+- [ ] H4.2.4 Viết kiểm thử Round-trip thể tích (`milliliter` $\leftrightarrow$ `liter`, `teaspoon` $\leftrightarrow$ `tablespoon`).
+- [ ] H4.2.5 Viết kiểm thử xác nhận Exception có kiểm soát khi đổi giữa hai đơn vị không tương thích.
+- [ ] H4.2.6 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_unit_converter.py -v`.
+- [ ] H4.2.7 Commit & tạo Pull Request vào `develop`: `feat(test): add PBT Property 2 unit conversion round-trip`.
 
 ---
 ---
 
 # 👤 THÀNH VIÊN 4: TRẦN NGỌC BẢO PHƯỚC
 > **Vai trò:** QA Automation Engineer 1 — Test Harness & String Engine Verification  
-> **Báo cáo phụ trách chính:** Phần F (Bộ kiểm thử tự động, cấu hình Test Harness & Hướng dẫn tái lập) + Mã kiểm thử Property 1 (Idempotence & String Utils)
+> **Báo cáo phụ trách chính:** Phần F (Bộ kiểm thử tự động, cấu hình Test Harness & Hướng dẫn tái lập)  
+> **Kịch bản Code PBT trực tiếp:** **Property 1 (Idempotence & String Utils)** trong `tests/unit_tests/test_pbt_string_utils.py`
 
 ---
 
@@ -412,61 +323,36 @@
 **Deadline: 18/10**
 
 ### P1.1 — Phân tích mã nguồn bộ tiền xử lý chuỗi
-- [ ] P1.1.1 Đọc kỹ file `mealie/services/parser_services/parser_utils/string_utils.py`.
-- [ ] P1.1.2 Phân tích hành vi của 3 hàm then chốt: `remove_footnote_markers`, `move_parens_to_end`, `convert_vulgar_fractions_to_regular_fractions`.
-- [ ] P1.1.3 Lập danh sách các ca biên (Edge Cases): Phân số unicode đặc thù (`½`, `¼`, `¾`, `⅓`, `⅔`, `⅛`, `⅜`, `⅝`, `⅞`), chuỗi rỗng, chuỗi chỉ chứa ký tự xuống dòng, chuỗi có ngoặc lồng nhau `(a (b) c)`.
-- [ ] P1.1.4 Hỗ trợ Nam xác thực Luồng 2 (Ingredient Parsing) và Luồng 3 (Servings Scaling) ở Giai đoạn 1 để kiểm tra chuỗi thực tế từ giao diện người dùng.
-- [ ] P1.1.5 Tổng hợp ghi chú phân tích logic chuỗi gửi cho Hiếu đưa vào Đề cương kiểm thử giữa kỳ.
-- [ ] P1.1.6 Commit: `docs: analyze string utils edge cases and parser pre-processing`.
+- [ ] P1.1.1 Đọc file `mealie/services/parser_services/parser_utils/string_utils.py`.
+- [ ] P1.1.2 Phân tích hành vi 3 hàm: `remove_footnote_markers`, `move_parens_to_end`, `convert_vulgar_fractions_to_regular_fractions`.
+- [ ] P1.1.3 Lập danh mục các ca biên (Edge Cases): phân số unicode (`½`, `¼`, `¾...`), chuỗi rỗng, chuỗi chỉ chứa dấu cách, ngoặc lồng nhau.
+- [ ] P1.1.4 Hỗ trợ Nam xác thực Luồng 2 (Ingredient Parsing) và Luồng 3 (Servings Scaling) ở Giai đoạn 1.
+- [ ] P1.1.5 Commit: `docs: analyze string utils edge cases and parser pre-processing`.
 
 ---
 
 ## ✅ NHÓM VIỆC P2: THIẾT LẬP TEST HARNESS & CẤU HÌNH PYTEST / HYPOTHESIS
 **Deadline: 15/11**
 
-### P2.1 — Cấu hình file `pytest.ini`
-- [ ] P2.1.1 Tạo hoặc cập nhật file `pytest.ini` chuẩn xác tại thư mục gốc kiểm thử:
-  ```ini
-  [pytest]
-  addopts = -v --tb=short
-  testpaths = tests
-  filterwarnings =
-      ignore::DeprecationWarning
-  ```
-- [ ] P2.1.2 Xác nhận `pytest` nhận diện đúng cấu hình qua lệnh: `pytest --version`.
-
-### P2.2 — Xây dựng cấu hình Profile Hypothesis trong `tests/conftest.py`
-- [ ] P2.2.1 Tạo file `tests/conftest.py` thiết lập 3 chế độ chạy (Profiles):
-  ```python
-  from hypothesis import settings, Verbosity
-
-  # Profile chạy nhanh trong quá trình phát triển
-  settings.register_profile("dev", max_examples=50, verbosity=Verbosity.normal)
-
-  # Profile chạy tích hợp CI
-  settings.register_profile("ci", max_examples=300, deadline=1000)
-
-  # Profile chạy kiểm thử sâu toàn diện trước khi phát hành
-  settings.register_profile("thorough", max_examples=1000, deadline=2000)
-
-  # Mặc định sử dụng profile dev
-  settings.load_profile("dev")
-  ```
-- [ ] P2.2.2 Cấu hình lưu trữ bộ nhớ đệm ca lỗi của Hypothesis (`.hypothesis/`) và bổ sung `.hypothesis/` vào `.gitignore`.
-- [ ] P2.2.3 Kiểm tra khả năng nhận diện test runner: `pytest tests/ --collect-only` đảm bảo không có lỗi cú pháp hoặc import.
-- [ ] P2.2.4 Commit: `chore: setup pytest harness and hypothesis multi-profile configuration`.
+### P2.1 — Cấu hình file `pytest.ini` & Profiles trong `tests/conftest.py`
+- [ ] P2.1.1 Cấu hình file `pytest.ini` chuẩn xác (`testpaths = tests`, `-v --tb=short`).
+- [ ] P2.1.2 Xây dựng 3 profiles trong `tests/conftest.py`:
+  - Profile `dev`: `max_examples=50` (chạy nhanh khi code).
+  - Profile `ci`: `max_examples=300` (chạy CI).
+  - Profile `thorough`: `max_examples=1000` (chạy sâu kiểm tra sức bền).
+- [ ] P2.1.3 Cấu hình cache `.hypothesis/` và bổ sung vào `.gitignore`.
+- [ ] P2.1.4 Kiểm tra nhận diện test runner: `pytest tests/ --collect-only`.
+- [ ] P2.1.5 Commit: `chore: setup pytest harness and hypothesis multi-profile configuration`.
 
 ---
 
-## ✅ NHÓM VIỆC P3: CODE TEST PBT — PROPERTY 1 (IDEMPOTENCE STRING UTILS)
-**Deadline: 25/11**
+## ✅ NHÓM VIỆC P3: LẬP TRÌNH KIỂM THỬ PBT — PROPERTY 1 (IDEMPOTENCE STRING UTILS)
+**Deadline: 25/11** | File code: `tests/unit_tests/test_pbt_string_utils.py`
 
-### P3.1 — Tạo file và chuẩn bị môi trường test
-- [ ] P3.1.1 Tạo file `tests/unit_tests/test_pbt_string_utils.py`.
-- [ ] P3.1.2 Import các hàm từ `mealie.services.parser_services.parser_utils.string_utils`.
-
-### P3.2 — Hiện thực kịch bản kiểm thử Property 1
-- [ ] P3.2.1 Viết kiểm thử tính lũy đẳng (Idempotence) cho hàm `remove_footnote_markers`:
+### P3.1 — Hiện thực kịch bản kiểm thử Property 1
+- [ ] P3.1.1 Tạo nhánh `feat/phuoc-property-1-stringutils` từ `develop`.
+- [ ] P3.1.2 Tạo file `tests/unit_tests/test_pbt_string_utils.py`.
+- [ ] P3.1.3 Viết test tính lũy đẳng (Idempotence) cho hàm `remove_footnote_markers`:
   ```python
   from hypothesis import given, strategies as st, settings
   from mealie.services.parser_services.parser_utils.string_utils import (
@@ -480,9 +366,9 @@
   def test_remove_footnote_idempotent(s):
       once = remove_footnote_markers(s)
       twice = remove_footnote_markers(once)
-      assert once == twice, f"Vi phạm tính lũy đẳng: input={s!r}, once={once!r}, twice={twice!r}"
+      assert once == twice, f"Vi phạm lũy đẳng: input={s!r}, once={once!r}, twice={twice!r}"
   ```
-- [ ] P3.2.2 Viết kiểm thử tính lũy đẳng cho hàm `move_parens_to_end`:
+- [ ] P3.1.4 Viết test tính lũy đẳng cho hàm `move_parens_to_end`:
   ```python
   @given(st.text())
   @settings(max_examples=300)
@@ -491,28 +377,10 @@
       twice = move_parens_to_end(once)
       assert once == twice, f"Vi phạm di chuyển ngoặc: input={s!r}, once={once!r}, twice={twice!r}"
   ```
-- [ ] P3.2.3 Viết kiểm thử tính bền vững (Crash-free) cho hàm chuyển đổi phân số `convert_vulgar_fractions_to_regular_fractions`:
-  ```python
-  @given(st.text())
-  @settings(max_examples=300)
-  def test_vulgar_fractions_never_crashes(s):
-      result = convert_vulgar_fractions_to_regular_fractions(s)
-      assert isinstance(result, str)
-  ```
-- [ ] P3.2.4 Viết kiểm thử tính triệt để: Xác nhận sau khi chuyển đổi, chuỗi không còn chứa bất kỳ ký tự phân số unicode nào:
-  ```python
-  VULGAR_CHARS = ["½", "¼", "¾", "⅓", "⅔", "⅛", "⅜", "⅝", "⅞"]
-
-  @given(st.text())
-  @settings(max_examples=300)
-  def test_vulgar_chars_removed_completely(s):
-      result = convert_vulgar_fractions_to_regular_fractions(s)
-      for char in VULGAR_CHARS:
-          assert char not in result, f"Ký tự phân số {char!r} vẫn còn sót trong chuỗi: {result!r}"
-  ```
-- [ ] P3.2.5 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_string_utils.py -v`.
-- [ ] P3.2.6 Nếu phát hiện ca lỗi vi phạm (ví dụ regex xử lý ngoặc bị lặp vô hạn hoặc sót phân số), ghi lại counterexample vào `Documents/ket_qua_test.md` và chuyển giao cho **Mạnh**.
-- [ ] P3.2.7 Commit: `feat(test): add PBT Property 1 string utils idempotence and completeness`.
+- [ ] P3.1.5 Viết test tính bền bỉ Crash-free cho `convert_vulgar_fractions_to_regular_fractions` với mọi `st.text()`.
+- [ ] P3.1.6 Viết test xác nhận không còn ký tự phân số unicode (`½, ¼, ¾, ⅓, ⅔...`) sau khi chuyển đổi.
+- [ ] P3.1.7 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_string_utils.py -v`.
+- [ ] P3.1.8 Commit & tạo Pull Request vào `develop`: `feat(test): add PBT Property 1 string utils idempotence and completeness`.
 
 ---
 
@@ -520,27 +388,20 @@
 **Deadline: 30/11**
 
 ### P4.1 — Soạn thảo `Documents/bao_cao_phan_F.md` & `tests/README.md`
-- [ ] P4.1.1 Tạo file `Documents/bao_cao_phan_F.md` và file `tests/README.md`.
-- [ ] P4.1.2 Trình bày cấu trúc tổ chức mã nguồn kiểm thử (giải thích vai trò của từng file trong thư mục `tests/unit_tests/`).
-- [ ] P4.1.3 Cung cấp lệnh thực thi 1-click duy nhất để chạy toàn bộ bộ kiểm thử tự động:
-  ```bash
-  pytest tests/unit_tests/test_pbt_*.py -v
-  ```
-- [ ] P4.1.4 Cung cấp lệnh thực thi tích hợp đo độ bao phủ mã nguồn (Code Coverage):
-  ```bash
-  pytest tests/unit_tests/test_pbt_*.py --cov=mealie/services/parser_services --cov-report=html:logs/coverage_html
-  ```
-- [ ] P4.1.5 Viết hướng dẫn giải thích các chỉ số hiển thị của Hypothesis: PASSED, FAILED, Falsifying example, Shrink trace.
-- [ ] P4.1.6 Nhờ **Nam** hoặc **Hiếu** thực hiện chạy thử toàn bộ test theo hướng dẫn trên môi trường máy sạch để xác nhận tính tái lập (Reproducibility).
-- [ ] P4.1.7 Hoàn thiện Phần F và bàn giao cho Trưởng nhóm Quân.
-- [ ] P4.1.8 Commit: `docs: complete automated test harness documentation Phan F`.
+- [ ] P4.1.1 Trình bày cấu trúc toàn bộ suite test và vai trò của từng file test trong repo.
+- [ ] P4.1.2 Cung cấp lệnh chạy test 1-click duy nhất: `pytest tests/unit_tests/test_pbt_*.py -v`.
+- [ ] P4.1.3 Cung cấp lệnh chạy tích hợp đo độ bao phủ mã nguồn với `pytest-cov`.
+- [ ] P4.1.4 Giải thích định dạng kết quả của Hypothesis (PASSED, Falsifying example, Shrink trace).
+- [ ] P4.1.5 Mời Nam hoặc Hiếu chạy thử nghiệm từ máy sạch để xác nhận tính tái lập (Reproducibility).
+- [ ] P4.1.6 Commit: `docs: complete automated test harness documentation Phan F`.
 
 ---
 ---
 
 # 👤 THÀNH VIÊN 5: VÕ HÙNG MẠNH
 > **Vai trò:** QA Automation Engineer 2 & Defect Analyst  
-> **Báo cáo phụ trách chính:** Phần G (Log thực thi, Đo Code Coverage, Phân tích lỗi Root Cause Analysis - RCA & Đề xuất bản vá) + Mã kiểm thử Property 3 (Crash-free Ingredient Parser)
+> **Báo cáo phụ trách chính:** Phần G (Log thực thi, Đo Code Coverage, Phân tích lỗi Root Cause Analysis - RCA & Đề xuất bản vá)  
+> **Kịch bản Code PBT trực tiếp:** **Property 3 (Crash-free Ingredient Parser)** trong `tests/unit_tests/test_pbt_ingredient_parser.py`
 
 ---
 
@@ -549,30 +410,25 @@
 
 ### M1.1 — Phân tích kiến trúc Async của bộ Parser
 - [ ] M1.1.1 Đọc mã nguồn `mealie/services/parser_services/ingredient_parser.py`.
-- [ ] M1.1.2 Xác định phương thức then chốt: `BruteForceParser.parse_one(text)` là hàm bất đồng bộ (`async def`).
-- [ ] M1.1.3 Xác định các tham số khởi tạo cần thiết của `BruteForceParser`: `session` (SQLAlchemy async session), `group_id`, `household_id`.
+- [ ] M1.1.2 Xác định hàm `BruteForceParser.parse_one(text)` là hàm bất đồng bộ (`async def`).
+- [ ] M1.1.3 Xác định các tham số khởi tạo cần thiết: `session`, `group_id`, `household_id`.
 
 ### M1.2 — Thiết lập môi trường và fixture Mock
-- [ ] M1.2.1 Cài đặt các thư viện bổ trợ:
-  ```bash
-  pip install pytest-asyncio pytest-cov
-  ```
-- [ ] M1.2.2 Cập nhật file `pytest.ini` bổ sung chế độ chạy bất đồng bộ tự động:
-  ```ini
-  asyncio_mode = auto
-  ```
-- [ ] M1.2.3 Xây dựng mock fixture nhẹ nhàng trong `tests/conftest.py` sử dụng `unittest.mock.MagicMock` hoặc `AsyncMock` để cô lập logic parser không phụ thuộc vào database thực tế.
-- [ ] M1.2.4 Đóng góp phần phân tích cơ chế Async và Mock vào Báo cáo giữa kỳ của Trưởng nhóm Quân.
+- [ ] M1.2.1 Cài đặt thư viện: `pip install pytest-asyncio pytest-cov`.
+- [ ] M1.2.2 Cập nhật `pytest.ini` bổ sung: `asyncio_mode = auto`.
+- [ ] M1.2.3 Tạo mock fixture trong `tests/conftest.py` dùng `unittest.mock.MagicMock` cô lập database.
+- [ ] M1.2.4 Đóng góp nội dung phân tích kỹ thuật Async/Mock vào Báo cáo giữa kỳ của Trưởng nhóm Quân.
 - [ ] M1.2.5 Commit: `chore: setup async test runner and parser mock fixtures`.
 
 ---
 
-## ✅ NHÓM VIỆC M2: CODE TEST PBT — PROPERTY 3 (CRASH-FREE INGREDIENT PARSER)
-**Deadline: 25/11**
+## ✅ NHÓM VIỆC M2: LẬP TRÌNH KIỂM THỬ PBT — PROPERTY 3 (CRASH-FREE INGREDIENT PARSER)
+**Deadline: 25/11** | File code: `tests/unit_tests/test_pbt_ingredient_parser.py`
 
 ### M2.1 — Hiện thực kịch bản kiểm thử Property 3
-- [ ] M2.1.1 Tạo file `tests/unit_tests/test_pbt_ingredient_parser.py`.
-- [ ] M2.1.2 Viết test PBT kiểm tra tính bền bỉ / Bất khả sập (Crash-free Invariant) với mọi chuỗi Unicode ngẫu nhiên:
+- [ ] M2.1.1 Tạo nhánh `feat/manh-property-3-rca` từ `develop`.
+- [ ] M2.1.2 Tạo file `tests/unit_tests/test_pbt_ingredient_parser.py`.
+- [ ] M2.1.3 Viết test PBT kiểm tra tính bền bỉ Crash-free với mọi chuỗi Unicode ngẫu nhiên:
   ```python
   import pytest
   import asyncio
@@ -583,7 +439,7 @@
   @given(st.text(max_size=500))
   @settings(max_examples=300)
   def test_ingredient_parser_never_crashes(text):
-      """Property 3: Hàm parse_one không bao giờ được quăng Unhandled Exception"""
+      """Property 3: Hàm parse_one không bao giờ được ném Unhandled Exception"""
       try:
           mock_session = MagicMock()
           parser = BruteForceParser(session=mock_session, group_id=None, household_id=None)
@@ -592,35 +448,33 @@
       except Exception as e:
           pytest.fail(f"CRASH phát hiện với input {text!r}\nException type: {type(e).__name__}: {e}")
   ```
-- [ ] M2.1.3 Viết kiểm thử mở rộng với các tập dữ liệu biên đặc biệt: Chuỗi chỉ chứa số và ký tự toán học, chuỗi cực dài không chứa khoảng trắng, chuỗi chứa ký tự null byte `\x00` hoặc thẻ HTML/Markdown.
-- [ ] M2.1.4 Chạy thử nghiệm: `pytest tests/unit_tests/test_pbt_ingredient_parser.py -v`.
-- [ ] M2.1.5 Nếu phát hiện lỗi (Exception sập chương trình): Lưu vết ngay lập tức toàn bộ input tối giản (Falsifying example) và traceback vào file `Documents/ket_qua_test.md`.
-- [ ] M2.1.6 Commit: `feat(test): add PBT Property 3 crash-free ingredient parser`.
+- [ ] M2.1.4 Viết test mở rộng với các tập dữ liệu biên đặc biệt (chuỗi chỉ chứa ký tự toán học, chuỗi cực dài không dấu cách, null byte `\x00`).
+- [ ] M2.1.5 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_ingredient_parser.py -v`.
+- [ ] M2.1.6 Commit & tạo Pull Request vào `develop`: `feat(test): add PBT Property 3 crash-free ingredient parser`.
 
 ---
 
-## ✅ NHÓM VIỆC M3: THỰC THI TỔNG THỂ, THU THẬP LOG & ĐO LƯỜNG CODE COVERAGE
+## ✅ NHÓM VIỆC M3: THỰC THI TỔNG THỂ, THU THẬP LOG & ĐO CODE COVERAGE
 **Deadline: 05/12**
 
-### M3.1 — Chạy toàn bộ bộ test và thu thập Log
-- [ ] M3.1.1 Chạy toàn bộ 4 file test PBT ở mức kiểm thử cao nhất (`max_examples=500`):
+### M3.1 — Chạy toàn bộ 5 test suites và thu thập Log
+- [ ] M3.1.1 Chạy toàn bộ 5 file test PBT ở mức kiểm thử cao nhất (`max_examples=500`):
   ```bash
   pytest tests/unit_tests/test_pbt_*.py -v --tb=long > logs/test_run_final.txt 2>&1
   ```
-- [ ] M3.1.2 Xác nhận file `logs/test_run_final.txt` ghi lại chi tiết các ca test, thời gian thực thi và trạng thái hoàn thành.
+- [ ] M3.1.2 Xác nhận `logs/test_run_final.txt` ghi lại chi tiết các ca test, thời gian và trạng thái hoàn thành.
 
 ### M3.2 — Đo lường độ bao phủ mã nguồn (Code Coverage)
-- [ ] M3.2.1 Thực hiện lệnh đo Coverage tập trung vào module mục tiêu `parser_services`:
+- [ ] M3.2.1 Thực hiện lệnh đo Coverage tập trung vào module `parser_services`:
   ```bash
   pytest tests/unit_tests/test_pbt_*.py \
     --cov=mealie/services/parser_services \
     --cov-report=html:logs/coverage_html \
     --cov-report=term-missing > logs/coverage_summary.txt 2>&1
   ```
-- [ ] M3.2.2 Mở báo cáo `logs/coverage_html/index.html` trên trình duyệt.
-- [ ] M3.2.3 Chụp ảnh màn hình tổng quan tỷ lệ bao phủ của các file mục tiêu → lưu `Documents/assets/coverage_report.png`.
-- [ ] M3.2.4 Lập bảng thống kê chi tiết tỷ lệ dòng lệnh được bao phủ (Line Coverage) và rẽ nhánh (Branch Coverage) của từng file: `ingredient_parser.py`, `string_utils.py`, `unit_utils.py`.
-- [ ] M3.2.5 Commit: `test: execute comprehensive test suite, save execution logs and coverage artifacts`.
+- [ ] M3.2.2 Mở báo cáo `logs/coverage_html/index.html` trên trình duyệt và chụp ảnh màn hình → lưu `Documents/assets/coverage_report.png`.
+- [ ] M3.2.3 Lập bảng thống kê chi tiết tỷ lệ Line Coverage và Branch Coverage của từng file mục tiêu.
+- [ ] M3.2.4 Commit: `test: execute comprehensive test suite, save execution logs and coverage artifacts`.
 
 ---
 
@@ -628,32 +482,16 @@
 **Deadline: 10/12**
 
 ### M4.1 — Soạn thảo `Documents/bao_cao_phan_G.md`
-- [ ] M4.1.1 Tạo file `Documents/bao_cao_phan_G.md`.
-- [ ] M4.1.2 Trình bày bảng tổng kết số liệu thực nghiệm: Tổng số test cases được sinh ra bởi Hypothesis, số ca Passed/Failed, bảng số liệu Coverage.
+- [ ] M4.1.1 Trình bày bảng tổng kết số liệu thực nghiệm: Tổng số test cases sinh bởi Hypothesis, tỷ lệ Pass/Fail, bảng số liệu Coverage.
 
-### M4.2 — Phân tích nguyên nhân gốc rễ (RCA) cho từng lỗi phát hiện được
+### M4.2 — Phân tích lỗi Root Cause Analysis (RCA) & Đề xuất bản vá
 - [ ] M4.2.1 Trích xuất thông tin Falsifying Example từ log của Hypothesis.
-- [ ] M4.2.2 Tái hiện lỗi độc lập trong môi trường Python tối giản và lưu traceback đầy đủ.
-- [ ] M4.2.3 Đọc traceback từ dưới lên để xác định chính xác tên file và số dòng code trong Mealie bị sập.
-- [ ] M4.2.4 Phân loại và giải thích nguyên nhân cốt lõi (Lỗi chia cho 0, lỗi ép kiểu dữ liệu chuỗi sang số, lỗi regex backtracking khi gặp chuỗi unicode đặc biệt,...).
-- [ ] M4.2.5 Soạn thảo đề xuất bản vá (Patch Proposal) dưới dạng mã diff hoặc đoạn code chuẩn chỉnh theo nguyên tắc Ponytail (sửa tại gốc, không sửa tạm bợ).
-- [ ] M4.2.6 Trình bày phân tích theo cấu trúc chuẩn trong `bao_cao_phan_G.md`:
-  ```markdown
-  ### LỖI PHÁT HIỆN #1: [Tên ngắn gọn]
-  - **Property vi phạm:** Property 3 (Tính bền bỉ) / Property 1...
-  - **Phản ví dụ tối giản (Falsifying Example):** `text = "..."`
-  - **Loại ngoại lệ (Exception):** `AttributeError` / `ZeroDivisionError`...
-  - **Vị trí phát sinh:** `mealie/services/parser_services/ingredient_parser.py:dòng_xyz`
-  - **Nguyên nhân gốc rễ (Root Cause):** [Giải thích tường tận]
-  - **Đề xuất bản vá (Patch Proposal):**
-    ```diff
-    - code_cu()
-    + code_moi_da_kiem_tra_dieu_kien()
-    ```
-  ```
-- [ ] M4.2.7 *(Trường hợp không phát sinh bug):* Phân tích lý do hệ thống hoạt động ổn định, chứng minh qua độ bao phủ kiểm thử cao ($\ge 80\%$) và khả năng chống chịu của các bộ try-catch có sẵn trong Mealie.
-- [ ] M4.2.8 Hoàn thiện toàn bộ Phần G và bàn giao cho Trưởng nhóm Quân để tích hợp vào báo cáo tổng kết cuối kỳ.
-- [ ] M4.2.9 Commit: `docs: complete test results, defect root cause analysis and patch proposals Phan G`.
+- [ ] M4.2.2 Tái hiện lỗi độc lập trong môi trường Python tối giản và trích xuất traceback chi tiết từ dưới lên.
+- [ ] M4.2.3 Phân loại và giải thích nguyên nhân cốt lõi (chia cho 0, lỗi ép kiểu, regex backtracking,...).
+- [ ] M4.2.4 Soạn thảo đề xuất bản vá lỗi (Patch Proposal) chuẩn Ponytail dưới dạng mã diff.
+- [ ] M4.2.5 *(Trường hợp không có bug):* Chứng minh độ tin cậy qua tỷ lệ Code Coverage $\ge 80\%$.
+- [ ] M4.2.6 Hoàn thiện Phần G và bàn giao cho Trưởng nhóm Quân tích hợp vào báo cáo cuối kỳ.
+- [ ] M4.2.7 Commit: `docs: complete test results, defect root cause analysis and patch proposals Phan G`.
 
 ---
 ---
@@ -661,7 +499,8 @@
 # 🔍 CHECKLIST NGHIỆM THU CUỐI KỲ (Toàn nhóm tự kiểm tra trước khi nộp)
 
 ## Mốc Giữa kỳ — 20/10
-- [ ] Mealie chạy thành công demo trực tiếp trên máy (Nam xác nhận).
+- [x] Repo GitHub được khởi tạo chuẩn, có branch `main`, `develop` và pin version Mealie `v3.28.0` (Quân hoàn thành).
+- [ ] Mealie chạy thành công demo trực tiếp qua Docker Compose trên cổng 9925 (Nam xác nhận).
 - [ ] Đủ 6 ảnh chụp bằng chứng 3 luồng nghiệp vụ cốt lõi (Nam & Phước nghiệm thu).
 - [ ] Tài liệu On-boarding `Documents/bao_cao_phan_C.md` chi tiết, đã được Hiếu cài đặt thẩm định thành công từ máy sạch độc lập.
 - [ ] Sơ đồ kiến trúc tổng thể và Data Flow đầy đủ trong `Documents/bao_cao_phan_B.md` (Quân hoàn thành).
@@ -671,7 +510,8 @@
 
 ## Mốc Cuối kỳ — Tháng 12
 - [ ] Cuốn báo cáo hoàn chỉnh đầy đủ 8 phần từ A đến H không thiếu mục nào (Quân tổng hợp).
-- [ ] Toàn bộ 4 file test PBT chạy tự động trơn tru bằng 1 lệnh duy nhất (`pytest tests/unit_tests/test_pbt_*.py -v`).
+- [ ] **Toàn bộ 5 file test PBT chạy tự động trơn tru bằng 1 lệnh duy nhất (`pytest tests/unit_tests/test_pbt_*.py -v`).**
+- [ ] **Cả 5 thành viên đều có ít nhất 1 commit code kiểm thử (`feat(test):`) trực tiếp trên repo.**
 - [ ] Test Runner biệt lập qua Docker chạy thành công trên mọi máy tính (Nam hoàn thành).
 - [ ] Đã chỉ ra được ít nhất 1 lỗi thực tế kèm phân tích RCA và đề xuất bản vá HOẶC chứng minh Coverage đạt chuẩn $\ge 80\%$ (Mạnh hoàn thành).
 - [ ] `tests/README.md` đã được kiểm thử chéo và tái lập thành công từ máy sạch độc lập (Phước & Hiếu xác nhận).

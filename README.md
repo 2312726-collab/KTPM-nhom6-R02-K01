@@ -10,18 +10,19 @@
   * **Công cụ chủ đạo:** `Hypothesis` (Python) tích hợp cùng test runner `pytest`
 * **Giảng viên hướng dẫn:** Nguyễn Thế Lâm
 * **Nhóm thực hiện:** **Nhóm 6**
+* **Kho lưu trữ GitHub:** [https://github.com/2312726-collab/KTPM-nhom6-K02-R01](https://github.com/2312726-collab/KTPM-nhom6-K02-R01)
 
 ---
 
-### 👥 DANH SÁCH THÀNH VIÊN NHÓM 6
+### 👥 MA TRẬN PHÂN VAI & ĐÓNG GÓP CỦA 5 THÀNH VIÊN
 
-| STT | Họ và tên | MSSV | Vai trò chính | Phụ trách chuyên môn |
+| STT | Họ và tên | MSSV | Báo cáo phụ trách chính | Kịch bản Code PBT trực tiếp |
 | :---: | :--- | :---: | :--- | :--- |
-| 1 | **Trần Quốc Quân** | `2312726` | **Trưởng nhóm** / Architecture Lead | Quản trị dự án, Phân tích kiến trúc (Phần A, B), Tổng hợp báo cáo & Slide |
-| 2 | **Nguyễn Phạm Phú Nam** | `2111874` | DevOps & On-boarding Specialist | Dựng môi trường Docker, Seed Data, Tài liệu On-boarding (Phần C), Code Property 4 |
-| 3 | **Bùi Trung Hiếu** | `2110037` | Test Architect & PBT Methodology | Cơ sở lý thuyết PBT (Phần D), Thiết kế 4 Properties (Phần E), Code Property 2 |
-| 4 | **Trần Ngọc Bảo Phước** | `2111883` | QA Automation Engineer 1 | Xây dựng Test Harness, Code Property 1, Hướng dẫn tái lập kiểm thử (Phần F) |
-| 5 | **Võ Hùng Mạnh** | `2111867` | QA Automation Engineer 2 & Defect Analyst | Async Test Mock, Code Property 3, Đo Coverage, Phân tích lỗi RCA (Phần G) |
+| 1 | **Trần Quốc Quân** | `2312726` | **Trưởng nhóm** — Phần A, Phần B, Phần H + Slide | **Property 4** (Servings Scaling Monotonicity & Reversibility) |
+| 2 | **Nguyễn Phạm Phú Nam** | `2111874` | **Phần C** (Tài liệu On-boarding & Bằng chứng 3 luồng) | **Property 5** (Fraction Normalization & Numeric Preservation) + Docker Runner |
+| 3 | **Bùi Trung Hiếu** | `2110037` | **Phần D & E** (Lý thuyết PBT & Thiết kế 5 kịch bản) | **Property 2** (Unit Conversion Round-trip) |
+| 4 | **Trần Ngọc Bảo Phước** | `2111883` | **Phần F** (Test Harness & Hướng dẫn tái lập `README.md`) | **Property 1** (String Utils Idempotence & Robustness) |
+| 5 | **Võ Hùng Mạnh** | `2111867` | **Phần G** (Log, Đo Coverage HTML & Phân tích RCA) | **Property 3** (Crash-free Ingredient Parser with Async Mock) |
 
 ---
 
@@ -36,19 +37,20 @@ DoAnCuoiKy_Nhom6/
 │   ├── phan_cong_nhiem_vu_thanh_vien.md # Bảng phân công nguyên tử theo thành viên
 │   ├── mealie_version.md         # Tài liệu ghim cố định tag v3.28.0 & commit SHA
 │   └── assets/                   # Bằng chứng thực nghiệm, sơ đồ kiến trúc
-├── mealie_docker/                # Cấu hình Docker Compose chạy Mealie
+├── mealie_docker/                # [Nam phụ trách] Cấu hình Docker Compose chạy Mealie
 │   ├── docker-compose.yml
 │   └── .env
-├── tests/                        # Toàn bộ mã nguồn kiểm thử tự động PBT
-│   ├── conftest.py               # Cấu hình Hypothesis đa profile & Mock fixtures
+├── tests/                        # Toàn bộ mã nguồn kiểm thử tự động PBT của cả 5 bạn
+│   ├── conftest.py               # [Phước & Mạnh] Cấu hình Hypothesis đa profile & Mock fixtures
 │   ├── pytest.ini                # Cấu hình Pytest runner
-│   ├── README.md                 # Hướng dẫn tái lập và chạy test với 1 lệnh
+│   ├── README.md                 # [Phước] Hướng dẫn tái lập và chạy test với 1 lệnh
 │   └── unit_tests/
-│       ├── test_pbt_string_utils.py       # Property 1: Tính lũy đẳng (Idempotence)
-│       ├── test_pbt_unit_converter.py     # Property 2: Tính bảo toàn hai chiều (Round-trip)
-│       ├── test_pbt_ingredient_parser.py  # Property 3: Tính bền bỉ (Crash-free)
-│       └── test_pbt_scaling.py            # Property 4: Tính đơn điệu khi nhân khẩu phần
-├── logs/                         # File log thực thi kiểm thử và báo cáo Coverage HTML
+│       ├── test_pbt_string_utils.py       # [Phước] Property 1: Tính lũy đẳng (Idempotence)
+│       ├── test_pbt_unit_converter.py     # [Hiếu]  Property 2: Tính bảo toàn hai chiều (Round-trip)
+│       ├── test_pbt_ingredient_parser.py  # [Mạnh]  Property 3: Tính bền bỉ (Crash-free)
+│       ├── test_pbt_scaling.py            # [Quân]  Property 4: Tính đơn điệu khi nhân khẩu phần
+│       └── test_pbt_fraction.py           # [Nam]   Property 5: Tính bảo toàn giá trị phân số
+├── logs/                         # [Mạnh] File log thực thi kiểm thử và báo cáo Coverage HTML
 ├── .gitignore
 └── README.md
 ```
@@ -63,20 +65,9 @@ DoAnCuoiKy_Nhom6/
    - Dựng Docker Mealie, chạy thực nghiệm 3 luồng nghiệp vụ, vẽ sơ đồ kiến trúc, lập đề cương PBT.
    - 🎯 **Cột mốc 1: Báo cáo Giữa kỳ (20/10)**.
 3. **Sprint 3 (21/10 – 10/11): Nghiên cứu lý thuyết & Thiết kế kịch bản PBT**
-   - Soạn thảo cơ sở lý thuyết Hypothesis (Phần D), thiết kế chi tiết 4 Properties (Phần E).
+   - Soạn thảo cơ sở lý thuyết Hypothesis (Phần D), thiết kế chi tiết 5 Properties (Phần E).
 4. **Sprint 4 (11/11 – 30/11): Lập trình bộ kiểm thử tự động**
-   - Dựng Test Harness, code toàn bộ 4 file test PBT, kiểm thử khả năng thu nhỏ ca lỗi (Shrinking).
+   - Dựng Test Harness, code toàn bộ 5 file test PBT (mỗi thành viên tự code và commit 1 file test), kiểm thử khả năng thu nhỏ ca lỗi (Shrinking).
 5. **Sprint 5 (01/12 – Bảo vệ): Phân tích lỗi, Đo Coverage & Tổng kết**
    - Chạy toàn bộ test suite, đo độ bao phủ mã nguồn với `pytest-cov`, thực hiện Root Cause Analysis (RCA) nếu có bug, đóng gói báo cáo 8 phần A→H và Slide thuyết trình.
    - 🎯 **Cột mốc 2: Bảo vệ Cuối kỳ (Tháng 12)**.
-
----
-
-### 📜 QUY ƯỚC COMMIT & PHỐI HỢP
-* Tuân thủ quy tắc Commit Message chuẩn Conventional Commits:
-  * `docs: ...` — Thêm hoặc sửa đổi tài liệu báo cáo
-  * `feat(test): ...` — Thêm kịch bản hoặc mã kiểm thử mới
-  * `fix(test): ...` — Sửa lỗi trong mã kiểm thử hoặc cấu hình
-  * `chore: ...` — Cấu hình môi trường, dependencies
-  * `test: ...` — Chạy test, lưu log thực thi và coverage
-* Mọi đóng góp phải được thực hiện qua Pull Request từ nhánh tính năng hoặc nhánh `develop`, không commit trực tiếp vào `main`.
