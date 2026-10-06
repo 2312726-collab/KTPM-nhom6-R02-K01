@@ -1,0 +1,21 @@
+# ==============================================================================
+# DANH MỤC THƯ VIỆN KIỂM THỬ — ĐỒ ÁN KIỂM THỬ PHẦN MỀM (NHÓM 6)
+# Đề tài: Mealie (v3.28.0) + Property-Based Testing với Hypothesis
+# Cài đặt: pip install -r requirements-test.txt
+# ==============================================================================
+
+# Framework kiểm thử & Công cụ PBT cốt lõi
+pytest>=8.0.0,<9.0.0
+hypothesis>=6.100.0,<7.0.0
+
+# Đo lường độ bao phủ mã nguồn (Code Coverage)
+pytest-cov>=5.0.0,<6.0.0
+
+# Hỗ trợ kiểm thử bất đồng bộ (Async) & Mocking
+pytest-asyncio>=0.23.0,<1.0.0
+pytest-mock>=3.14.0,<4.0.0
+
+# Các thư viện phụ thuộc dùng cho Schema & API testing
+pydantic>=2.7.0,<3.0.0
+httpx>=0.27.0,<1.0.0
+python-dateutil>=2.9.0
