@@ -71,8 +71,50 @@ Trước khi viết bất kỳ dòng mã nguồn hay kịch bản kiểm thử n
 
 1. **Commit nhỏ, rõ ràng, minh bạch:**
    - Mỗi commit giải quyết đúng 1 vấn đề cụ thể (Atomic commit).
-   - Format tin nhắn commit chuẩn: `feat(test): ...`, `fix(parser): ...`, `docs: ...`.
+   - Format tin nhắn commit bằng tiếng Việt chuẩn: `thêm:`, `sửa:`, `cấu hình:`, `dọn dẹp:`.
 2. **Mọi thành viên đều có dấu ấn trên Git:**
    - Điểm số phụ thuộc vào lịch sử đóng góp thực tế trên Git. Cả 5 thành viên đều phải tự commit phần việc của mình từ máy cá nhân.
 3. **Ghi chép và lưu vết:**
    - Mọi giả định kỹ thuật hoặc giải pháp tạm thời phải được ghi chú rõ ràng với tiền tố `# note(ponytail): <lý do và hướng nâng cấp sau>`.
+
+---
+
+## 🤖 PHẦN V: NGUYÊN TẮC LÀM VIỆC DỰ ÁN DÀNH CHO AI ASSISTANT
+
+Tất cả các hành vi của AI Assistant trong dự án này PHẢI TUÂN THỦ NGHIÊM NGẶT 4 NGUYÊN TẮC SAU:
+
+### 1. Quy tắc tạo nhánh (Branching):
+- TUYỆT ĐỐI KHÔNG làm việc trực tiếp trên nhánh `main` hay `develop`.
+- Trước khi thực hiện bất kỳ công việc/tính năng nào, LUÔN LUÔN kiểm tra xem nhánh đang làm có đúng không.
+- **Mô hình phân nhánh (QUAN TRỌNG):**
+  Các nhánh công việc là NHÁNH ĐỘC LẬP, KHÔNG PHẢI nhánh con của `develop`.
+  Chúng được tạo từ `develop` nhưng tồn tại độc lập và merge ngược lại vào `develop` qua Pull Request.
+```text
+  main          <- chỉ nhận merge từ develop khi đã ổn định
+    ^
+  develop       <- chỉ nhận merge từ các nhánh công việc qua Pull Request
+    ^
+Vai trò từng nhánh:
+  - Nhánh công việc: Viết code, hoàn toàn độc lập nhau. Merge về develop qua PR khi xong.
+  - develop: Gộp code từ các nhánh công việc. Kiểm tra ổn định tổng thể.
+  - main: Chỉ nhận khi develop đã ổn định hoàn toàn.
+```
+- Commit message PHẢI viết bằng TIẾNG VIỆT theo cấu trúc:
+  `thêm:` / `sửa:` / `cấu hình:` / `dọn dẹp:`
+
+### 2. Kiểm soát nhánh `main` và đẩy code:
+- Mọi hành động merge, push lên nhánh `main` BẮT BUỘC phải thông qua sự kiểm tra và đồng ý rõ ràng của USER.
+- Không tự ý thực hiện `git push origin main`.
+- Mọi hành động merge vào `develop` cũng phải qua Pull Request và được USER duyệt.
+
+### 3. Phân tích kỹ & Chia nhỏ công việc (Incremental workflow):
+- Luôn luôn phân tích vấn đề thật kỹ càng trước khi bắt đầu.
+- Chia nhỏ các đầu việc thành từng phần cụ thể, rõ ràng.
+- Thực hiện xong chức năng nào thì DỪNG LẠI, đợi USER kiểm tra và commit lên Git rồi mới tiếp tục làm chức năng tiếp theo.
+- Chỉ push lên GitHub sau khi toàn bộ các bước trong 1 nhóm công việc đã hoàn thành (Lựa chọn A).
+
+### 4. Quyền thực thi & Phạm vi công việc:
+- CHỈ KHI USER yêu cầu và cho phép bắt đầu code thì AI mới được phép viết mã trong đúng phạm vi được giao.
+- KHÔNG TỰ Ý suy diễn hoặc tự tiện thêm các tính năng nằm ngoài phạm vi được giao.
+- Mọi ý tưởng hoặc đề xuất bổ sung phải được thảo luận và nhận được sự đồng ý của USER trước khi làm.
+

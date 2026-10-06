@@ -35,7 +35,7 @@
 ### Q1.2 — Thiết lập quy tắc nhánh & Quy chuẩn phối hợp
 - [x] Q1.2.1 Tạo nhánh `develop` từ `main` và đẩy cả 2 nhánh lên GitHub.
 - [ ] Q1.2.2 Cấu hình bảo vệ nhánh `main`: Settings → Branches → Add classic branch protection rule → tick *"Require a pull request before merging"*.
-- [x] Q1.2.3 Tạo file `.github/COMMIT_CONVENTION.md` quy định chuẩn Conventional Commits cho cả nhóm (`docs:`, `feat(test):`, `chore:`, `fix(test):`, `test:`).
+- [x] Q1.2.3 Thống nhất quy chuẩn commit Tiếng Việt trong `Documents/quy_tac_du_an.md` và `README.md` (`thêm:`, `sửa:`, `cấu hình:`, `dọn dẹp:`).
 - [ ] Q1.2.4 Phổ biến quy trình làm việc 4 bước (tạo nhánh `feat/*` từ `develop`, commit, push, tạo PR) cho các thành viên.
 
 ### Q1.3 — Cố định phiên bản Mealie (Pin Version)
