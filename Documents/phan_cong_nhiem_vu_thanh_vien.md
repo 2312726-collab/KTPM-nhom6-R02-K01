@@ -23,35 +23,35 @@
 **Deadline: 30/9**
 
 ### Q1.1 — Tạo kho chứa Git của nhóm
-- [ ] Q1.1.1 Tạo repository mới trên GitHub (tên gợi ý: `ktpm-nhom6-mealie-pbt`), visibility: `Public`.
-- [ ] Q1.1.2 Thêm file `README.md` ban đầu: Tên nhóm, đề tài, danh sách 5 thành viên, link repo Mealie.
+- [x] Q1.1.1 Tạo repository mới trên GitHub: `https://github.com/2312726-collab/KTPM-nhom6-K02-R01.git`.
+- [x] Q1.1.2 Thêm file `README.md` ban đầu: Tên nhóm, đề tài, danh sách 5 thành viên, link repo Mealie.
 - [ ] Q1.1.3 Mời 4 thành viên còn lại vào repo (Settings → Collaborators → Add people).
 - [ ] Q1.1.4 Xác nhận cả 5 thành viên đã Accept lời mời và thấy repo trên tài khoản GitHub của mình.
 
 ### Q1.2 — Thiết lập quy tắc nhánh Git
-- [ ] Q1.2.1 Tạo nhánh `develop` từ `main`:
+- [x] Q1.2.1 Tạo nhánh `develop` từ `main` và đẩy lên GitHub:
   ```bash
   git checkout -b develop
-  git push origin develop
+  git push -u origin develop
   ```
 - [ ] Q1.2.2 Bảo vệ nhánh `main`: Settings → Branches → Add Rule → chọn `main` → tick *"Require pull request before merging"*.
-- [ ] Q1.2.3 Tạo file `.github/COMMIT_CONVENTION.md` với nội dung quy ước commit:
+- [x] Q1.2.3 Tạo file `.github/COMMIT_CONVENTION.md` với nội dung quy ước commit:
   - `docs: ...` — Thêm/sửa tài liệu
   - `feat(test): ...` — Thêm kịch bản kiểm thử mới
   - `fix(test): ...` — Sửa lỗi trong mã kiểm thử
   - `chore: ...` — Cấu hình, setup môi trường
   - `test: ...` — Chạy test, thu thập log/artifacts
-- [ ] Q1.2.4 Commit & push: `docs: add commit convention`.
-- [ ] Q1.2.5 Gửi link repo cho cả nhóm qua chat.
+- [x] Q1.2.4 Commit & push: `docs: add commit convention`.
+- [ ] Q1.2.5 Gửi link repo cho cả nhóm qua chat: `https://github.com/2312726-collab/KTPM-nhom6-K02-R01`.
 
 ### Q1.3 — Cố định phiên bản Mealie (Pin Version)
-- [ ] Q1.3.1 Tạo file `Documents/mealie_version.md` ghi lại:
+- [x] Q1.3.1 Tạo file `Documents/mealie_version.md` ghi lại:
   - Repository: `https://github.com/mealie-recipes/mealie`
   - Release Tag: **`v3.28.0`**
   - Commit SHA: `0552eaa4a80031b8572849cca0ed95d07f1be001`
   - Ngày chốt phiên bản: 06/10/2026
-- [ ] Q1.3.2 Kiểm tra tag còn tồn tại: mở `https://github.com/mealie-recipes/mealie/tree/v3.28.0`.
-- [ ] Q1.3.3 Commit: `docs: pin mealie version v3.28.0`.
+- [x] Q1.3.2 Kiểm tra tag còn tồn tại: mở `https://github.com/mealie-recipes/mealie/tree/v3.28.0`.
+- [x] Q1.3.3 Commit: `docs: pin mealie version v3.28.0`.
 
 ### Q1.4 — Thiết lập bảng quản lý công việc
 - [ ] Q1.4.1 Tạo GitHub Project Board: Projects → New Project → Board view.
