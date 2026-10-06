@@ -160,7 +160,7 @@
 ### N1.2 — Đăng ký tài khoản Admin & Xác nhận Dashboard
 - [x] N1.2.1 Đăng ký tài khoản Admin (`admin@nhom6.test` / `Admin123@`).
 - [x] N1.2.2 Đăng nhập Dashboard thành công, chụp ảnh Dashboard → lưu `Documents/assets/02_mealie_dashboard.png`.
-- [ ] N1.2.3 Commit: `chore: setup docker-compose environment and initial admin credentials`.
+- [x] N1.2.3 Commit: `chore: setup docker-compose environment and initial admin credentials`.
 
 ---
 
