@@ -195,13 +195,13 @@
 **Deadline: 25/11** | File code: `tests/unit_tests/test_pbt_fraction.py`
 
 ### N4.1 — Nghiên cứu logic xử lý phân số trong Mealie
-- [ ] N4.1.1 Đọc hàm chuẩn hóa phân số trong `mealie/services/parser_services/parser_utils/string_utils.py`.
-- [ ] N4.1.2 Xác định Invariant: Khi phân số dạng chuỗi (ví dụ `"1/2"`, `"3/4"`, hỗn số `"2 1/2"`) được bóc tách sang số thực, giá trị toán học phải được bảo toàn chính xác trong sai số $\epsilon \le 10^{-4}$.
+- [x] N4.1.1 Đọc hàm chuẩn hóa phân số trong `mealie/services/parser_services/parser_utils/string_utils.py`.
+- [x] N4.1.2 Xác định Invariant: Khi phân số dạng chuỗi (ví dụ `"1/2"`, `"3/4"`, hỗn số `"2 1/2"`) được bóc tách sang số thực, giá trị toán học phải được bảo toàn chính xác trong sai số $\epsilon \le 10^{-4}$.
 
 ### N4.2 — Viết mã kiểm thử tự động PBT Property 5
 - [x] N4.2.1 Tạo nhánh `feat/nam-property-5-fraction` từ `develop`.
-- [ ] N4.2.2 Tạo file `tests/unit_tests/test_pbt_fraction.py`.
-- [ ] N4.2.3 Viết kiểm thử bảo toàn giá trị toán học cho phân số:
+- [x] N4.2.2 Tạo file `tests/unit_tests/test_pbt_fraction.py`.
+- [x] N4.2.3 Viết kiểm thử bảo toàn giá trị toán học cho phân số:
   ```python
   from hypothesis import given, strategies as st, assume, settings
   from fractions import Fraction
@@ -219,8 +219,8 @@
       parsed_val = float(Fraction(fraction_str))
       assert abs(parsed_val - expected_val) < 1e-6
   ```
-- [ ] N4.2.4 Đóng gói container chạy test độc lập: Tạo file `docker-compose.test.yml` để chạy toàn bộ suite test bên trong Docker.
-- [ ] N4.2.5 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_fraction.py -v`.
+- [x] N4.2.4 Đóng gói container chạy test độc lập: Tạo file `docker-compose.test.yml` để chạy toàn bộ suite test bên trong Docker.
+- [x] N4.2.5 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_fraction.py -v` — **23 passed, 0 failed** (1.09s, Python 3.14.7, profile dev).
 - [ ] N4.2.6 Commit & tạo Pull Request vào `develop`: `feat(test): add PBT Property 5 fraction normalization and docker runner`.
 
 ---
