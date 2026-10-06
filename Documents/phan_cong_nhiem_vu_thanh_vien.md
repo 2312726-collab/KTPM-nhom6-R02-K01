@@ -176,7 +176,7 @@
 - [x] N2.2.1 Luồng 1 — Import công thức từ URL: Chụp ảnh công thức đã import → lưu `04_recipe_import.png`.
 - [x] N2.2.2 Luồng 2 — Phân tích nguyên liệu (Ingredient Parsing): Nhập chuỗi bóc tách Qty, Unit, Food, Note → chụp `05_ingredient_parse.png`.
 - [x] N2.2.3 Luồng 3 — Nhân tỉ lệ khẩu phần ăn (Servings Scaling): Đổi 4 thành 8 servings, kiểm tra nhân đôi → chụp `06_servings_scale.png`.
-- [ ] N2.2.4 Commit: `docs: seed test recipes and capture evidence for 3 core business flows`.
+- [x] N2.2.4 Commit: `docs: seed test recipes and capture evidence for 3 core business flows`.
 
 ---
 
