@@ -10,7 +10,7 @@
   * **Công cụ chủ đạo:** `Hypothesis` (Python) tích hợp cùng test runner `pytest`
 * **Giảng viên hướng dẫn:** Nguyễn Thế Lâm
 * **Nhóm thực hiện:** **Nhóm 6**
-* **Kho lưu trữ GitHub:** [https://github.com/2312726-collab/KTPM-nhom6-K02-R01](https://github.com/2312726-collab/KTPM-nhom6-K02-R01)
+* **Kho lưu trữ GitHub:** [https://github.com/2312726-collab/KTPM-nhom6-R02-K01](https://github.com/2312726-collab/KTPM-nhom6-R02-K01)
 
 ---
 
