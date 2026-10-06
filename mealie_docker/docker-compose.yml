@@ -13,6 +13,7 @@ services:
       - BASE_URL=${BASE_URL:-http://localhost:9925}
       - DB_ENGINE=sqlite
       - LOG_LEVEL=${LOG_LEVEL:-DEBUG}
+      - HTTP_ALLOW_LIST=${HTTP_ALLOW_LIST:-host.docker.internal}
     volumes:
       - mealie-data:/app/data/
 
