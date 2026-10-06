@@ -221,7 +221,7 @@
   ```
 - [x] N4.2.4 Đóng gói container chạy test độc lập: Tạo file `docker-compose.test.yml` để chạy toàn bộ suite test bên trong Docker.
 - [x] N4.2.5 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_fraction.py -v` — **23 passed, 0 failed** trên cả host (Python 3.14.7, 0.79s) và Docker container độc lập (`ktpm_nhom6_test_runner`, Linux Python 3.14.8, exit code 0, 1.61s).
-- [ ] N4.2.6 Commit & tạo Pull Request vào `develop`: `feat(test): add PBT Property 5 fraction normalization and docker runner`.
+- [x] N4.2.6 Commit & tạo Pull Request vào `develop`: `feat(test): add PBT Property 5 fraction normalization and docker runner` — PR #1: https://github.com/2312726-collab/KTPM-nhom6-R02-K01/pull/1.
 
 ---
 ---
