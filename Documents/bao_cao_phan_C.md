@@ -214,7 +214,7 @@ docker compose restart mealie
 
 > ⚠️ **LƯU Ý CỐT LÕI VỀ BIẾN MÔI TRƯỜNG:**
 > Lệnh `docker compose restart mealie` CHỈ khởi động lại tiến trình bên trong container đang chạy. Lệnh này **KHÔNG** đọc lại các thay đổi trong file `.env` hoặc phần `environment` của `docker-compose.yml`.
-> 
+>
 > Khi thay đổi bất kỳ biến môi trường nào (ví dụ thêm `HTTP_ALLOW_LIST=host.docker.internal` hoặc đổi cổng `MEALIE_PORT`), bắt buộc phải thực thi:
 > ```powershell
 > docker compose up -d
