@@ -54,7 +54,7 @@
 **Deadline: 18/10** | Đầu ra: `Documents/bao_cao_phan_A.md` + `Documents/bao_cao_phan_B.md`
 
 ### Q2.1 — Khảo sát cấu trúc mã nguồn Mealie
-- [ ] Q2.1.1 Clone Mealie đúng tag `v3.28.0` về máy cá nhân:
+- [x] Q2.1.1 Clone Mealie đúng tag `v3.28.0` về máy cá nhân:
   ```bash
   git clone --branch v3.28.0 --depth 1 https://github.com/mealie-recipes/mealie.git mealie_src
   ```
