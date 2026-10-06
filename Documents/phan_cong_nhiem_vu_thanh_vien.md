@@ -151,16 +151,16 @@
 **Deadline: 15/10**
 
 ### N1.1 — Dựng Mealie bằng Docker Compose
-- [ ] N1.1.1 Tạo thư mục `mealie_docker/` trong repo.
-- [ ] N1.1.2 Tạo file `mealie_docker/docker-compose.yml` (phiên bản SQLite chuẩn) và `mealie_docker/.env` mở cổng `9925`.
-- [ ] N1.1.3 Chạy container: `docker-compose up -d`.
-- [ ] N1.1.4 Kiểm tra log: `docker-compose logs -f mealie` xác nhận FastAPI khởi động mượt mà.
-- [ ] N1.1.5 Truy cập `http://localhost:9925`, chụp ảnh Landing Page → lưu `Documents/assets/01_mealie_landing.png`.
+- [x] N1.1.1 Tạo thư mục `mealie_docker/` trong repo.
+- [x] N1.1.2 Tạo file `mealie_docker/docker-compose.yml` (phiên bản SQLite chuẩn) và `mealie_docker/.env` mở cổng `9925`.
+- [x] N1.1.3 Chạy container: `docker-compose up -d`.
+- [x] N1.1.4 Kiểm tra log: `docker-compose logs -f mealie` xác nhận FastAPI khởi động mượt mà.
+- [x] N1.1.5 Truy cập `http://localhost:9925`, chụp ảnh Landing Page → lưu `Documents/assets/01_mealie_landing.png`.
 
 ### N1.2 — Đăng ký tài khoản Admin & Xác nhận Dashboard
-- [ ] N1.2.1 Đăng ký tài khoản Admin (`admin@nhom6.test` / `Admin123@`).
-- [ ] N1.2.2 Đăng nhập Dashboard thành công, chụp ảnh Dashboard → lưu `Documents/assets/02_mealie_dashboard.png`.
-- [ ] N1.2.3 Commit: `chore: setup docker-compose environment and initial admin credentials`.
+- [x] N1.2.1 Đăng ký tài khoản Admin (`admin@nhom6.test` / `Admin123@`).
+- [x] N1.2.2 Đăng nhập Dashboard thành công, chụp ảnh Dashboard → lưu `Documents/assets/02_mealie_dashboard.png`.
+- [x] N1.2.3 Commit: `chore: setup docker-compose environment and initial admin credentials`.
 
 ---
 
@@ -168,15 +168,15 @@
 **Deadline: 17/10**
 
 ### N2.1 — Nạp dữ liệu mẫu (Seed Data)
-- [ ] N2.1.1 Tạo tài khoản kiểm thử thường (`test@nhom6.test` / `User123@`).
-- [ ] N2.1.2 Tạo 10 công thức mẫu đa dạng (nguyên liệu đơn giản, phân số thường, phân số unicode `½`, chú thích trong ngoặc, công thức dài nhiều bước).
-- [ ] N2.1.3 Tạo kế hoạch thực đơn (Meal Plan) 7 ngày tuần 06/10–12/10, chụp ảnh → lưu `Documents/assets/03_meal_plan.png`.
+- [x] N2.1.1 Tạo tài khoản kiểm thử thường (`test@nhom6.test` / `User123@`).
+- [x] N2.1.2 Tạo 10 công thức mẫu đa dạng (nguyên liệu đơn giản, phân số thường, phân số unicode `½`, chú thích trong ngoặc, công thức dài nhiều bước).
+- [x] N2.1.3 Tạo kế hoạch thực đơn (Meal Plan) 7 ngày tuần 06/10–12/10, chụp ảnh → lưu `Documents/assets/03_meal_plan.png`.
 
 ### N2.2 — Thu thập bằng chứng 3 luồng nghiệp vụ cốt lõi
-- [ ] N2.2.1 Luồng 1 — Import công thức từ URL: Chụp ảnh công thức đã import → lưu `04_recipe_import.png`.
-- [ ] N2.2.2 Luồng 2 — Phân tích nguyên liệu (Ingredient Parsing): Nhập chuỗi bóc tách Qty, Unit, Food, Note → chụp `05_ingredient_parse.png`.
-- [ ] N2.2.3 Luồng 3 — Nhân tỉ lệ khẩu phần ăn (Servings Scaling): Đổi 4 thành 8 servings, kiểm tra nhân đôi → chụp `06_servings_scale.png`.
-- [ ] N2.2.4 Commit: `docs: seed test recipes and capture evidence for 3 core business flows`.
+- [x] N2.2.1 Luồng 1 — Import công thức từ URL: Chụp ảnh công thức đã import → lưu `04_recipe_import.png`.
+- [x] N2.2.2 Luồng 2 — Phân tích nguyên liệu (Ingredient Parsing): Nhập chuỗi bóc tách Qty, Unit, Food, Note → chụp `05_ingredient_parse.png`.
+- [x] N2.2.3 Luồng 3 — Nhân tỉ lệ khẩu phần ăn (Servings Scaling): Đổi 4 thành 8 servings, kiểm tra nhân đôi → chụp `06_servings_scale.png`.
+- [x] N2.2.4 Commit: `docs: seed test recipes and capture evidence for 3 core business flows`.
 
 ---
 
@@ -184,10 +184,10 @@
 **Deadline: 18/10**
 
 ### N3.1 — Soạn thảo `Documents/bao_cao_phan_C.md`
-- [ ] N3.1.1 Soạn thảo đầy đủ 5 mục chuẩn: C.1 Yêu cầu môi trường, C.2 Các bước cài đặt chi tiết, C.3 Quản lý dịch vụ docker, C.4 Hướng dẫn nạp Seed Data, C.5 Xử lý sự cố (xung đột port 9925, cấp quyền thư mục).
-- [ ] N3.1.2 Nhúng toàn bộ 6 ảnh minh chứng vào đúng vị trí trong báo cáo.
+- [x] N3.1.1 Soạn thảo đầy đủ 5 mục chuẩn: C.1 Yêu cầu môi trường, C.2 Các bước cài đặt chi tiết, C.3 Quản lý dịch vụ docker, C.4 Hướng dẫn nạp Seed Data, C.5 Xử lý sự cố (xung đột port 9925, cấp quyền thư mục).
+- [x] N3.1.2 Nhúng toàn bộ 6 ảnh minh chứng vào đúng vị trí trong báo cáo.
 - [ ] N3.1.3 Bàn giao cho **Hiếu** cài đặt thẩm định chéo trên máy sạch, tiếp thu góp ý để hoàn thiện.
-- [ ] N3.1.4 Commit: `docs: complete onboarding guide Phan C with verified evidence`.
+- [x] N3.1.4 Commit: `docs: complete onboarding guide Phan C with verified evidence`.
 
 ---
 
@@ -195,13 +195,13 @@
 **Deadline: 25/11** | File code: `tests/unit_tests/test_pbt_fraction.py`
 
 ### N4.1 — Nghiên cứu logic xử lý phân số trong Mealie
-- [ ] N4.1.1 Đọc hàm chuẩn hóa phân số trong `mealie/services/parser_services/parser_utils/string_utils.py`.
-- [ ] N4.1.2 Xác định Invariant: Khi phân số dạng chuỗi (ví dụ `"1/2"`, `"3/4"`, hỗn số `"2 1/2"`) được bóc tách sang số thực, giá trị toán học phải được bảo toàn chính xác trong sai số $\epsilon \le 10^{-4}$.
+- [x] N4.1.1 Đọc hàm chuẩn hóa phân số trong `mealie/services/parser_services/parser_utils/string_utils.py`.
+- [x] N4.1.2 Xác định Invariant: Khi phân số dạng chuỗi (ví dụ `"1/2"`, `"3/4"`, hỗn số `"2 1/2"`) được bóc tách sang số thực, giá trị toán học phải được bảo toàn chính xác trong sai số $\epsilon \le 10^{-4}$.
 
 ### N4.2 — Viết mã kiểm thử tự động PBT Property 5
-- [ ] N4.2.1 Tạo nhánh `feat/nam-property-5-fraction` từ `develop`.
-- [ ] N4.2.2 Tạo file `tests/unit_tests/test_pbt_fraction.py`.
-- [ ] N4.2.3 Viết kiểm thử bảo toàn giá trị toán học cho phân số:
+- [x] N4.2.1 Tạo nhánh `feat/nam-property-5-fraction` từ `develop`.
+- [x] N4.2.2 Tạo file `tests/unit_tests/test_pbt_fraction.py`.
+- [x] N4.2.3 Viết kiểm thử bảo toàn giá trị toán học cho phân số:
   ```python
   from hypothesis import given, strategies as st, assume, settings
   from fractions import Fraction
@@ -219,9 +219,9 @@
       parsed_val = float(Fraction(fraction_str))
       assert abs(parsed_val - expected_val) < 1e-6
   ```
-- [ ] N4.2.4 Đóng gói container chạy test độc lập: Tạo file `docker-compose.test.yml` để chạy toàn bộ suite test bên trong Docker.
-- [ ] N4.2.5 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_fraction.py -v`.
-- [ ] N4.2.6 Commit & tạo Pull Request vào `develop`: `feat(test): add PBT Property 5 fraction normalization and docker runner`.
+- [x] N4.2.4 Đóng gói container chạy test độc lập: Tạo file `docker-compose.test.yml` để chạy toàn bộ suite test bên trong Docker.
+- [x] N4.2.5 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_fraction.py -v`.
+- [x] N4.2.6 Commit & tạo Pull Request vào `develop`: `feat(test): add PBT Property 5 fraction normalization and docker runner`.
 
 ---
 ---
