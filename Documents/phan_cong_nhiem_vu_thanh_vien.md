@@ -187,7 +187,7 @@
 - [x] N3.1.1 Soạn thảo đầy đủ 5 mục chuẩn: C.1 Yêu cầu môi trường, C.2 Các bước cài đặt chi tiết, C.3 Quản lý dịch vụ docker, C.4 Hướng dẫn nạp Seed Data, C.5 Xử lý sự cố (xung đột port 9925, cấp quyền thư mục).
 - [x] N3.1.2 Nhúng toàn bộ 6 ảnh minh chứng vào đúng vị trí trong báo cáo.
 - [ ] N3.1.3 Bàn giao cho **Hiếu** cài đặt thẩm định chéo trên máy sạch, tiếp thu góp ý để hoàn thiện.
-- [ ] N3.1.4 Commit: `docs: complete onboarding guide Phan C with verified evidence`.
+- [x] N3.1.4 Commit: `docs: complete onboarding guide Phan C with verified evidence`.
 
 ---
 
