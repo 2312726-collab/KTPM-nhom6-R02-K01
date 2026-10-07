@@ -2,7 +2,7 @@
 ## ĐỒ ÁN MÔN KIỂM THỬ PHẦN MỀM — NHÓM 6
 
 * **Đối tượng thẩm định:** Tài liệu hướng dẫn On-boarding & triển khai Docker Mealie (`Phần C`) do **Nguyễn Phạm Phú Nam** xây dựng.
-* **Người thực hiện thẩm định chéo:** **Bùi Trung Hiếu** *(MSSV: 2312611 — Vai trò: Test Architect & Cross-validator)*
+* **Người thực hiện thẩm định chéo:** **Bùi Trung Hiếu** *(MSSV: 2312695 | GitHub: 2312611-Hieu — Vai trò: Test Architect & Cross-validator)*
 * **Thời gian thẩm định:** 07/10/2026
 * **Môi trường thực nghiệm:**
   - Hệ điều hành: Windows 11 Pro 64-bit
