@@ -55,3 +55,8 @@ mealie_src/
 # OS specific
 .DS_Store
 Thumbs.db
+
+# Environment variables
+.env
+mealie_docker/.env
+*.env
