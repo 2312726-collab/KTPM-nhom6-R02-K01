@@ -244,7 +244,7 @@
 
 ### H1.2 — Thẩm định chéo (Cross-validation) tài liệu On-boarding
 - [x] H1.2.1 Tiếp nhận `bao_cao_phan_C.md` từ **Nam**.
-- [x] H1.2.2 Cài đặt thử nghiệm Mealie từ đầu trên máy cá nhân theo đúng từng dòng lệnh trong tài liệu.
+- [ ] H1.2.2 Cài đặt thử nghiệm Mealie từ đầu trên máy cá nhân theo đúng từng dòng lệnh trong tài liệu (đã thử, bị chặn do Docker; chưa cài đặt thành công).
 - [x] H1.2.3 Lập biên bản phản hồi (lỗi phát sinh, lệnh còn thiếu) gửi lại Nam cập nhật.
 - [x] H1.2.4 Commit: `docs: outline midterm PBT test strategy and cross-validate onboarding`.
 
@@ -505,7 +505,7 @@
 - [ ] Đủ 6 ảnh chụp bằng chứng 3 luồng nghiệp vụ cốt lõi (Nam & Phước nghiệm thu).
 - [ ] Tài liệu On-boarding `Documents/bao_cao_phan_C.md` chi tiết, đã được Hiếu cài đặt thẩm định thành công từ máy sạch độc lập.
 - [ ] Sơ đồ kiến trúc tổng thể và Data Flow đầy đủ trong `Documents/bao_cao_phan_B.md` (Quân hoàn thành).
-- [x] Đề cương kế hoạch kiểm thử PBT rõ phạm vi và giả định kỹ thuật (Hiếu & Quân hoàn thành).
+- [ ] Đề cương kế hoạch kiểm thử PBT rõ phạm vi và giả định kỹ thuật (Hiếu & Quân hoàn thành).
 - [ ] Cấu hình async/mock cơ bản cho bộ parser sẵn sàng (Mạnh hoàn thành).
 - [ ] **Cả 5 thành viên đều có ít nhất 1–2 commit Git hợp lệ trong Sprint 1 & 2.**
 
