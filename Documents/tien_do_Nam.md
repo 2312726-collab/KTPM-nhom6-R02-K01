@@ -90,12 +90,12 @@
 
 - [x] **N2.2.2** — Luồng 2: Phân tích nguyên liệu (Ingredient Parsing).
   - *Bằng chứng / File:* [`Documents/assets/05_ingredient_parse.png`](Documents/assets/05_ingredient_parse.png).
-  - *Kết quả kiểm tra:* Ảnh chụp kết quả bóc tách chuỗi phức tạp: `1 1/2 cups (360ml) whole milk, warm (about 110F)` thành `Quantity=1.5`, `Unit=cup`, `Food=whole milk`, `Note=warm...`.
+  - *Kết quả kiểm tra:* Đối chiếu trực tiếp với ảnh thật: Modal bóc tách chuỗi `1 onion (finely chopped)` trong công thức `NAM-08 Súp Hành Tây Pháp`, trích xuất chính xác `Quantity=1`, `Unit=None`, `Food=onion` (gợi ý Create missing food: onion), `Note=finely chopped` với `Confidence Score=100.00%`.
   - *Việc còn thiếu:* Không.
 
 - [x] **N2.2.3** — Luồng 3: Nhân tỉ lệ khẩu phần ăn (Servings Scaling từ 4 lên 8).
   - *Bằng chứng / File:* [`Documents/assets/06_servings_scale.png`](Documents/assets/06_servings_scale.png).
-  - *Kết quả kiểm tra:* Ảnh chụp kiểm chứng nhân đôi số lượng toàn bộ nguyên liệu khi scale từ 4 lên 8 servings.
+  - *Kết quả kiểm tra:* Đối chiếu trực tiếp với ảnh thật: Công thức `NAM-10 Bò Sốt Tiêu Khẩu Phần Chuẩn` (gốc 4 servings: 400g beef, 2 tbsp black pepper, 0.5 cup beef broth, 4 cloves garlic), khi đổi sang 8 servings (hệ số 2.0x) giao diện hiển thị chính xác gấp đôi: 800g beef, 4 tbsp black pepper, 1 cup beef broth, 8 cloves garlic.
   - *Việc còn thiếu:* Không.
 
 - [x] **N2.2.4** — Commit dữ liệu mẫu và minh chứng 3 luồng.
@@ -136,3 +136,58 @@
   - Git Bundle: `d:\Nam 4\Kiểm thử phần mềm CTK47-PM\backup_nam_ktpm_20261007\nam_repo_all_branches.bundle` (đã verify).
   - Thư mục sao lưu ngoài repo: `d:\Nam 4\Kiểm thử phần mềm CTK47-PM\backup_nam_ktpm_20261007\`.
 - Sẽ mở lại và triển khai khi có yêu cầu chuyển sang Phần 2 sau mốc Giữa kỳ 20/10.
+
+---
+
+## 5. BẰNG CHỨNG KIỂM CHỨNG THỰC NGHIỆM ĐỘC LẬP (MÔI TRƯỜNG SẠCH)
+
+Thực hiện kiểm chứng độc lập trên container `mealie-verify-clean` (cổng 9935, named volume hoàn toàn mới `mealie-verify-clean-volume`) để đảm bảo không phụ thuộc vào bất kỳ dữ liệu cũ nào:
+
+### 5.1. Quy trình cài đặt mới và kiểm chứng phân quyền RBAC (Yêu cầu 1 & 4)
+- **Quy trình:**
+  1. Khởi động container Mealie v3.28.0 SQLite với named volume mới trên cổng host `9935`.
+  2. Đăng nhập tài khoản ban đầu `changeme@example.com` / `MyPassword` (`HTTP 200`).
+  3. Tạo tài khoản Quản trị viên `admin@nhom6.test` (`admin: True`) qua `POST /api/admin/users` (`HTTP 201`).
+  4. Tạo tài khoản người dùng thường `test@nhom6.test` (`admin: False`) qua `POST /api/admin/users` (`HTTP 201`).
+- **Kết quả đo đạc phân quyền qua API:**
+  - `admin@nhom6.test`: admin flag = `True`. Gọi `GET /api/admin/users` -> **HTTP 200 OK** (trả về danh sách 3 tài khoản).
+  - `test@nhom6.test`: admin flag = `False`. Gọi `GET /api/admin/users` -> **HTTP 403 Forbidden** (`{"detail":"Forbidden"}`).
+  - `test@nhom6.test` gọi `POST /api/admin/users` (thử tạo user mới) -> **HTTP 403 Forbidden** (`{"detail":"Forbidden"}`).
+  - *Kết luận:* Cơ chế RBAC kiểm soát quyền hạn chính xác; tài khoản thường không thể truy cập tài nguyên quản trị.
+
+### 5.2. Kiểm chứng tính Idempotent của Seed Script qua 2 lần chạy liên tiếp (Yêu cầu 3)
+Chạy script `seed_data.py` hai lần liên tiếp trên môi trường sạch và truy vấn trực tiếp API:
+
+| Đối tượng đo đạc | Sau Lần 1 | Sau Lần 2 | Độ lệch (Tăng thêm) | Đánh giá |
+|---|:---:|:---:|:---:|:---:|
+| **Số tài khoản mẫu** | 3 users | 3 users | **+0** | Giữ nguyên danh sách người dùng |
+| **Số công thức NAM** | 10 công thức | 10 công thức | **+0** | Không nhân đôi bản ghi (`NAM-01`..`NAM-10`) |
+| **Số mục thực đơn** | 14 bữa ăn | 14 bữa ăn | **+0** | 7 ngày x 2 bữa không phát sinh trùng lặp |
+
+*Kết luận:* Script seed đạt 100% tính lũy đẳng (idempotent), tự động đối chiếu slug và ngày trước khi ghi.
+
+### 5.3. Kiểm chứng định lượng Servings Scaling của NAM-10 (Yêu cầu 4)
+- **Công thức:** `NAM-10 Bò Sốt Tiêu Khẩu Phần Chuẩn` (khẩu phần mặc định: 4 servings).
+- **Hệ số scale:** Đổi từ 4 lên 8 servings ($k = 8 / 4 = 2.0\times$).
+- **Định lượng trước/sau:**
+  - Thịt bò (Beef): `400 grams` -> `800 grams` ($2.0\times$).
+  - Tiêu đen (Black pepper): `2 tablespoons` -> `4 tablespoons` ($2.0\times$).
+  - Nước dùng bò (Beef broth): `1/2 cup` (`0.5 cup`) -> `1 cup` ($2.0\times$).
+  - Tỏi (Garlic): `4 cloves` -> `8 cloves` ($2.0\times$).
+- *Kết luận:* Giao diện Mealie tính toán tỷ lệ nhân 2 chính xác cho tất cả 4 nguyên liệu, khớp 100% với ảnh [`Documents/assets/06_servings_scale.png`](Documents/assets/06_servings_scale.png).
+
+### 5.4. Đối chiếu 6 ảnh minh chứng trực tiếp (Yêu cầu 2)
+1. `01_mealie_landing.png`: Giao diện Sign In Mealie v3.28.0 chuẩn.
+2. `02_mealie_dashboard.png`: Dashboard người dùng Quản trị viên nhóm 6.
+3. `03_meal_plan.png`: Thực đơn 7 ngày tuần 06/10–12/10 (bữa sáng + tối).
+4. `04_recipe_import.png`: Import thành công món Phở Bò Hà Nội từ mock server cục bộ qua JSON-LD.
+5. `05_ingredient_parse.png`: Bóc tách `1 onion (finely chopped)` trong `NAM-08 Súp Hành Tây Pháp` thành `Qty=1`, `Unit=None`, `Food=onion`, `Note=finely chopped` (Confidence: 100.00%). Khớp ảnh thật.
+6. `06_servings_scale.png`: Món `NAM-10 Bò Sốt Tiêu Khẩu Phần Chuẩn` scale từ 4 lên 8 servings, nhân đôi 4 nguyên liệu. Khớp ảnh thật.
+
+### 5.5. Kết luận trạng thái nghiệm thu Phần 1 (Yêu cầu 5)
+- **Phần đã tự kiểm tra thực nghiệm đạt:**
+  - Nhóm việc N1: Môi trường Docker Mealie SQLite v3.28.0, Admin setup, 2 ảnh minh chứng Landing/Dashboard.
+  - Nhóm việc N2: Seed data 10 món NAM, thực đơn 7 ngày, 4 ảnh minh chứng 3 luồng, idempotent test đạt +0, scaling chính xác.
+  - Nhóm việc N3: Tài liệu On-boarding C.1 đến C.5 đầy đủ, kết quả thực nghiệm môi trường sạch C.4.4.
+- **Phần còn thiếu / Đang chờ:**
+  - **N3.1.3:** Đang chờ bạn **Bùi Trung Hiếu** thẩm định chéo độc lập từ máy sạch theo phân công bước H1.2. Giữ nguyên ô trống `[ ]` cho đến khi có biên bản phản hồi chính thức.

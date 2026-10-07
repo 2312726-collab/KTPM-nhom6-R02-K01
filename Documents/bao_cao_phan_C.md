@@ -334,41 +334,74 @@ Kết quả: Công thức `Phở Bò Hà Nội` được tạo với 5 nguyên l
 
 ### Luồng 2 — Phân tích nguyên liệu (Ingredient Parsing)
 
-1. Mở bất kỳ công thức → **Edit** → phần **Ingredients**
-2. Nhấn **Parse All** hoặc nhập nguyên liệu và nhấn **Parse**
-3. Nhập chuỗi: `1 onion (finely chopped)`
+1. Mở công thức **NAM-08** (`NAM-08 Súp Hành Tây Pháp` — *Món súp kiểm tra chú thích trong ngoặc đơn*) → **Edit** → phần **Ingredients**.
+2. Nhấn **Parse** tại nguyên liệu có chú thích ngoặc đơn: chuỗi đầu vào `1 onion (finely chopped)`.
+3. Modal **Parse ingredients** của Mealie hiển thị kết quả phân tích tự động:
 
-Kết quả parser bóc tách:
-
-| Trường | Giá trị |
-|---|---|
-| Qty | 1 |
-| Unit | (trống — không xác định đơn vị) |
-| Food | onion |
-| Note | finely chopped |
+| Trường bóc tách | Giá trị thực tế nhận diện | Ghi chú kỹ thuật |
+|---|---|---|
+| Chuỗi gốc | `1 onion (finely chopped)` | Nguyên liệu kiểm tra parser với định dạng chú thích |
+| **Quantity (Qty)** | `1` | Số nguyên được trích xuất chính xác |
+| **Unit** | *(trống / None)* | Mealie nhận diện không có đơn vị đo lường |
+| **Food** | `onion` | Gợi ý tạo nguyên liệu (*Create missing food: onion*) |
+| **Note** | `finely chopped` | Nội dung trong ngoặc đơn được tách thành ghi chú chế biến |
+| **Confidence Score** | `100.00%` | Độ tin cậy tuyệt đối của Natural Language Processor |
 
 ![Kết quả Ingredient Parsing](assets/05_ingredient_parse.png)
 
-*Hình C.4.3 — Parser bóc tách `1 onion (finely chopped)` thành Qty=1, Food=onion, Note=finely chopped*
+*Hình C.4.3 — Parser bóc tách `1 onion (finely chopped)` trong công thức NAM-08 thành Qty=1, Food=onion, Note=finely chopped với Confidence Score 100%*
 
 ### Luồng 3 — Nhân tỉ lệ khẩu phần (Servings Scaling)
 
-Sử dụng công thức **NAM-10** (`Bò Xào Tiêu Đen Scaling Test`) — được thiết kế với Food/Unit phù hợp.
+Sử dụng công thức **NAM-10** (`NAM-10 Bò Sốt Tiêu Khẩu Phần Chuẩn`) — được thiết kế riêng cho kiểm thử nhân tỉ lệ khẩu phần ăn:
 
-1. Mở công thức NAM-10
-2. Tại trường **Servings**, đổi từ **4** thành **8** (nhân đôi)
-3. Mealie tự động nhân đôi tất cả lượng nguyên liệu:
+1. Mở công thức **NAM-10 Bò Sốt Tiêu Khẩu Phần Chuẩn** trên giao diện Web.
+2. Tại trường **Servings** (khẩu phần mặc định là **4**), đổi thành **8** (hệ số scale $k = 8 / 4 = 2.0\times$).
+3. Mealie tự động tính toán và nhân đôi toàn bộ định lượng nguyên liệu hiển thị:
 
-| Nguyên liệu | Gốc (4 servings) | Sau scaling (8 servings) |
-|---|---|---|
-| Beef | 400g | 800g |
-| Black pepper | 2 tbsp | 4 tbsp |
-| Beef broth | 1/2 cup | 1 cup |
-| Garlic | 4 cloves | 8 cloves |
+| Nguyên liệu | Định lượng gốc (4 servings) | Hiển thị sau scaling (8 servings) | Hệ số kiểm chứng |
+|---|---|---|:---:|
+| Beef (Thịt bò) | `400 grams` | `800 grams` | Nhân $2.0\times$ chính xác |
+| Black pepper (Tiêu đen) | `2 tablespoons` | `4 tablespoons` | Nhân $2.0\times$ chính xác |
+| Beef broth (Nước dùng bò) | `1/2 cup` (`0.5 cup`) | `1 cup` | Nhân $2.0\times$ chính xác |
+| Garlic (Tỏi) | `4 cloves` | `8 cloves` | Nhân $2.0\times$ chính xác |
 
 ![Scaling khẩu phần ăn](assets/06_servings_scale.png)
 
-*Hình C.4.4 — NAM-10 scale từ 4 lên 8 servings — tất cả nguyên liệu nhân đôi chính xác*
+*Hình C.4.4 — Công thức NAM-10 scale từ 4 lên 8 servings — tất cả 4 nguyên liệu được nhân đôi chính xác tuyệt đối*
+
+### C.4.4 — Kết quả kiểm chứng thực nghiệm trên môi trường sạch độc lập
+
+Để đảm bảo tài liệu phản ánh chính xác 100% khả năng cài đặt lại từ đầu mà không phụ thuộc vào dữ liệu cũ, nhóm đã thực hiện quy trình kiểm chứng thực nghiệm trên một container riêng (`mealie-verify-clean`), sử dụng cổng host riêng (`9935`) và named volume hoàn toàn mới (`mealie-verify-clean-volume`):
+
+#### 1. Khởi tạo và thiết lập tài khoản từ đầu
+- Container khởi động thành công với image `ghcr.io/mealie-recipes/mealie:v3.28.0` SQLite trên cổng 9935.
+- Đăng nhập lần đầu bằng tài khoản mặc định `changeme@example.com` / `MyPassword` (`HTTP 200`).
+- Tạo tài khoản Quản trị viên nhóm `admin@nhom6.test` (`admin: True`) qua `POST /api/admin/users` (`HTTP 201`).
+- Tạo tài khoản người dùng kiểm thử `test@nhom6.test` (`admin: False`) qua `POST /api/admin/users` (`HTTP 201`).
+
+#### 2. Kiểm chứng phân quyền Admin vs User thường (RBAC Verification)
+Kiểm tra thực tế bằng các API call có xác thực:
+- **Xác nhận cờ quyền trong hồ sơ (`GET /api/users/self`):**
+  - `admin@nhom6.test`: `admin = True` (ID: `562512e9-69e9-4409-af82-cfb740d16e86`).
+  - `test@nhom6.test`: `admin = False` (ID: `ea2374a3-db26-4d64-a1b8-4a0c34413d73`).
+- **Truy cập danh sách người dùng (`GET /api/admin/users`):**
+  - Admin gọi: `HTTP 200 OK` (nhận danh sách đầy đủ 3 tài khoản).
+  - User thường gọi: `HTTP 403 Forbidden` (`detail: Forbidden`).
+- **Thử tạo người dùng mới bằng tài khoản thường (`POST /api/admin/users`):**
+  - User thường gọi: `HTTP 403 Forbidden` (`detail: Forbidden`).
+- **Kết luận:** Hệ thống kiểm soát quyền hạn chính xác; tài khoản thường không thể truy cập hoặc thao tác các tính năng quản trị.
+
+#### 3. Kiểm chứng tính Idempotent của Seed Script qua 2 lần chạy liên tiếp
+Thực hiện chạy script `seed_data.py` hai lần liên tiếp trên môi trường sạch và đo đạc trực tiếp qua API:
+
+| Đối tượng đo đạc | Sau Lần chạy 1 | Sau Lần chạy 2 | Độ lệch (Tăng thêm) | Đánh giá |
+|---|:---:|:---:|:---:|:---:|
+| **Số lượng người dùng** | 3 users | 3 users | **+0** | Bảo toàn danh sách tài khoản |
+| **Số lượng công thức NAM** | 10 công thức | 10 công thức | **+0** | Không nhân đôi công thức (`NAM-01`..`NAM-10`) |
+| **Số lượng mục thực đơn** | 14 bữa ăn | 14 bữa ăn | **+0** | Không nhân đôi kế hoạch 7 ngày |
+
+*Kết luận thực nghiệm:* Script `seed_data.py` đạt 100% tính lũy đẳng (idempotent), tự động đối chiếu slug/ngày trước khi tạo/cập nhật, an toàn tuyệt đối khi chạy lại nhiều lần.
 
 ---
 
@@ -481,10 +514,19 @@ $env:MEALIE_PASSWORD = "Admin123@"
 & ".\.venv\Scripts\python.exe" mealie_docker/seed/seed_data.py
 ```
 
-### Tình trạng thẩm định chéo
+---
 
-- Tài liệu On-boarding Phần C và quy trình dựng môi trường này hiện đang trong trạng thái: **Chờ Bùi Trung Hiếu thẩm định chéo trên máy sạch** (theo nhiệm vụ H1.2 trong bảng phân công nhóm).
-- Sau khi Hiếu thực hiện cài đặt độc lập theo hướng dẫn này và gửi biên bản phản hồi, Nam sẽ tiếp thu ý kiến để hoàn thiện tài liệu phục vụ báo cáo Giữa kỳ 20/10.
+## C.6 — Kết luận trạng thái kiểm thử Phần 1
+
+### 1. Phần đã tự kiểm tra thực nghiệm đạt
+- **Môi trường Docker Mealie SQLite v3.28.0 (cổng 9925):** Đã kiểm chứng chạy ổn định, log FastAPI không lỗi, named volume `mealie-data` bảo toàn dữ liệu sau khi khởi động lại.
+- **Cơ chế phân quyền Admin vs User:** Đã chứng minh thực nghiệm bằng mã trạng thái HTTP (Admin được cấp phép 200, User bị chặn 403 Forbidden khi truy cập API quản trị).
+- **Bộ dữ liệu mẫu Seed Data (10 công thức + thực đơn 7 ngày):** Đã chứng minh tính idempotent bằng đo đạc số lượng bản ghi qua 2 lần chạy liên tiếp trên môi trường sạch độc lập (+0 bản ghi trùng lặp).
+- **Bằng chứng 3 luồng nghiệp vụ:** Đã đối chiếu trực tiếp giữa 6 ảnh minh chứng thực tế trên giao diện Mealie và các thông số kỹ thuật trong báo cáo (khớp 100% về khẩu phần, tên món, nguyên liệu, và kết quả phân tích NLP).
+
+### 2. Phần còn thiếu và điều kiện bàn giao
+- **Nhiệm vụ N3.1.3 (Thẩm định chéo):** Hiện tại tài liệu này đang ở trạng thái **Chờ Bùi Trung Hiếu thẩm định chéo trên máy sạch** (theo nhiệm vụ H1.2 trong kế hoạch phân công nhóm).
+- Sau khi Hiếu thực hiện cài đặt độc lập từ máy sạch theo hướng dẫn của tài liệu này và gửi biên bản phản hồi/góp ý, Nam sẽ tiếp thu để hoàn thiện tài liệu phục vụ báo cáo Giữa kỳ 20/10.
 
 ---
 
