@@ -1,0 +1,22 @@
+services:
+  mealie:
+    container_name: mealie
+    image: ghcr.io/mealie-recipes/mealie:v3.28.0
+    restart: always
+    ports:
+      - "${MEALIE_PORT:-9925}:9000"
+    environment:
+      - ALLOW_SIGNUP=${ALLOW_SIGNUP:-true}
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Ho_Chi_Minh
+      - BASE_URL=${BASE_URL:-http://localhost:9925}
+      - DB_ENGINE=sqlite
+      - LOG_LEVEL=${LOG_LEVEL:-DEBUG}
+      - HTTP_ALLOW_LIST=${HTTP_ALLOW_LIST:-host.docker.internal}
+    volumes:
+      - mealie-data:/app/data/
+
+volumes:
+  mealie-data:
+    driver: local
