@@ -227,6 +227,7 @@
 ---
 
 # 👤 THÀNH VIÊN 3: BÙI TRUNG HIẾU
+> **MSSV:** `2110037` *(GitHub username: `2312611-Hieu`)*  
 > **Vai trò:** Test Architect & PBT Methodology Specialist  
 > **Báo cáo phụ trách chính:** Phần D (Cơ sở lý thuyết PBT) + Phần E (Thiết kế kịch bản kiểm thử)  
 > **Kịch bản Code PBT trực tiếp:** **Property 2 (Unit Conversion Round-trip)** trong `tests/unit_tests/test_pbt_unit_converter.py`
@@ -237,15 +238,15 @@
 **Deadline: 18/10**
 
 ### H1.1 — Khảo sát module mục tiêu & Lập đề cương kiểm thử
-- [ ] H1.1.1 Đọc cấu trúc module `mealie/services/parser_services/`.
-- [ ] H1.1.2 Xác định phạm vi kiểm thử: 3 file cốt lõi (`ingredient_parser.py`, `string_utils.py`, `unit_utils.py`).
-- [ ] H1.1.3 Soạn thảo đề cương kế hoạch kiểm thử PBT sơ bộ nộp Trưởng nhóm Quân đưa vào Báo cáo Giữa kỳ.
+- [x] H1.1.1 Đọc cấu trúc module `mealie/services/parser_services/`.
+- [x] H1.1.2 Xác định phạm vi kiểm thử: 3 file cốt lõi (`ingredient_parser.py`, `string_utils.py`, `unit_utils.py`).
+- [x] H1.1.3 Soạn thảo đề cương kế hoạch kiểm thử PBT sơ bộ nộp Trưởng nhóm Quân đưa vào Báo cáo Giữa kỳ.
 
 ### H1.2 — Thẩm định chéo (Cross-validation) tài liệu On-boarding
-- [ ] H1.2.1 Tiếp nhận `bao_cao_phan_C.md` từ **Nam**.
-- [ ] H1.2.2 Cài đặt thử nghiệm Mealie từ đầu trên máy cá nhân theo đúng từng dòng lệnh trong tài liệu.
-- [ ] H1.2.3 Lập biên bản phản hồi (lỗi phát sinh, lệnh còn thiếu) gửi lại Nam cập nhật.
-- [ ] H1.2.4 Commit: `docs: outline midterm PBT test strategy and cross-validate onboarding`.
+- [x] H1.2.1 Tiếp nhận `bao_cao_phan_C.md` từ **Nam**.
+- [x] H1.2.2 Cài đặt thử nghiệm Mealie từ đầu trên máy cá nhân theo đúng từng dòng lệnh trong tài liệu.
+- [x] H1.2.3 Lập biên bản phản hồi (lỗi phát sinh, lệnh còn thiếu) gửi lại Nam cập nhật.
+- [x] H1.2.4 Commit: `docs: outline midterm PBT test strategy and cross-validate onboarding`.
 
 ---
 
@@ -504,7 +505,7 @@
 - [ ] Đủ 6 ảnh chụp bằng chứng 3 luồng nghiệp vụ cốt lõi (Nam & Phước nghiệm thu).
 - [ ] Tài liệu On-boarding `Documents/bao_cao_phan_C.md` chi tiết, đã được Hiếu cài đặt thẩm định thành công từ máy sạch độc lập.
 - [ ] Sơ đồ kiến trúc tổng thể và Data Flow đầy đủ trong `Documents/bao_cao_phan_B.md` (Quân hoàn thành).
-- [ ] Đề cương kế hoạch kiểm thử PBT rõ phạm vi và giả định kỹ thuật (Hiếu & Quân hoàn thành).
+- [x] Đề cương kế hoạch kiểm thử PBT rõ phạm vi và giả định kỹ thuật (Hiếu & Quân hoàn thành).
 - [ ] Cấu hình async/mock cơ bản cho bộ parser sẵn sàng (Mạnh hoàn thành).
 - [ ] **Cả 5 thành viên đều có ít nhất 1–2 commit Git hợp lệ trong Sprint 1 & 2.**
 

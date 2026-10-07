@@ -2,7 +2,7 @@
 ## ĐỒ ÁN MÔN KIỂM THỬ PHẦN MỀM — NHÓM 6
 * **Hệ thống mục tiêu (R02):** [Mealie v3.28.0](https://github.com/mealie-recipes/mealie) (Commit SHA: `0552eaa4a80031b8572849cca0ed95d07f1be001`)
 * **Kỹ thuật nâng cao (K01):** Property-Based Testing (PBT) với thư viện `Hypothesis`
-* **Người thực hiện:** **Bùi Trung Hiếu** *(MSSV: 2312695 | GitHub: 2312611-Hieu — Vai trò: Test Architect & PBT Methodology Specialist)*
+* **Người thực hiện:** **Bùi Trung Hiếu** *(MSSV: 2110037 | GitHub: `2312611-Hieu` — Vai trò: Test Architect & PBT Methodology Specialist)*
 * **Đối tượng tiếp nhận:** Trưởng nhóm **Trần Quốc Quân** *(tổng hợp vào Báo cáo Giữa kỳ)*
 
 ---
