@@ -60,3 +60,12 @@ Thumbs.db
 .env
 mealie_docker/.env
 *.env
+
+# Documents assets & generated Office files
+Documents/assets/
+*.docx
+~$*.docx
+
+# Local helper scripts
+scripts/
+
