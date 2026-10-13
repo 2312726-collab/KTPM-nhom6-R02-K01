@@ -24,12 +24,12 @@
 **Mục tiêu:** Dựng thành công Mealie v3.28.0 SQLite trên cổng 9925 bằng Docker Compose, thiết lập quyền Admin và ghi nhận minh chứng.
 
 - [x] **N1.1.1** — Tạo thư mục `mealie_docker/` trong repo.
-  - *Bằng chứng / File:* Thư mục [`mealie_docker/`](mealie_docker/).
+  - *Bằng chứng / File:* Thư mục [`mealie_docker/`](../mealie_docker/).
   - *Kết quả kiểm tra:* Thư mục tồn tại, độc lập với thư mục gốc, cấu trúc sạch sẽ.
   - *Việc còn thiếu:* Không.
 
 - [x] **N1.1.2** — Tạo file `mealie_docker/docker-compose.yml` (SQLite) và `mealie_docker/.env.example` mở cổng `9925`.
-  - *Bằng chứng / File:* [`mealie_docker/docker-compose.yml`](mealie_docker/docker-compose.yml), [`mealie_docker/.env.example`](mealie_docker/.env.example).
+  - *Bằng chứng / File:* [`mealie_docker/docker-compose.yml`](../mealie_docker/docker-compose.yml), [`mealie_docker/.env.example`](../mealie_docker/.env.example).
   - *Kết quả kiểm tra:* Image `ghcr.io/mealie-recipes/mealie:v3.28.0`, port host 9925 -> container 9000, biến môi trường mẫu đầy đủ.
   - *Việc còn thiếu:* Không.
 
@@ -74,7 +74,7 @@
   - *Việc còn thiếu:* Không.
 
 - [x] **N2.1.2** — Tạo 10 công thức mẫu đa dạng (nguyên liệu đơn giản, phân số thường, phân số unicode `½`, chú thích, nhiều bước).
-  - *Bằng chứng / File:* [`mealie_docker/seed/recipes_nam.json`](mealie_docker/seed/recipes_nam.json), script [`mealie_docker/seed/seed_data.py`](mealie_docker/seed/seed_data.py).
+  - *Bằng chứng / File:* [`mealie_docker/seed/recipes_nam.json`](../mealie_docker/seed/recipes_nam.json), script [`mealie_docker/seed/seed_data.py`](../mealie_docker/seed/seed_data.py).
   - *Kết quả kiểm tra:* Script idempotent, tự kiểm tra trùng lặp slug trước khi tạo/cập nhật; 10 công thức mẫu `NAM-01` đến `NAM-10` đã có trong CSDL.
   - *Việc còn thiếu:* Không.
 
@@ -84,7 +84,7 @@
   - *Việc còn thiếu:* Không.
 
 - [x] **N2.2.1** — Luồng 1: Import công thức từ URL (nguồn mock server cục bộ).
-  - *Bằng chứng / File:* Script mock server [`mealie_docker/seed/mock_recipe_server.py`](mealie_docker/seed/mock_recipe_server.py) và ảnh minh chứng ngoại tuyến `04_recipe_import.png`.
+  - *Bằng chứng / File:* Script mock server [`mealie_docker/seed/mock_recipe_server.py`](../mealie_docker/seed/mock_recipe_server.py) và ảnh minh chứng ngoại tuyến `04_recipe_import.png`.
   - *Kết quả kiểm tra:* Import thành công công thức Phở Bò qua URL Schema.org JSON-LD cục bộ mà không phụ thuộc internet bên ngoài.
   - *Việc còn thiếu:* Không.
 
@@ -109,12 +109,12 @@
 **Mục tiêu:** Soạn thảo hoàn chỉnh tài liệu hướng dẫn cài đặt và vận hành môi trường kiểm thử `Documents/bao_cao_phan_C.md`.
 
 - [x] **N3.1.1** — Soạn thảo đầy đủ 5 mục chuẩn (C.1 Yêu cầu môi trường, C.2 Cài đặt chi tiết, C.3 Quản lý dịch vụ Docker, C.4 Nạp Seed Data, C.5 Xử lý sự cố).
-  - *Bằng chứng / File:* [`Documents/bao_cao_phan_C.md`](Documents/bao_cao_phan_C.md).
+  - *Bằng chứng / File:* [`Documents/bao_cao_phan_C.md`](bao_cao_phan_C.md).
   - *Kết quả kiểm tra:* Đủ 5 phần nội dung kỹ thuật, chính xác phiên bản máy thật, biến môi trường, đường dẫn và lệnh chạy.
   - *Việc còn thiếu:* Không.
 
 - [x] **N3.1.2** — Trình bày đầy đủ 6 khối minh chứng thực nghiệm trong báo cáo.
-  - *Bằng chứng / File:* 6 khối minh chứng kỹ thuật tương ứng với 6 file ảnh `01_mealie_landing.png` đến `06_servings_scale.png` trong [`Documents/bao_cao_phan_C.md`](Documents/bao_cao_phan_C.md).
+  - *Bằng chứng / File:* 6 khối minh chứng kỹ thuật tương ứng với 6 file ảnh `01_mealie_landing.png` đến `06_servings_scale.png` trong [`Documents/bao_cao_phan_C.md`](bao_cao_phan_C.md).
   - *Kết quả kiểm tra:* Mô tả chi tiết kết quả thực nghiệm, không tạo broken link trên GitHub, lưu trữ ảnh ngoại tuyến phục vụ demo.
   - *Việc còn thiếu:* Không.
 
