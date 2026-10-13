@@ -1,6 +1,7 @@
 """
 Cấu hình dùng chung cho Pytest & Hypothesis — Đồ án Kiểm thử phần mềm (Nhóm 6).
 Đề tài: Mealie (v3.28.0) + Property-Based Testing (Hypothesis).
+Phụ trách: Trần Ngọc Bảo Phước (MSSV: 2312719) — QA Automation Engineer 1
 """
 
 import sys
