@@ -118,9 +118,9 @@ Chờ xuất hiện dòng `Application startup complete` hoặc `Uvicorn running
 
 Mở trình duyệt: **http://localhost:9925**
 
-![Giao diện Landing của Mealie](assets/01_mealie_landing.png)
-
-*Hình C.2.1 — Giao diện trang chủ Mealie lần đầu truy cập*
+> 📸 **Minh chứng thực nghiệm (Hình C.2.1 — Lưu trữ ngoại tuyến phục vụ demo & nghiệm thu):**
+> - *File ảnh chụp:* `01_mealie_landing.png` (lưu tại hồ sơ minh chứng ngoại tuyến của nhóm).
+> - *Kết quả ghi nhận:* Giao diện Sign In chuẩn Mealie v3.28.0 tải mượt mà trên cổng host 9925, tiến độ khởi động FastAPI hoàn tất (`Application startup complete`).
 
 Mealie v3.28.0 hỗ trợ hai cách cấu hình Quản trị viên:
 
@@ -151,9 +151,9 @@ Nếu trong `.env` có `ALLOW_SIGNUP=true`:
 
 Sau khi đăng nhập Admin, Dashboard hiển thị:
 
-![Dashboard Mealie sau đăng nhập](assets/02_mealie_dashboard.png)
-
-*Hình C.2.2 — Dashboard Mealie sau khi Admin đăng nhập thành công*
+> 📸 **Minh chứng thực nghiệm (Hình C.2.2 — Lưu trữ ngoại tuyến phục vụ demo & nghiệm thu):**
+> - *File ảnh chụp:* `02_mealie_dashboard.png` (lưu tại hồ sơ minh chứng ngoại tuyến của nhóm).
+> - *Kết quả ghi nhận:* Đăng nhập tài khoản Quản trị viên `admin@nhom6.test` thành công, giao diện Dashboard hiển thị đầy đủ các thanh điều hướng quản trị.
 
 ### Bước 6: Cài đặt môi trường Python cho seed/test
 
@@ -298,9 +298,9 @@ Vào **Recipes** → kiểm tra danh sách 10 công thức có tiền tố `[NAM
 
 Vào **Meal Planner** → điều hướng đến tuần **06/10–12/10/2026** → xác nhận 14 bữa (2 bữa mỗi ngày: sáng + tối).
 
-![Kế hoạch thực đơn 7 ngày](assets/03_meal_plan.png)
-
-*Hình C.4.1 — Thực đơn 7 ngày tuần 06/10–12/10/2026 sau khi seed*
+> 📸 **Minh chứng thực nghiệm (Hình C.4.1 — Lưu trữ ngoại tuyến phục vụ demo & nghiệm thu):**
+> - *File ảnh chụp:* `03_meal_plan.png` (lưu tại hồ sơ minh chứng ngoại tuyến của nhóm).
+> - *Kết quả ghi nhận:* Lịch thực đơn 7 ngày tuần 06/10–12/10/2026 hiển thị đầy đủ 14 bữa ăn (bữa sáng và bữa tối mỗi ngày) được gắn đúng các công thức mẫu từ `NAM-01` đến `NAM-10`.
 
 ### Luồng 1 — Import công thức từ URL
 
@@ -328,9 +328,9 @@ Invoke-WebRequest http://localhost:9926/recipe/pho-bo -UseBasicParsing | Select-
 
 Kết quả: Công thức `Phở Bò Hà Nội` được tạo với 5 nguyên liệu, 3 bước và khẩu phần 4.
 
-![Import công thức từ URL](assets/04_recipe_import.png)
-
-*Hình C.4.2 — Công thức `pho-bo-ha-noi` đã import thành công từ mock server*
+> 📸 **Minh chứng thực nghiệm (Hình C.4.2 — Lưu trữ ngoại tuyến phục vụ demo & nghiệm thu):**
+> - *File ảnh chụp:* `04_recipe_import.png` (lưu tại hồ sơ minh chứng ngoại tuyến của nhóm).
+> - *Kết quả ghi nhận:* Import thành công công thức Phở Bò qua URL mock server nội bộ `http://host.docker.internal:9926/recipe/pho-bo` định dạng Schema.org JSON-LD; hệ thống tự động bóc tách tên, 5 nguyên liệu và 3 bước hướng dẫn.
 
 ### Luồng 2 — Phân tích nguyên liệu (Ingredient Parsing)
 
@@ -347,9 +347,9 @@ Kết quả: Công thức `Phở Bò Hà Nội` được tạo với 5 nguyên l
 | **Note** | `finely chopped` | Nội dung trong ngoặc đơn được tách thành ghi chú chế biến |
 | **Confidence Score** | `100.00%` | Độ tin cậy tuyệt đối của Natural Language Processor |
 
-![Kết quả Ingredient Parsing](assets/05_ingredient_parse.png)
-
-*Hình C.4.3 — Parser bóc tách `1 onion (finely chopped)` trong công thức NAM-08 thành Qty=1, Food=onion, Note=finely chopped với Confidence Score 100%*
+> 📸 **Minh chứng thực nghiệm (Hình C.4.3 — Lưu trữ ngoại tuyến phục vụ demo & nghiệm thu):**
+> - *File ảnh chụp:* `05_ingredient_parse.png` (lưu tại hồ sơ minh chứng ngoại tuyến của nhóm).
+> - *Kết quả ghi nhận:* Modal bóc tách nguyên liệu của Mealie phân tích chuỗi `1 onion (finely chopped)` trong công thức `NAM-08 Súp Hành Tây Pháp`, trích xuất chính xác 100% các trường: `Quantity=1`, `Unit=None`, `Food=onion` (*Create missing food*), `Note=finely chopped` với `Confidence Score = 100.00%`.
 
 ### Luồng 3 — Nhân tỉ lệ khẩu phần (Servings Scaling)
 
@@ -366,9 +366,9 @@ Sử dụng công thức **NAM-10** (`NAM-10 Bò Sốt Tiêu Khẩu Phần Chu�
 | Beef broth (Nước dùng bò) | `1/2 cup` (`0.5 cup`) | `1 cup` | Nhân $2.0\times$ chính xác |
 | Garlic (Tỏi) | `4 cloves` | `8 cloves` | Nhân $2.0\times$ chính xác |
 
-![Scaling khẩu phần ăn](assets/06_servings_scale.png)
-
-*Hình C.4.4 — Công thức NAM-10 scale từ 4 lên 8 servings — tất cả 4 nguyên liệu được nhân đôi chính xác tuyệt đối*
+> 📸 **Minh chứng thực nghiệm (Hình C.4.4 — Lưu trữ ngoại tuyến phục vụ demo & nghiệm thu):**
+> - *File ảnh chụp:* `06_servings_scale.png` (lưu tại hồ sơ minh chứng ngoại tuyến của nhóm).
+> - *Kết quả ghi nhận:* Công thức `NAM-10 Bò Sốt Tiêu Khẩu Phần Chuẩn` khi tăng Servings từ 4 lên 8 (hệ số $k = 2.0\times$) hiển thị chính xác gấp đôi định lượng cả 4 nguyên liệu (`400g` -> `800g beef`, `2 tbsp` -> `4 tbsp pepper`, `0.5 cup` -> `1 cup broth`, `4 cloves` -> `8 cloves garlic`).
 
 ### C.4.4 — Kết quả kiểm chứng thực nghiệm trên môi trường sạch độc lập
 

@@ -44,7 +44,7 @@
   - *Việc còn thiếu:* Không.
 
 - [x] **N1.1.5** — Truy cập `http://localhost:9925`, chụp ảnh Landing Page.
-  - *Bằng chứng / File:* [`Documents/assets/01_mealie_landing.png`](Documents/assets/01_mealie_landing.png).
+  - *Bằng chứng / File:* File ảnh minh chứng `01_mealie_landing.png` (lưu trữ ngoại tuyến tại `backup_nam_ktpm_20261013/assets_nam_6_anh/`, phục vụ demo & nghiệm thu theo quy tắc `.gitignore` của nhóm).
   - *Kết quả kiểm tra:* Ảnh chụp giao diện Landing page thật, kích thước 26.5 KB.
   - *Việc còn thiếu:* Không.
 
@@ -54,13 +54,13 @@
   - *Việc còn thiếu:* Không.
 
 - [x] **N1.2.2** — Đăng nhập Dashboard thành công, chụp ảnh Dashboard.
-  - *Bằng chứng / File:* [`Documents/assets/02_mealie_dashboard.png`](Documents/assets/02_mealie_dashboard.png).
+  - *Bằng chứng / File:* File ảnh minh chứng `02_mealie_dashboard.png` (lưu trữ ngoại tuyến phục vụ demo & nghiệm thu).
   - *Kết quả kiểm tra:* Ảnh chụp Dashboard thật, kích thước 38.3 KB.
   - *Việc còn thiếu:* Không.
 
 - [x] **N1.2.3** — Commit cấu hình Docker Compose và credentials.
   - *Bằng chứng / File:* Commit `f66d491` trên nhánh `2312695-NguyenPhamPhuNam-Phan1`.
-  - *Kết quả kiểm tra:* Đã push thành công lên `origin`.
+  - *Kết quả kiểm tra:* Đã commit thành công.
   - *Việc còn thiếu:* Không.
 
 ---
@@ -79,28 +79,28 @@
   - *Việc còn thiếu:* Không.
 
 - [x] **N2.1.3** — Tạo kế hoạch thực đơn (Meal Plan) 7 ngày tuần 06/10–12/10, chụp ảnh.
-  - *Bằng chứng / File:* [`Documents/assets/03_meal_plan.png`](Documents/assets/03_meal_plan.png).
+  - *Bằng chứng / File:* File ảnh minh chứng `03_meal_plan.png` (lưu trữ ngoại tuyến phục vụ demo & nghiệm thu).
   - *Kết quả kiểm tra:* Ảnh hiển thị thực đơn bữa sáng và bữa tối đầy đủ 7 ngày liên tục, kích thước 95.6 KB.
   - *Việc còn thiếu:* Không.
 
 - [x] **N2.2.1** — Luồng 1: Import công thức từ URL (nguồn mock server cục bộ).
-  - *Bằng chứng / File:* Script mock server [`mealie_docker/seed/mock_recipe_server.py`](mealie_docker/seed/mock_recipe_server.py) và ảnh [`Documents/assets/04_recipe_import.png`](Documents/assets/04_recipe_import.png).
+  - *Bằng chứng / File:* Script mock server [`mealie_docker/seed/mock_recipe_server.py`](mealie_docker/seed/mock_recipe_server.py) và ảnh minh chứng ngoại tuyến `04_recipe_import.png`.
   - *Kết quả kiểm tra:* Import thành công công thức Phở Bò qua URL Schema.org JSON-LD cục bộ mà không phụ thuộc internet bên ngoài.
   - *Việc còn thiếu:* Không.
 
 - [x] **N2.2.2** — Luồng 2: Phân tích nguyên liệu (Ingredient Parsing).
-  - *Bằng chứng / File:* [`Documents/assets/05_ingredient_parse.png`](Documents/assets/05_ingredient_parse.png).
+  - *Bằng chứng / File:* File ảnh minh chứng ngoại tuyến `05_ingredient_parse.png`.
   - *Kết quả kiểm tra:* Đối chiếu trực tiếp với ảnh thật: Modal bóc tách chuỗi `1 onion (finely chopped)` trong công thức `NAM-08 Súp Hành Tây Pháp`, trích xuất chính xác `Quantity=1`, `Unit=None`, `Food=onion` (gợi ý Create missing food: onion), `Note=finely chopped` với `Confidence Score=100.00%`.
   - *Việc còn thiếu:* Không.
 
 - [x] **N2.2.3** — Luồng 3: Nhân tỉ lệ khẩu phần ăn (Servings Scaling từ 4 lên 8).
-  - *Bằng chứng / File:* [`Documents/assets/06_servings_scale.png`](Documents/assets/06_servings_scale.png).
+  - *Bằng chứng / File:* File ảnh minh chứng ngoại tuyến `06_servings_scale.png`.
   - *Kết quả kiểm tra:* Đối chiếu trực tiếp với ảnh thật: Công thức `NAM-10 Bò Sốt Tiêu Khẩu Phần Chuẩn` (gốc 4 servings: 400g beef, 2 tbsp black pepper, 0.5 cup beef broth, 4 cloves garlic), khi đổi sang 8 servings (hệ số 2.0x) giao diện hiển thị chính xác gấp đôi: 800g beef, 4 tbsp black pepper, 1 cup beef broth, 8 cloves garlic.
   - *Việc còn thiếu:* Không.
 
 - [x] **N2.2.4** — Commit dữ liệu mẫu và minh chứng 3 luồng.
-  - *Bằng chứng / File:* Commit `12681a3` trên nhánh `2312695-NguyenPhamPhuNam-Phan1`.
-  - *Kết quả kiểm tra:* Đã push thành công lên `origin`.
+  - *Bằng chứng / File:* Commit trên nhánh `2312695-NguyenPhamPhuNam-Phan1`.
+  - *Kết quả kiểm tra:* Đã commit thành công.
   - *Việc còn thiếu:* Không.
 
 ---
@@ -113,9 +113,9 @@
   - *Kết quả kiểm tra:* Đủ 5 phần nội dung kỹ thuật, chính xác phiên bản máy thật, biến môi trường, đường dẫn và lệnh chạy.
   - *Việc còn thiếu:* Không.
 
-- [x] **N3.1.2** — Nhúng toàn bộ 6 ảnh minh chứng vào đúng vị trí trong báo cáo.
-  - *Bằng chứng / File:* 6 ảnh `01_mealie_landing.png` đến `06_servings_scale.png` nhúng trong [`Documents/bao_cao_phan_C.md`](Documents/bao_cao_phan_C.md).
-  - *Kết quả kiểm tra:* Đường dẫn chính xác `assets/0x_*.png`, tất cả ảnh hiển thị hợp lệ.
+- [x] **N3.1.2** — Trình bày đầy đủ 6 khối minh chứng thực nghiệm trong báo cáo.
+  - *Bằng chứng / File:* 6 khối minh chứng kỹ thuật tương ứng với 6 file ảnh `01_mealie_landing.png` đến `06_servings_scale.png` trong [`Documents/bao_cao_phan_C.md`](Documents/bao_cao_phan_C.md).
+  - *Kết quả kiểm tra:* Mô tả chi tiết kết quả thực nghiệm, không tạo broken link trên GitHub, lưu trữ ảnh ngoại tuyến phục vụ demo.
   - *Việc còn thiếu:* Không.
 
 - [ ] **N3.1.3** — Bàn giao cho **Bùi Trung Hiếu** cài đặt thẩm định chéo trên máy sạch, tiếp thu góp ý để hoàn thiện.
@@ -174,7 +174,7 @@ Chạy script `seed_data.py` hai lần liên tiếp trên môi trường sạch 
   - Tiêu đen (Black pepper): `2 tablespoons` -> `4 tablespoons` ($2.0\times$).
   - Nước dùng bò (Beef broth): `1/2 cup` (`0.5 cup`) -> `1 cup` ($2.0\times$).
   - Tỏi (Garlic): `4 cloves` -> `8 cloves` ($2.0\times$).
-- *Kết luận:* Giao diện Mealie tính toán tỷ lệ nhân 2 chính xác cho tất cả 4 nguyên liệu, khớp 100% với ảnh [`Documents/assets/06_servings_scale.png`](Documents/assets/06_servings_scale.png).
+- *Kết luận:* Giao diện Mealie tính toán tỷ lệ nhân 2 chính xác cho tất cả 4 nguyên liệu, khớp 100% với file ảnh minh chứng ngoại tuyến `06_servings_scale.png`.
 
 ### 5.4. Đối chiếu 6 ảnh minh chứng trực tiếp (Yêu cầu 2)
 1. `01_mealie_landing.png`: Giao diện Sign In Mealie v3.28.0 chuẩn.
