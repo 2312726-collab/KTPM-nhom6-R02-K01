@@ -55,3 +55,12 @@ mealie_src/
 # OS specific
 .DS_Store
 Thumbs.db
+
+# Documents assets & generated Office files
+Documents/assets/
+*.docx
+~$*.docx
+
+# Local helper scripts
+scripts/
+
