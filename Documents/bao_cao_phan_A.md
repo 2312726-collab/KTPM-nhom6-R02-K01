@@ -10,12 +10,12 @@
 ## 📌 A.1. TỔNG QUAN HỆ THỐNG MEALIE
 
 ### 1. Giới thiệu và Bối cảnh bài toán
-Trong đời sống gia đình hiện đại, việc quản lý dinh dưỡng và nấu nướng thường gặp phải tình trạng phân mảnh thông tin:
-* Các công thức nấu ăn được lưu rải rác trên nhiều website ẩm thực, mạng xã hội, sách báo hoặc ghi chép tay.
-* Định lượng nguyên liệu trong các công thức gốc thường được cố định cho một số lượng người ăn cụ thể (ví dụ: công thức cho 2 người), gây khó khăn khi cần nấu cho gia đình đông người hoặc các bữa tiệc (cần tăng lên 6–8 người).
-* Các hệ thống đo lường ẩm thực trên thế giới thiếu tính đồng nhất: một số công thức dùng hệ đo lường Quốc tế (Metric: gram, kilogram, mililit), trong khi nhiều công thức phương Tây sử dụng hệ đo lường Anh-Mỹ (Imperial: pound, ounce, teaspoon, tablespoon, cup).
+Trong bối cảnh quản lý dữ liệu dinh dưỡng và chế biến ẩm thực gia đình, người dùng thường đối mặt với thách thức phân mảnh dữ liệu:
+* Dữ liệu công thức ẩm thực bị phân tán trên nhiều nguồn không đồng nhất: các cổng thông tin điện tử, mạng xã hội và tài liệu ghi chép thủ công.
+* Định lượng thành phần nguyên liệu trong các công thức gốc thường bị ấn định cho một quy mô khẩu phần cố định (ví dụ: mặc định dành cho 2 người), gây trở ngại lớn khi cần tái cấu trúc và điều chỉnh quy mô khẩu phần ăn (Servings Scaling) phù hợp với quy mô thực tế của đối tượng sử dụng.
+* Thiếu tính chuẩn hóa trong hệ thống đo lường quốc tế: sự đan xen giữa hệ đo lường Quốc tế (Metric: gram, kilogram, mililit) và hệ đo lường Anh - Mỹ (Imperial: pound, ounce, teaspoon, tablespoon, cup) dẫn đến sai số trong quá trình quy đổi và tính toán định lượng.
 
-**Mealie** ra đời như một nền tảng mã nguồn mở tự lưu trữ (**Self-hosted Recipe Management System**) nhằm giải quyết toàn diện bài toán trên. Hệ thống cung cấp giải pháp trọn gói: từ việc tự động trích xuất dữ liệu web (**Web Scraping**) công thức ẩm thực từ các trang web bên ngoài, bóc tách nguyên liệu thông minh bằng xử lý ngôn ngữ tự nhiên, tự động nhân chia tỉ lệ khẩu phần ăn, cho đến lập kế hoạch thực đơn theo tuần và tổng hợp danh sách mua sắm thực phẩm.
+**Mealie** được phát triển như một nền tảng mã nguồn mở tự lưu trữ (**Self-hosted Recipe Management System**) nhằm cung cấp giải pháp toàn diện cho bài toán quản trị dữ liệu ẩm thực. Hệ thống cung cấp chu trình xử lý khép kín: từ việc tự động trích xuất dữ liệu web (**Web Scraping**) từ các nguồn phân tán bên ngoài, phân tích cú pháp chuỗi nguyên liệu tự nhiên bằng kỹ thuật xử lý ngôn ngữ tự nhiên (**Natural Language Processing - NLP**), tự động co giãn khẩu phần ăn theo tỉ lệ toán học, cho đến lập lịch trình thực đơn dinh dưỡng và tổng hợp danh mục mua sắm nguyên liệu.
 
 ### 2. Mục tiêu và Phạm vi của hệ thống
 * **Tự động hóa số hóa công thức:** Cho phép người dùng nhập đường dẫn (URL) của bất kỳ trang web ẩm thực phổ biến nào; hệ thống sẽ tự động trích xuất tiêu đề, hình ảnh, thời gian nấu, danh mục nguyên liệu và các bước thực hiện.
