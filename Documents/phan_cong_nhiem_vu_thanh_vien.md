@@ -312,7 +312,7 @@
 ---
 ---
 
-# 👤 THÀNH VIÊN 4: TRẦN NGỌC BẢO PHƯỚC
+# 👤 THÀNH VIÊN 4: TRẦN NGỌC BẢO PHƯỚC (MSSV: 2312719)
 > **Vai trò:** QA Automation Engineer 1 — Test Harness & String Engine Verification  
 > **Báo cáo phụ trách chính:** Phần F (Bộ kiểm thử tự động, cấu hình Test Harness & Hướng dẫn tái lập)  
 > **Kịch bản Code PBT trực tiếp:** **Property 1 (Idempotence & String Utils)** trong `tests/unit_tests/test_pbt_string_utils.py`
@@ -320,39 +320,39 @@
 ---
 
 ## ✅ NHÓM VIỆC P1: PHÂN TÍCH STRING UTILS & HỖ TRỢ GIỮA KỲ
-**Deadline: 18/10**
+**Deadline: 18/10** *(Đã hoàn thành)*
 
 ### P1.1 — Phân tích mã nguồn bộ tiền xử lý chuỗi
-- [ ] P1.1.1 Đọc file `mealie/services/parser_services/parser_utils/string_utils.py`.
-- [ ] P1.1.2 Phân tích hành vi 3 hàm: `remove_footnote_markers`, `move_parens_to_end`, `convert_vulgar_fractions_to_regular_fractions`.
-- [ ] P1.1.3 Lập danh mục các ca biên (Edge Cases): phân số unicode (`½`, `¼`, `¾...`), chuỗi rỗng, chuỗi chỉ chứa dấu cách, ngoặc lồng nhau.
-- [ ] P1.1.4 Hỗ trợ Nam xác thực Luồng 2 (Ingredient Parsing) và Luồng 3 (Servings Scaling) ở Giai đoạn 1.
-- [ ] P1.1.5 Commit: `docs: analyze string utils edge cases and parser pre-processing`.
+- [x] P1.1.1 Đọc file `mealie/services/parser_services/parser_utils/string_utils.py`.
+- [x] P1.1.2 Phân tích hành vi 3 hàm: `remove_footnote_markers`, `move_parens_to_end`, `convert_vulgar_fractions_to_regular_fractions`.
+- [x] P1.1.3 Lập danh mục các ca biên (Edge Cases): phân số unicode (`½`, `¼`, `¾...`), chuỗi rỗng, chuỗi chỉ chứa dấu cách, ngoặc lồng nhau.
+- [x] P1.1.4 Hỗ trợ Nam xác thực Luồng 2 (Ingredient Parsing) và Luồng 3 (Servings Scaling) ở Giai đoạn 1.
+- [x] P1.1.5 Commit: `docs: analyze string utils edge cases and parser pre-processing`.
 
 ---
 
 ## ✅ NHÓM VIỆC P2: THIẾT LẬP TEST HARNESS & CẤU HÌNH PYTEST / HYPOTHESIS
-**Deadline: 15/11**
+**Deadline: 15/11** *(Đã hoàn thành)*
 
 ### P2.1 — Cấu hình file `pytest.ini` & Profiles trong `tests/conftest.py`
-- [ ] P2.1.1 Cấu hình file `pytest.ini` chuẩn xác (`testpaths = tests`, `-v --tb=short`).
-- [ ] P2.1.2 Xây dựng 3 profiles trong `tests/conftest.py`:
+- [x] P2.1.1 Cấu hình file `pytest.ini` chuẩn xác (`testpaths = tests`, `-v --tb=short`).
+- [x] P2.1.2 Xây dựng 3 profiles trong `tests/conftest.py`:
   - Profile `dev`: `max_examples=50` (chạy nhanh khi code).
   - Profile `ci`: `max_examples=300` (chạy CI).
   - Profile `thorough`: `max_examples=1000` (chạy sâu kiểm tra sức bền).
-- [ ] P2.1.3 Cấu hình cache `.hypothesis/` và bổ sung vào `.gitignore`.
-- [ ] P2.1.4 Kiểm tra nhận diện test runner: `pytest tests/ --collect-only`.
-- [ ] P2.1.5 Commit: `chore: setup pytest harness and hypothesis multi-profile configuration`.
+- [x] P2.1.3 Cấu hình cache `.hypothesis/` và bổ sung vào `.gitignore`.
+- [x] P2.1.4 Kiểm tra nhận diện test runner: `pytest tests/ --collect-only`.
+- [x] P2.1.5 Commit: `chore: setup pytest harness and hypothesis multi-profile configuration`.
 
 ---
 
 ## ✅ NHÓM VIỆC P3: LẬP TRÌNH KIỂM THỬ PBT — PROPERTY 1 (IDEMPOTENCE STRING UTILS)
-**Deadline: 25/11** | File code: `tests/unit_tests/test_pbt_string_utils.py`
+**Deadline: 25/11** *(Đã hoàn thành)* | File code: `tests/unit_tests/test_pbt_string_utils.py`
 
 ### P3.1 — Hiện thực kịch bản kiểm thử Property 1
-- [ ] P3.1.1 Tạo nhánh `feat/phuoc-property-1-stringutils` từ `develop`.
-- [ ] P3.1.2 Tạo file `tests/unit_tests/test_pbt_string_utils.py`.
-- [ ] P3.1.3 Viết test tính lũy đẳng (Idempotence) cho hàm `remove_footnote_markers`:
+- [x] P3.1.1 Tạo nhánh `feat/phuoc-property-1-stringutils` từ `develop`.
+- [x] P3.1.2 Tạo file `tests/unit_tests/test_pbt_string_utils.py`.
+- [x] P3.1.3 Viết test tính lũy đẳng (Idempotence) cho hàm `remove_footnote_markers`:
   ```python
   from hypothesis import given, strategies as st, settings
   from mealie.services.parser_services.parser_utils.string_utils import (
@@ -368,7 +368,7 @@
       twice = remove_footnote_markers(once)
       assert once == twice, f"Vi phạm lũy đẳng: input={s!r}, once={once!r}, twice={twice!r}"
   ```
-- [ ] P3.1.4 Viết test tính lũy đẳng cho hàm `move_parens_to_end`:
+- [x] P3.1.4 Viết test tính lũy đẳng cho hàm `move_parens_to_end`:
   ```python
   @given(st.text())
   @settings(max_examples=300)
@@ -377,23 +377,23 @@
       twice = move_parens_to_end(once)
       assert once == twice, f"Vi phạm di chuyển ngoặc: input={s!r}, once={once!r}, twice={twice!r}"
   ```
-- [ ] P3.1.5 Viết test tính bền bỉ Crash-free cho `convert_vulgar_fractions_to_regular_fractions` với mọi `st.text()`.
-- [ ] P3.1.6 Viết test xác nhận không còn ký tự phân số unicode (`½, ¼, ¾, ⅓, ⅔...`) sau khi chuyển đổi.
-- [ ] P3.1.7 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_string_utils.py -v`.
-- [ ] P3.1.8 Commit & tạo Pull Request vào `develop`: `feat(test): add PBT Property 1 string utils idempotence and completeness`.
+- [x] P3.1.5 Viết test tính bền bỉ Crash-free cho `convert_vulgar_fractions_to_regular_fractions` với mọi `st.text()`.
+- [x] P3.1.6 Viết test xác nhận không còn ký tự phân số unicode (`½, ¼, ¾, ⅓, ⅔...`) sau khi chuyển đổi.
+- [x] P3.1.7 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_string_utils.py -v`.
+- [x] P3.1.8 Commit & tạo Pull Request vào `develop`: `feat(test): add PBT Property 1 string utils idempotence and completeness`.
 
 ---
 
 ## ✅ NHÓM VIỆC P4: BIÊN SOẠN HƯỚNG DẪN THỰC THI & TÁI LẬP (PHẦN F)
-**Deadline: 30/11**
+**Deadline: 30/11** *(Đã hoàn thành)*
 
 ### P4.1 — Soạn thảo `Documents/bao_cao_phan_F.md` & `tests/README.md`
-- [ ] P4.1.1 Trình bày cấu trúc toàn bộ suite test và vai trò của từng file test trong repo.
-- [ ] P4.1.2 Cung cấp lệnh chạy test 1-click duy nhất: `pytest tests/unit_tests/test_pbt_*.py -v`.
-- [ ] P4.1.3 Cung cấp lệnh chạy tích hợp đo độ bao phủ mã nguồn với `pytest-cov`.
-- [ ] P4.1.4 Giải thích định dạng kết quả của Hypothesis (PASSED, Falsifying example, Shrink trace).
-- [ ] P4.1.5 Mời Nam hoặc Hiếu chạy thử nghiệm từ máy sạch để xác nhận tính tái lập (Reproducibility).
-- [ ] P4.1.6 Commit: `docs: complete automated test harness documentation Phan F`.
+- [x] P4.1.1 Trình bày cấu trúc toàn bộ suite test và vai trò của từng file test trong repo.
+- [x] P4.1.2 Cung cấp lệnh chạy test 1-click duy nhất: `pytest tests/unit_tests/test_pbt_*.py -v`.
+- [x] P4.1.3 Cung cấp lệnh chạy tích hợp đo độ bao phủ mã nguồn với `pytest-cov`.
+- [x] P4.1.4 Giải thích định dạng kết quả của Hypothesis (PASSED, Falsifying example, Shrink trace).
+- [x] P4.1.5 Mời Nam hoặc Hiếu chạy thử nghiệm từ máy sạch để xác nhận tính tái lập (Reproducibility).
+- [x] P4.1.6 Commit: `docs: complete automated test harness documentation Phan F`.
 
 ---
 ---
