@@ -56,6 +56,11 @@ mealie_src/
 .DS_Store
 Thumbs.db
 
+# Environment variables
+.env
+mealie_docker/.env
+*.env
+
 # Documents assets & generated Office files
 Documents/assets/
 *.docx
