@@ -409,16 +409,16 @@
 **Deadline: 18/10**
 
 ### M1.1 — Phân tích kiến trúc Async của bộ Parser
-- [ ] M1.1.1 Đọc mã nguồn `mealie/services/parser_services/ingredient_parser.py`.
-- [ ] M1.1.2 Xác định hàm `BruteForceParser.parse_one(text)` là hàm bất đồng bộ (`async def`).
-- [ ] M1.1.3 Xác định các tham số khởi tạo cần thiết: `session`, `group_id`, `household_id`.
+- [x] M1.1.1 Đọc mã nguồn `mealie/services/parser_services/ingredient_parser.py`.
+- [x] M1.1.2 Xác định hàm `BruteForceParser.parse_one(text)` là hàm bất đồng bộ (`async def`).
+- [x] M1.1.3 Xác định các tham số khởi tạo cần thiết: `session`, `group_id`, `household_id`.
 
 ### M1.2 — Thiết lập môi trường và fixture Mock
-- [ ] M1.2.1 Cài đặt thư viện: `pip install pytest-asyncio pytest-cov`.
-- [ ] M1.2.2 Cập nhật `pytest.ini` bổ sung: `asyncio_mode = auto`.
-- [ ] M1.2.3 Tạo mock fixture trong `tests/conftest.py` dùng `unittest.mock.MagicMock` cô lập database.
-- [ ] M1.2.4 Đóng góp nội dung phân tích kỹ thuật Async/Mock vào Báo cáo giữa kỳ của Trưởng nhóm Quân.
-- [ ] M1.2.5 Commit: `chore: setup async test runner and parser mock fixtures`.
+- [x] M1.2.1 Cài đặt thư viện: `pip install pytest-asyncio pytest-cov`.
+- [ ] M1.2.2 Cập nhật `pytest.ini` bổ sung: `asyncio_mode = auto` *(Tạm hoãn: test dùng marker tường minh `@pytest.mark.asyncio` chạy mượt mà độc lập, không sửa file cấu hình dùng chung để tránh ảnh hưởng test đồng bộ khác)*.
+- [ ] M1.2.3 Tạo mock fixture trong `tests/conftest.py` dùng `unittest.mock.MagicMock` cô lập database *(Đã hiện thực hoàn chỉnh 5 fixtures trong `test_manh_m1_async_mock.py`; sẽ trích xuất lên `conftest.py` khi làm Property 3 ở Sprint 4 để giữ PR cô lập)*.
+- [ ] M1.2.4 Đóng góp nội dung phân tích kỹ thuật Async/Mock vào Báo cáo giữa kỳ của Trưởng nhóm Quân *(Đã chuẩn bị sẵn sàng toàn bộ nội dung bàn giao tại `bao_cao_M1_VoHungManh.md`, chờ Trưởng nhóm Quân biên tập tích hợp vào Báo cáo Giữa kỳ chung)*.
+- [x] M1.2.5 Commit: `chore: setup async test runner and parser mock fixtures`.
 
 ---
 
@@ -505,7 +505,7 @@
 - [ ] Tài liệu On-boarding `Documents/bao_cao_phan_C.md` chi tiết, đã được Hiếu cài đặt thẩm định thành công từ máy sạch độc lập.
 - [ ] Sơ đồ kiến trúc tổng thể và Data Flow đầy đủ trong `Documents/bao_cao_phan_B.md` (Quân hoàn thành).
 - [ ] Đề cương kế hoạch kiểm thử PBT rõ phạm vi và giả định kỹ thuật (Hiếu & Quân hoàn thành).
-- [ ] Cấu hình async/mock cơ bản cho bộ parser sẵn sàng (Mạnh hoàn thành).
+- [x] Cấu hình async/mock cơ bản cho bộ parser sẵn sàng (Mạnh hoàn thành).
 - [ ] **Cả 5 thành viên đều có ít nhất 1–2 commit Git hợp lệ trong Sprint 1 & 2.**
 
 ## Mốc Cuối kỳ — Tháng 12
