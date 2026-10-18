@@ -109,14 +109,14 @@ Trước khi tiến hành cài đặt, người thực hiện cần đảm bảo
 
 ### C.1.4 — Thông tin cố định phiên bản (Pin Version)
 
-Nhóm 6 đã thống nhất cố định phiên bản hệ thống Mealie nhằm chống trôi mã nguồn (Breaking Changes) và bảo đảm khả năng tái lập 100% kết quả kiểm thử:
+Nhóm 6 đã thống nhất cố định phiên bản hệ thống Mealie nhằm chống trôi mã nguồn (Breaking Changes) và nâng cao khả năng tái lập kết quả kiểm thử trên các môi trường tương thích:
 
 - **Tên phần mềm mục tiêu:** Mealie (Recipe Manager and Meal Planner)
 - **Kho lưu trữ chính thức:** [https://github.com/mealie-recipes/mealie](https://github.com/mealie-recipes/mealie)
 - **Phiên bản cố định (Release Tag):** **`v3.28.0`**
 - **Mã định danh commit nguồn (Git SHA):** **`0552eaa4a80031b8572849cca0ed95d07f1be001`**
 - **Docker Image chính thức:** `ghcr.io/mealie-recipes/mealie:v3.28.0`
-- **Tài liệu chốt phiên bản:** [Documents/mealie_version.md](file:///d:/Nam%204/Ki%E1%BB%83m%20th%E1%BB%AD%20ph%E1%BA%A7n%20m%E1%BB%81m%20CTK47-PM/KTPM-nhom6-K02-R01/Documents/mealie_version.md)
+- **Tài liệu chốt phiên bản:** [Documents/mealie_version.md](mealie_version.md)
 
 ---
 
@@ -153,9 +153,9 @@ Dành cho giảng viên hoặc thành viên nhóm **đã có sẵn Git, Docker D
 
 ```powershell
 # 1. Di chuyển vào thư mục cấu hình Docker của dự án
-cd "d:\Nam 4\Kiểm thử phần mềm CTK47-PM\KTPM-nhom6-K02-R01\mealie_docker"
+cd mealie_docker
 
-# 2. Tạo file biến môi trường từ mẫu (nếu chưa có)
+# 2. Tạo file biến môi trường từ mẫu (nếu chưa có, tránh ghi đè cấu hình hiện tại)
 if (-not (Test-Path .env)) { Copy-Item .env.example .env }
 
 # 3. Khởi động Mealie ở chế độ nền
@@ -193,7 +193,7 @@ Nhằm đảm bảo tính trung thực khoa học cao nhất theo yêu cầu c�
 | **C.15** | `C15_servings_scale.png` | **Screenshot Web UI thật** | Chụp trực tiếp màn hình Servings Scaling NAM-10 | 07/10/2026 06:25 | Định lượng nhân đôi chính xác khi tăng từ 4 lên 8 |
 | **C.16** | `C16_docker_logs.png` | **Trích xuất Console thực tế** | Kết xuất đồ họa từ 25 dòng log lệnh `docker compose logs` | 18/10/2026 13:05 | Log FastAPI `Application startup complete` Uvicorn 9000 |
 
-*Ghi chú kỹ thuật về phương thức Trích xuất Console:* Các hình ảnh trích xuất Console (C01–C07, C10, C12, C16) được thực hiện bằng cách lấy nguyên văn luồng dữ liệu (stdout/stderr) của các câu lệnh thực tế thực thi trên máy trạm và kết xuất qua thư viện đồ họa .NET Drawing với phông chữ đơn không gian Consolas, nhằm đảm bảo khả năng đọc văn bản rõ ràng nhất, không bị vỡ hạt hay biến dạng màu sắc khi xem trên GitHub ở các kích thước màn hình khác nhau.
+*Ghi chú kỹ thuật về phương thức Trích xuất Console:* Các hình ảnh trích xuất Console (C01–C07, C10, C12, C16) lấy nguyên văn luồng dữ liệu (stdout/stderr) thực tế từ các câu lệnh PowerShell/Docker CLI thực thi trên máy trạm của Nam, được kết xuất qua thư viện đồ họa .NET Drawing với phông Consolas đơn không gian. Các hình ảnh này đóng vai trò minh họa trực quan kết quả lệnh mong đợi giúp người đọc dễ đối chiếu, không đại diện cho ảnh chụp màn hình máy sạch chưa kiểm chứng độc lập. Toàn bộ chú thích dưới hình trong báo cáo đã được gắn nhãn rõ ràng: `*[Trích xuất Console thực tế]*` hoặc `*[Ảnh chụp giao diện Web thực tế]*`.
 
 ---
 
@@ -258,7 +258,7 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 - **Thao tác:** Chạy lệnh clone repository từ GitHub và checkout sang nhánh `2312695-NguyenPhamPhuNam-Phan1`.
 - **Lệnh PowerShell:**
   ```powershell
-  # Thư mục làm việc: Thư mục học tập của bạn (ví dụ: D:\Nam 4\Kiểm thử phần mềm CTK47-PM)
+  # Thư mục làm việc: Thư mục học tập của bạn (ví dụ: C:\Workspace hoặc D:\Projects)
   git clone https://github.com/2312726-collab/KTPM-nhom6-R02-K01.git
   cd KTPM-nhom6-R02-K01
 
@@ -330,9 +330,15 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 - **Lệnh PowerShell:**
   ```powershell
   # Thư mục thực thi: mealie_docker/
-  Copy-Item .env.example .env
+  # Kiểm tra và chỉ tạo nếu chưa có để không ghi đè cấu hình hiện tại:
+  if (-not (Test-Path .env)) {
+      Copy-Item .env.example .env
+      Write-Host "Đã tạo file .env từ .env.example"
+  } else {
+      Write-Host "File .env đã tồn tại, giữ nguyên cấu hình hiện tại."
+  }
 
-  # Xem nội dung file cấu hình vừa tạo:
+  # Xem nội dung file cấu hình:
   Get-Content .env
   ```
 - **Giải thích:** File `.env` chứa các biến cấu hình cổng host, URL, database SQLite và danh sách whitelist mạng. File này được bảo vệ bởi `.gitignore` và không bị commit lên GitHub.
@@ -467,11 +473,22 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 - **Thao tác:** Mở terminal, đứng từ **thư mục gốc repository** và chạy script `seed_data.py`.
 - **Lệnh PowerShell:**
   ```powershell
-  # Quay về thư mục gốc repository:
-  cd "d:\Nam 4\Kiểm thử phần mềm CTK47-PM\KTPM-nhom6-K02-R01"
+  # Đứng từ thư mục gốc repository (nếu đang ở mealie_docker/, dùng lệnh quay lại 'cd ..'):
+  cd ..
 
-  # Chạy script nạp dữ liệu bằng Python tiêu chuẩn:
+  # Trường hợp 1: Nếu sử dụng tài khoản mẫu ban đầu (admin@nhom6.test / Admin123@):
   python mealie_docker/seed/seed_data.py
+
+  # Trường hợp 2: Nếu người cài đặt đã đổi email, mật khẩu hoặc cổng host khác:
+  # Thiết lập biến môi trường tạm thời cho phiên chạy (không lưu mật khẩu vào file hay log):
+  $env:MEALIE_BASE_URL = "http://localhost:9925"
+  $env:MEALIE_EMAIL = "your_admin_email@example.com"
+  $env:MEALIE_PASSWORD = "YourCustomPassword"
+
+  python mealie_docker/seed/seed_data.py
+
+  # Xóa mật khẩu khỏi biến môi trường ngay sau khi nạp xong:
+  Remove-Item env:MEALIE_PASSWORD
   ```
 - **Giải thích:** Script sử dụng thư viện chuẩn của Python (`urllib.request`), tự động đăng nhập API lấy Bearer token, phân tích nguyên liệu qua NLP parser nội bộ của Mealie và tạo công thức cùng lịch thực đơn. Script có tính **lũy đẳng (idempotent)** trong phạm vi tập dữ liệu thử nghiệm chuẩn (< 100 bản ghi), chạy lại sẽ không sinh bản ghi nhân đôi.
 - **Kết quả mong đợi trên terminal:**
@@ -517,7 +534,8 @@ Mở ứng dụng **Docker Desktop** trên Windows và chờ icon cá voi ở kh
 #### Bước 2 — Khởi động lại container (nếu chưa tự chạy)
 Vì cấu hình `docker-compose.yml` có thiết lập chính sách `restart: always`, Docker Desktop khi khởi động lại thông thường sẽ tự động đánh thức container `mealie`. Nếu container đang ở trạng thái `exited`, mở PowerShell và chạy:
 ```powershell
-cd "d:\Nam 4\Kiểm thử phần mềm CTK47-PM\KTPM-nhom6-K02-R01\mealie_docker"
+# Di chuyển vào thư mục mealie_docker của dự án:
+cd mealie_docker
 docker compose up -d
 docker compose ps
 ```
@@ -527,7 +545,7 @@ Mở trình duyệt truy cập: **`http://localhost:9925`**. Đăng nhập trự
 - **Email:** `admin@nhom6.test`
 - **Mật khẩu:** `Admin123@`
 
-Toàn bộ 10 công thức `NAM-01` đến `NAM-10` và kế hoạch thực đơn tuần 06/10–12/10 vẫn được bảo toàn nguyên vẹn 100%.
+Toàn bộ 10 công thức `NAM-01` đến `NAM-10` và kế hoạch thực đơn tuần 06/10–12/10 vẫn được bảo toàn nguyên vẹn trong volume SQLite.
 
 ---
 
@@ -620,7 +638,7 @@ Kịch bản `mealie_docker/seed/seed_data.py` được thiết kế phục vụ
 3. **Giới hạn kỹ thuật cần lưu ý:**
    - Cả hai API kiểm tra đều sử dụng tham số phân trang tối đa `perPage=100`. Nếu cơ sở dữ liệu đã tích lũy trên 100 công thức hoặc trên 100 bữa ăn, các bản ghi nằm từ trang thứ hai trở đi sẽ không nằm trong tập kiểm tra trùng lặp ban đầu.
    - Khi tên công thức trùng lặp, thao tác `PATCH` sẽ ghi đè dữ liệu công thức cũ theo nội dung trong `recipes_nam.json`.
-   - **Kết luận:** Script đạt tính lũy đẳng an toàn tuyệt đối **trong phạm vi tập dữ liệu kiểm thử chuẩn (< 100 bản ghi)**, đảm bảo khi chạy lại nhiều lần sẽ không làm phát sinh bản ghi rác hoặc nhân đôi lịch ăn tuần 06/10–12/10.
+   - **Kết luận:** Script đạt tính lũy đẳng thực nghiệm **trong phạm vi tập dữ liệu kiểm thử chuẩn (< 100 bản ghi)**, đảm bảo khi chạy lại nhiều lần sẽ không làm phát sinh bản ghi rác hoặc nhân đôi lịch ăn tuần 06/10–12/10. Khi quy mô dữ liệu vượt quá 100 mục, người vận hành cần mở rộng tham số phân trang của script.
 
 ---
 
@@ -721,7 +739,7 @@ Bộ dữ liệu mẫu `mealie_docker/seed/recipes_nam.json` được thiết k�
   | **Unit** | *(không có)* | **`None`** (trống) | Nhận diện đúng việc không có đơn vị đo lường | **PASS** |
   | **Food** | `onion` | **`onion`** | Hệ thống gợi ý tạo thực phẩm mới (*Create missing food*) | **PASS** |
   | **Note** | `(finely chopped)` | **`finely chopped`** | Tách bỏ dấu ngoặc đơn, đưa vào ghi chú chế biến | **PASS** |
-  | **Confidence** | — | **`100.00%`** | Độ tin cậy tuyệt đối của thuật toán NLP | **PASS** |
+  | **Confidence** | — | **`100.00%`** | Độ tin cậy cao của thuật toán NLP (Confidence Score: 100.00% do Mealie báo cáo) | **PASS** |
 
 ---
 
@@ -753,7 +771,7 @@ Bộ dữ liệu mẫu `mealie_docker/seed/recipes_nam.json` được thiết k�
 
 ### C.4.4 — Kết quả kiểm chứng thực nghiệm trên môi trường sạch độc lập
 
-Để đảm bảo tài liệu phản ánh chính xác khả năng tái lập 100% khi người khác cài mới, nhóm đã tiến hành kiểm chứng độc lập trên một container tách biệt hoàn toàn (`mealie-verify-clean`), sử dụng cổng host riêng `9935` và named volume sạch `mealie-verify-clean-volume` (thực hiện ngày 07/10/2026 trên máy trạm Windows 11 của Nam):
+Để kiểm chứng khả năng tái lập trên môi trường cài đặt mới, nhóm đã tiến hành kiểm chứng độc lập trên một container tách biệt hoàn toàn (`mealie-verify-clean`), sử dụng cổng host riêng `9935` và named volume sạch `mealie-verify-clean-volume` (thực hiện ngày 07/10/2026 trên máy trạm Windows 11 của Nam):
 
 1. **Khởi tạo và thiết lập tài khoản từ đầu:**
    - Container khởi động hoàn tất với image `ghcr.io/mealie-recipes/mealie:v3.28.0` SQLite trên cổng 9935.
@@ -829,7 +847,7 @@ Bảng tổng hợp các lỗi phát sinh trong thực tế cài đặt và vậ
 
 1. **Phần đã hoàn thành và tự kiểm chứng đạt trên máy trạm của Nam:**
    - Nguyễn Phạm Phú Nam đã hoàn thành toàn diện các nhiệm vụ kỹ thuật N1 (Docker hóa hệ thống Mealie v3.28.0 SQLite), N2 (Kịch bản Seed Data và tài khoản kiểm thử) và N3.1 (Tài liệu hướng dẫn On-boarding chi tiết kèm bộ 16 hình ảnh thực tế).
-   - Mọi câu lệnh, đường dẫn file và kết quả nghiệp vụ trong tài liệu này đều khớp 100% với mã nguồn hiện hành trong repository.
+   - Mọi câu lệnh, đường dẫn file và kết quả nghiệp vụ trong tài liệu này đều khớp với mã nguồn hiện hành trong repository.
 
 2. **Hạng mục chưa hoàn tất và điều kiện tiếp thu:**
    - **Nhiệm vụ N3.1.3 (Thẩm định chéo):** Hiện tại tài liệu này đang ở trạng thái **Chờ thành viên Bùi Trung Hiếu thẩm định độc lập từ máy sạch** (theo phân công nhiệm vụ H1.2 trong kế hoạch đồ án).
