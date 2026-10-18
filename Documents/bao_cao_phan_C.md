@@ -17,8 +17,9 @@
   - [C.1.2 — Bảng thông số môi trường máy thật đã kiểm chứng](#c12--bảng-thông-số-môi-trường-máy-thật-đã-kiểm-chứng)
   - [C.1.3 — Bảng công cụ, nguồn tải chính thức và lệnh kiểm tra](#c13--bảng-công-cụ-nguồn-tải-chính-thức-và-lệnh-kiểm-tra)
   - [C.1.4 — Thông tin cố định phiên bản (Pin Version)](#c14--thông-tin-cố-định-phiên-bản-pin-version)
-  - [C.1.5 — Quy hoạch cổng mạng và Danh mục tài khoản](#c15--quy-hoạch-cổng-mạng-và-danh-mục-tài-khoản)
+  - [C.1.5 — Quy hoạch cổng mạng, Danh mục tài khoản & Cảnh báo bảo mật](#c15--quy-hoạch-cổng-mạng-danh-mục-tài-khoản--cảnh-báo-bảo-mật)
   - [C.1.6 — Hướng dẫn Khởi động Nhanh (Quick Start)](#c16--hướng-dẫn-khởi-động-nhanh-quick-start)
+  - [C.1.7 — Bảng kê khai minh bạch nguồn gốc và phân loại 16 hình ảnh](#c17--bảng-kê-khai-minh-bạch-nguồn-gốc-và-phân-loại-16-hình-ảnh)
 - [C.2 — Hướng dẫn cài đặt chi tiết](#c2--hướng-dẫn-cài-đặt-chi-tiết)
   - [Trường hợp A — Hướng dẫn cài đặt trên máy mới hoàn toàn](#trường-hợp-a--hướng-dẫn-cài-đặt-trên-máy-mới-hoàn-toàn)
   - [Trường hợp B — Hướng dẫn vận hành trên máy đã chạy trước đó](#trường-hợp-b--hướng-dẫn-vận-hành-trên-máy-đã-chạy-trước-đó)
@@ -27,7 +28,7 @@
   - [C.3.2 — Cơ chế Named Volume và Quy tắc bảo toàn dữ liệu SQLite](#c32--cơ-chế-named-volume-và-quy-tắc-bảo-toàn-dữ-liệu-sqlite)
   - [C.3.3 — Quy trình nạp biến môi trường mới (Recreate vs Restart)](#c33--quy-trình-nạp-biến-môi-trường-mới-recreate-vs-restart)
 - [C.4 — Dữ liệu mẫu (Seed Data) & Thực nghiệm Ba Luồng nghiệp vụ](#c4--dữ-liệu-mẫu-seed-data--thực-nghiệm-ba-luồng-nghiệp-vụ)
-  - [C.4.1 — Cơ chế hoạt động của kịch bản nạp dữ liệu Seed Data](#c41--cơ-chế-hoạt-động-của-kịch-bản-nạp-dữ-liệu-seed-data)
+  - [C.4.1 — Cơ chế hoạt động & Phân tích tính lũy đẳng của kịch bản Seed Data](#c41--cơ-chế-hoạt-động--phân-tích-tính-lũy-đẳng-của-kịch-bản-seed-data)
   - [C.4.2 — Danh mục 10 công thức mẫu NAM và Kế hoạch thực đơn 7 ngày](#c42--danh-mục-10-công-thức-mẫu-nam-và-kế-hoạch-thực-đơn-7-ngày)
   - [C.4.3 — Hướng dẫn thực nghiệm ba luồng nghiệp vụ cốt lõi](#c43--hướng-dẫn-thực-nghiệm-ba-luồng-nghiệp-vụ-cốt-lõi)
   - [C.4.4 — Kết quả kiểm chứng thực nghiệm trên môi trường sạch độc lập](#c44--kết-quả-kiểm-chứng-thực-nghiệm-trên-môi-trường-sạch-độc-lập)
@@ -84,11 +85,11 @@ Toàn bộ cấu hình và hướng dẫn trong tài liệu này đã được t
 | **Docker Backend** | WSL 2 (Windows Subsystem for Linux v2) | Bản phân phối: `docker-desktop` distro |
 | **Docker Compose** | v5.5.1 | Docker Compose V2 plugin chính thức |
 | **Git** | 2.55.0.windows.3 | Git for Windows (hỗ trợ credential helper & LF) |
-| **Python (Host)** | Python 3.14.7 (hoặc Python 3.11 - 3.14) | Môi trường ảo `.venv` trên máy trạm |
+| **Python (Host)** | Python 3.14.7 (hoặc Python 3.10 - 3.14) | Môi trường ảo `.venv` hoặc Python toàn cục trên máy trạm |
 | **Python (Container)** | Python 3.14.8 (`python:3.14-slim`) | Base image chuẩn của Mealie v3.28.0 |
 
 > [!NOTE]
-> **Dành cho người dùng Linux:** Nếu cài đặt trên Ubuntu/Debian, hãy thay thế `host.docker.internal` trong biến `HTTP_ALLOW_LIST` bằng địa chỉ IP cầu mạng Docker (`172.17.0.1` hoặc gateway của bridge network). Cấu hình trên Windows/macOS mặc định hỗ trợ bí danh `host.docker.internal`.
+> **Dành cho người dùng Linux:** Nếu cài đặt trên Ubuntu/Debian, hãy thay thế `host.docker.internal` trong biến `HTTP_ALLOW_LIST` bằng địa chỉ IP cầu mạng Docker (`172.17.0.1` hoặc gateway của bridge network theo lệnh `ip route | grep default | awk '{print $3}'`). Cấu hình trên Windows/macOS mặc định hỗ trợ bí danh `host.docker.internal`.
 
 ---
 
@@ -119,9 +120,9 @@ Nhóm 6 đã thống nhất cố định phiên bản hệ thống Mealie nhằm
 
 ---
 
-### C.1.5 — Quy hoạch cổng mạng và Danh mục tài khoản
+### C.1.5 — Quy hoạch cổng mạng, Danh mục tài khoản & Cảnh báo bảo mật
 
-#### Bảng cổng mạng trên máy Host:
+#### Bảng quy hoạch cổng mạng trên máy Host:
 
 | Dịch vụ | Cổng Host | Cổng Container | Giao thức | Mục đích sử dụng |
 |---|:---:|:---:|:---:|---|
@@ -131,13 +132,18 @@ Nhóm 6 đã thống nhất cố định phiên bản hệ thống Mealie nhằm
 > [!IMPORTANT]
 > Trước khi khởi động hệ thống, bắt buộc kiểm tra xem cổng `9925` và `9926` có bị chiếm dụng bởi ứng dụng khác hay không (xem hướng dẫn tại C.2 Bước 5 hoặc C.5 Lỗi 1).
 
-#### Danh mục tài khoản sử dụng trong đồ án:
+#### Danh mục tài khoản phục vụ đồ án:
 
-| Vai trò | Địa chỉ Email | Mật khẩu ban đầu | Quyền hạn | Mục đích sử dụng |
+| Vai trò | Địa chỉ Email | Mật khẩu mẫu ban đầu | Quyền hạn | Mục đích sử dụng |
 |---|---|---|:---:|---|
-| **Default Admin (Gốc Mealie)** | `changeme@example.com` | `MyPassword` | Quản trị tối cao | Tài khoản gốc mặc định do Docker image Mealie tự sinh khi khởi tạo database lần đầu |
+| **Default Admin (Gốc Mealie)** | `changeme@example.com` | `MyPassword` | Quản trị tối cao | Tài khoản gốc mặc định do Docker image Mealie tự sinh khi khởi tạo SQLite lần đầu |
 | **Team Admin (Quản trị nhóm)** | `admin@nhom6.test` | `Admin123@` | Quản trị nhóm | Tài khoản quản trị chính dùng để chạy seed data, import công thức và thiết lập hệ thống |
 | **Standard User (Người dùng thường)** | `test@nhom6.test` | `User123@` | Thành viên gia đình | Tài khoản người dùng thường phục vụ kiểm chứng phân quyền RBAC và kiểm thử tính năng |
+
+> [!WARNING]
+> **CẢNH BÁO BẢO MẬT BẮT BUỘC:**
+> 1. Tài khoản `changeme@example.com` đi kèm mật khẩu `MyPassword` là **tài khoản mặc định công khai** do chính image gốc Mealie `v3.28.0` sinh ra khi cơ sở dữ liệu rỗng. Ngay sau khi đăng nhập lần đầu tiên, quản trị viên **bắt buộc phải tạo tài khoản quản trị mới và vô hiệu hóa hoặc đổi mật khẩu tài khoản mặc định này** để tránh nguy cơ bảo mật.
+> 2. Các thông tin `admin@nhom6.test` / `Admin123@` và `test@nhom6.test` / `User123@` được sử dụng trong tài liệu này là **dữ liệu minh họa (Mock/Demo Credentials)** phục vụ mục đích kiểm thử đồ án môn học trong môi trường nội bộ. Tuyệt đối không tái sử dụng các tài khoản hoặc mật khẩu này trên bất kỳ môi trường Production thực tế nào.
 
 ---
 
@@ -149,7 +155,7 @@ Dành cho giảng viên hoặc thành viên nhóm **đã có sẵn Git, Docker D
 # 1. Di chuyển vào thư mục cấu hình Docker của dự án
 cd "d:\Nam 4\Kiểm thử phần mềm CTK47-PM\KTPM-nhom6-K02-R01\mealie_docker"
 
-# 2. Tạo file biến môi trường từ mẫu
+# 2. Tạo file biến môi trường từ mẫu (nếu chưa có)
 if (-not (Test-Path .env)) { Copy-Item .env.example .env }
 
 # 3. Khởi động Mealie ở chế độ nền
@@ -161,6 +167,33 @@ docker compose logs --tail=20 mealie
 ```
 
 Sau khi thấy dòng `Application startup complete`, mở trình duyệt truy cập: **`http://localhost:9925`**.
+
+---
+
+### C.1.7 — Bảng kê khai minh bạch nguồn gốc và phân loại 16 hình ảnh
+
+Nhằm đảm bảo tính trung thực khoa học cao nhất theo yêu cầu của môn học Kiểm thử Phần mềm, bảng dưới đây công khai minh bạch nguồn gốc kỹ thuật, phương thức tạo và bằng chứng đối chứng cho toàn bộ 16 hình ảnh trong thư mục `Documents/images_huong_dan_C/`:
+
+| Mã hình | Tên file | Phân loại kỹ thuật | Nguồn gốc & Cách thức tạo | Thời điểm ghi nhận | Bằng chứng đối chứng & Runtime |
+|:---:|---|:---:|---|:---:|---|
+| **C.1** | `C01_github_branch.png` | **Trích xuất Console thực tế** | Kết xuất đồ họa từ output lệnh `git status; git branch -vv` | 18/10/2026 13:05 | Nhánh `2312695-NguyenPhamPhuNam-Phan1`, HEAD `644d68b` |
+| **C.2** | `C02_folder_structure.png` | **Trích xuất Console thực tế** | Kết xuất đồ họa từ output lệnh `Get-ChildItem` cây thư mục | 18/10/2026 13:05 | Cấu trúc thư mục thực tế trên đĩa D: máy Nam |
+| **C.3** | `C03_docker_desktop.png` | **Trích xuất Console thực tế** | Kết xuất đồ họa từ lệnh `docker context ls` và `docker info` | 18/10/2026 13:05 | Docker Desktop 29.7.2, WSL 2 backend active |
+| **C.4** | `C04_docker_check.png` | **Trích xuất Console thực tế** | Kết xuất đồ họa từ lệnh `docker info` và `compose version` | 18/10/2026 13:05 | Docker Engine Server 29.7.2, Compose v5.5.1 |
+| **C.5** | `C05_env_config.png` | **Trích xuất Console thực tế** | Kết xuất đồ họa từ nội dung file `mealie_docker/.env` | 18/10/2026 13:05 | File cấu hình thực tế trên máy Nam, đã che bí mật |
+| **C.6** | `C06_docker_up.png` | **Trích xuất Console thực tế** | Kết xuất đồ họa từ output lệnh `docker compose up -d` | 18/10/2026 13:05 | Docker network created, container mealie started |
+| **C.7** | `C07_docker_running.png` | **Trích xuất Console thực tế** | Kết xuất đồ họa từ output lệnh `docker compose ps` | 18/10/2026 13:05 | Container `mealie` running (healthy), port 9925->9000 |
+| **C.8** | `C08_mealie_login.png` | **Screenshot Web UI thật** | Chụp trực tiếp màn hình Sign In thật qua trình duyệt | 07/10/2026 06:04 | Trang `http://localhost:9925/login` Mealie v3.28.0 |
+| **C.9** | `C09_mealie_dashboard.png` | **Screenshot Web UI thật** | Chụp trực tiếp Dashboard sau khi đăng nhập Admin thật | 07/10/2026 06:04 | Tài khoản `admin@nhom6.test` trên cổng 9925 |
+| **C.10** | `C10_recipes_nam.png` | **Trích xuất Console thực tế** | Kết xuất đồ họa từ truy vấn API `GET /api/recipes` | 18/10/2026 13:06 | 11 công thức hiện có trong SQLite (10 NAM + 1 Phở Bò) |
+| **C.11** | `C11_meal_planner.png` | **Screenshot Web UI thật** | Chụp trực tiếp giao diện Meal Planner tuần 06/10–12/10 | 07/10/2026 06:25 | 14 bữa ăn lập lịch thành công từ script seed data |
+| **C.12** | `C12_mock_server.png` | **Trích xuất Console thực tế** | Kết xuất đồ họa từ terminal chạy `mock_recipe_server.py` | 18/10/2026 13:05 | Server lắng nghe tại `0.0.0.0:9926`, phục vụ JSON-LD |
+| **C.13** | `C13_recipe_import.png` | **Screenshot Web UI thật** | Chụp trực tiếp màn hình import Phở Bò từ URL mock | 07/10/2026 06:25 | Mealie import thành công 5 nguyên liệu, 3 bước |
+| **C.14** | `C14_ingredient_parse.png` | **Screenshot Web UI thật** | Chụp trực tiếp modal NLP Parser bóc tách nguyên liệu | 07/10/2026 06:25 | Chuỗi `1 onion (finely chopped)` trong NAM-08 |
+| **C.15** | `C15_servings_scale.png` | **Screenshot Web UI thật** | Chụp trực tiếp màn hình Servings Scaling NAM-10 | 07/10/2026 06:25 | Định lượng nhân đôi chính xác khi tăng từ 4 lên 8 |
+| **C.16** | `C16_docker_logs.png` | **Trích xuất Console thực tế** | Kết xuất đồ họa từ 25 dòng log lệnh `docker compose logs` | 18/10/2026 13:05 | Log FastAPI `Application startup complete` Uvicorn 9000 |
+
+*Ghi chú kỹ thuật về phương thức Trích xuất Console:* Các hình ảnh trích xuất Console (C01–C07, C10, C12, C16) được thực hiện bằng cách lấy nguyên văn luồng dữ liệu (stdout/stderr) của các câu lệnh thực tế thực thi trên máy trạm và kết xuất qua thư viện đồ họa .NET Drawing với phông chữ đơn không gian Consolas, nhằm đảm bảo khả năng đọc văn bản rõ ràng nhất, không bị vỡ hạt hay biến dạng màu sắc khi xem trên GitHub ở các kích thước màn hình khác nhau.
 
 ---
 
@@ -189,7 +222,7 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 
   ![Hình C.4 - Kiểm tra Docker Engine và Docker Compose](images_huong_dan_C/C04_docker_check.png)
 
-  *Hình C.4. Kết quả kiểm tra phiên bản Docker Engine 29.7.2 và Docker Compose v5.5.1 trên PowerShell.*
+  *Hình C.4. [Trích xuất Console thực tế] Kết quả kiểm tra phiên bản Docker Engine 29.7.2 và Docker Compose v5.5.1 trên PowerShell.*
 
 - **Kết quả mong đợi:** Tất cả 4 lệnh đều in ra phiên bản tương ứng, không có thông báo lỗi `is not recognized as an internal or external command`.
 - **Cách xác nhận:** Kiểm tra số phiên bản khớp với yêu cầu tại mục C.1.3.
@@ -211,7 +244,7 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 
   ![Hình C.3 - Docker Desktop Engine sẵn sàng](images_huong_dan_C/C03_docker_desktop.png)
 
-  *Hình C.3. Trạng thái Docker Desktop Engine và context desktop-linux sẵn sàng hoạt động.*
+  *Hình C.3. [Trích xuất Console thực tế] Trạng thái Docker Desktop Engine và context desktop-linux sẵn sàng hoạt động.*
 
 - **Kết quả mong đợi:** In ra `ServerVersion: 29.7.2` (hoặc tương đương) và không gặp lỗi `cannot connect to pipe`.
 - **Cách xác nhận:** Lệnh trả về mã thoát 0 (`$LASTEXITCODE -eq 0`).
@@ -241,7 +274,7 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 
   ![Hình C.1 - GitHub Repository và lựa chọn đúng nhánh](images_huong_dan_C/C01_github_branch.png)
 
-  *Hình C.1. Kết quả kiểm tra nhánh làm việc 2312695-NguyenPhamPhuNam-Phan1 và remote tracking GitHub.*
+  *Hình C.1. [Trích xuất Console thực tế] Kết quả kiểm tra nhánh làm việc 2312695-NguyenPhamPhuNam-Phan1 và remote tracking GitHub.*
 
 - **Kết quả mong đợi:** Dòng đầu tiên thông báo: `On branch 2312695-NguyenPhamPhuNam-Phan1` và `working tree clean`.
 - **Cách xác nhận:** Lệnh `git branch --show-current` trả về đúng tên nhánh `2312695-NguyenPhamPhuNam-Phan1`.
@@ -264,7 +297,7 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 
   ![Hình C.2 - Cấu trúc thư mục dự án sau khi tải mã nguồn](images_huong_dan_C/C02_folder_structure.png)
 
-  *Hình C.2. Cấu trúc thư mục dự án với đầy đủ tài liệu Documents/ và cấu hình mealie_docker/.*
+  *Hình C.2. [Trích xuất Console thực tế] Cấu trúc thư mục dự án với đầy đủ tài liệu Documents/ và cấu hình mealie_docker/.*
 
 - **Kết quả mong đợi:** Thư mục `mealie_docker/` chứa `docker-compose.yml`, `.env.example` và thư mục con `seed/`.
 - **Cách xác nhận:** Kiểm tra tồn tại file `mealie_docker/docker-compose.yml`.
@@ -307,7 +340,7 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 
   ![Hình C.5 - File .env và các biến cấu hình](images_huong_dan_C/C05_env_config.png)
 
-  *Hình C.5. Nội dung file cấu hình mealie_docker/.env chuẩn hóa, an toàn bảo mật.*
+  *Hình C.5. [Trích xuất Console thực tế] Nội dung file cấu hình mealie_docker/.env chuẩn hóa, an toàn bảo mật.*
 
 - **Nội dung chuẩn của `.env`:**
   ```env
@@ -337,7 +370,7 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 
   ![Hình C.6 - Lệnh Docker Compose khởi động thành công](images_huong_dan_C/C06_docker_up.png)
 
-  *Hình C.6. Docker Compose tạo network và khởi chạy container mealie thành công.*
+  *Hình C.6. [Trích xuất Console thực tế] Docker Compose tạo network và khởi chạy container mealie thành công.*
 
 - **Kết quả mong đợi:** Docker thông báo:
   ```
@@ -367,11 +400,11 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 
   ![Hình C.7 - Container Mealie chạy trong Docker](images_huong_dan_C/C07_docker_running.png)
 
-  *Hình C.7. Trạng thái container mealie chạy lành mạnh trên cổng host 9925.*
+  *Hình C.7. [Trích xuất Console thực tế] Trạng thái container mealie chạy lành mạnh trên cổng host 9925.*
 
   ![Hình C.16 - Kết quả kiểm tra log container Mealie](images_huong_dan_C/C16_docker_logs.png)
 
-  *Hình C.16. Log container ghi nhận tiến trình khởi động FastAPI hoàn tất (Application startup complete).*
+  *Hình C.16. [Trích xuất Console thực tế] Log container ghi nhận tiến trình khởi động FastAPI hoàn tất (Application startup complete).*
 
 - **Kết quả mong đợi:** Cuối log xuất hiện thông báo:
   ```
@@ -398,13 +431,14 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
      - **Username:** `admin`
      - **Password:** `Admin123@`
      - Bật cờ quyền **Admin** (`admin: true`).
-  6. (Tùy chọn) Tạo thêm tài khoản người dùng thường phục vụ kiểm thử:
+  6. **Thực hiện yêu cầu bảo mật:** Đổi mật khẩu hoặc vô hiệu hóa tài khoản gốc `changeme@example.com`.
+  7. (Tùy chọn) Tạo thêm tài khoản người dùng thường phục vụ kiểm thử:
      - **Email:** `test@nhom6.test` | **Username:** `testuser` | **Password:** `User123@` | **Admin:** Tắt.
 - **Hình minh họa:**
 
   ![Hình C.8 - Giao diện thiết lập tài khoản và đăng nhập](images_huong_dan_C/C08_mealie_login.png)
 
-  *Hình C.8. Màn hình đăng nhập Mealie v3.28.0 trên cổng host 9925.*
+  *Hình C.8. [Ảnh chụp giao diện Web thực tế] Màn hình đăng nhập Mealie v3.28.0 trên cổng host 9925.*
 
 - **Kết quả mong đợi:** Đăng nhập thành công, hệ thống chuyển hướng vào giao diện chính.
 - **Cách xác nhận:** Kiểm tra góc phải màn hình hiển thị biểu tượng người dùng đã đăng nhập.
@@ -420,7 +454,7 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 
   ![Hình C.9 - Dashboard Mealie sau đăng nhập](images_huong_dan_C/C09_mealie_dashboard.png)
 
-  *Hình C.9. Dashboard quản trị Mealie sau khi đăng nhập thành công bằng tài khoản admin@nhom6.test.*
+  *Hình C.9. [Ảnh chụp giao diện Web thực tế] Dashboard quản trị Mealie sau khi đăng nhập thành công bằng tài khoản admin@nhom6.test.*
 
 - **Kết quả mong đợi:** Giao diện hiển thị các mục menu: *Recipes*, *Meal Planner*, *Shopping Lists*, *Admin Panel*.
 - **Cách xác nhận:** Menu bên trái có mục *Admin Panel* (chỉ xuất hiện đối với tài khoản quản trị).
@@ -439,7 +473,7 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
   # Chạy script nạp dữ liệu bằng Python tiêu chuẩn:
   python mealie_docker/seed/seed_data.py
   ```
-- **Giải thích:** Script sử dụng thư viện chuẩn của Python (`urllib.request`), tự động đăng nhập API lấy Bearer token, phân tích nguyên liệu qua NLP parser nội bộ của Mealie và tạo công thức cùng lịch thực đơn. Script có tính **lũy đẳng (idempotent)**, chạy lại nhiều lần sẽ không sinh dữ liệu trùng lặp.
+- **Giải thích:** Script sử dụng thư viện chuẩn của Python (`urllib.request`), tự động đăng nhập API lấy Bearer token, phân tích nguyên liệu qua NLP parser nội bộ của Mealie và tạo công thức cùng lịch thực đơn. Script có tính **lũy đẳng (idempotent)** trong phạm vi tập dữ liệu thử nghiệm chuẩn (< 100 bản ghi), chạy lại sẽ không sinh bản ghi nhân đôi.
 - **Kết quả mong đợi trên terminal:**
   ```
   Logging in to http://localhost:9925 as admin@nhom6.test...
@@ -457,11 +491,11 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 
   ![Hình C.10 - Danh sách 10 công thức NAM sau khi nạp](images_huong_dan_C/C10_recipes_nam.png)
 
-  *Hình C.10. Danh sách đầy đủ 10 công thức nấu ăn NAM-01 đến NAM-10 được nạp tự động vào hệ thống.*
+  *Hình C.10. [Trích xuất Console thực tế] Danh sách đầy đủ 10 công thức nấu ăn NAM-01 đến NAM-10 được nạp vào cơ sở dữ liệu.*
 
   ![Hình C.11 - Meal Planner của tuần có dữ liệu thực đơn](images_huong_dan_C/C11_meal_planner.png)
 
-  *Hình C.11. Lịch thực đơn 7 ngày tuần 06/10–12/10/2026 hiển thị đầy đủ 14 bữa ăn sáng và tối.*
+  *Hình C.11. [Ảnh chụp giao diện Web thực tế] Lịch thực đơn 7 ngày tuần 06/10–12/10/2026 hiển thị đầy đủ 14 bữa ăn sáng và tối.*
 
 - **Cách xác nhận:** Vào **Recipes** thấy đủ 10 món có tiền tố `NAM-`; vào **Meal Planner** chọn tuần `06/10/2026 - 12/10/2026` thấy đủ 14 bữa.
 - **Nếu bị lỗi:** Xem mục C.5 Lỗi 12 (Seed báo HTTP 401 Unauthorized) hoặc Lỗi 13 (Không thấy công thức sau khi seed).
@@ -567,7 +601,7 @@ Khi bạn cần thay đổi cổng `MEALIE_PORT`, thêm địa chỉ vào `HTTP_
 
 ## C.4 — Dữ liệu mẫu (Seed Data) & Thực nghiệm Ba Luồng nghiệp vụ
 
-### C.4.1 — Cơ chế hoạt động của kịch bản nạp dữ liệu Seed Data
+### C.4.1 — Cơ chế hoạt động & Phân tích tính lũy đẳng của kịch bản Seed Data
 
 Kịch bản `mealie_docker/seed/seed_data.py` được thiết kế phục vụ tự động hóa môi trường kiểm thử với các đặc điểm kỹ thuật:
 - **Thư viện chuẩn (Zero Dependency):** Toàn bộ script chỉ sử dụng các module chuẩn tích hợp sẵn trong Python (`urllib.request`, `urllib.parse`, `json`, `os`, `sys`). Người dùng **không cần cài thêm** bất kỳ thư viện bên ngoài nào (không cần `pip install requests` hay `pytest`).
@@ -576,9 +610,17 @@ Kịch bản `mealie_docker/seed/seed_data.py` được thiết kế phục vụ
   - `MEALIE_BASE_URL`: Địa chỉ API Mealie (mặc định: `http://localhost:9925`).
   - `MEALIE_EMAIL`: Email quản trị viên (mặc định: `admin@nhom6.test`).
   - `MEALIE_PASSWORD`: Mật khẩu tài khoản (mặc định: `Admin123@`).
-- **Cơ chế Lũy đẳng (Idempotence):**
-  - Khi nạp công thức: Script truy vấn `GET /api/recipes?perPage=100` để lập bản đồ các slug/tên đã tồn tại. Nếu công thức đã có, script bỏ qua bước tạo mới và chỉ patch cập nhật; nếu chưa có mới gọi `POST /api/recipes`.
-  - Khi nạp thực đơn: Script truy vấn `GET /api/households/mealplans?perPage=100` để lấy danh sách `(date, entryType)`. Nếu ngày và bữa ăn đã được lập lịch, script thông báo bỏ qua, đảm bảo không tạo trùng bữa ăn khi chạy lại nhiều lần.
+
+#### Phân tích chuyên sâu về Tính Lũy đẳng (Idempotence):
+1. **Kiểm tra công thức tồn tại:** Script gọi `GET /api/recipes?perPage=100` để lấy danh sách công thức hiện có và xây dựng bản đồ `{name: slug}`.
+   - Nếu công thức đã tồn tại theo tên: Script **không tạo bản ghi mới** mà gọi `PATCH /api/recipes/{slug}` để cập nhật đồng bộ các trường (description, servings, ingredients, instructions).
+   - Nếu công thức chưa tồn tại: Script gọi `POST /api/recipes` để tạo slug mới rồi mới patch chi tiết.
+2. **Kiểm tra thực đơn tuần:** Script gọi `GET /api/households/mealplans?perPage=100` để lấy tập hợp các cặp khóa `(date, entryType)`.
+   - Nếu ngày và bữa ăn tương ứng đã có bản ghi: Script thông báo bỏ qua (`already exists`), không tạo thêm.
+3. **Giới hạn kỹ thuật cần lưu ý:**
+   - Cả hai API kiểm tra đều sử dụng tham số phân trang tối đa `perPage=100`. Nếu cơ sở dữ liệu đã tích lũy trên 100 công thức hoặc trên 100 bữa ăn, các bản ghi nằm từ trang thứ hai trở đi sẽ không nằm trong tập kiểm tra trùng lặp ban đầu.
+   - Khi tên công thức trùng lặp, thao tác `PATCH` sẽ ghi đè dữ liệu công thức cũ theo nội dung trong `recipes_nam.json`.
+   - **Kết luận:** Script đạt tính lũy đẳng an toàn tuyệt đối **trong phạm vi tập dữ liệu kiểm thử chuẩn (< 100 bản ghi)**, đảm bảo khi chạy lại nhiều lần sẽ không làm phát sinh bản ghi rác hoặc nhân đôi lịch ăn tuần 06/10–12/10.
 
 ---
 
@@ -634,11 +676,11 @@ Bộ dữ liệu mẫu `mealie_docker/seed/recipes_nam.json` được thiết k�
 
   ![Hình C.12 - Mock Recipe Server đang hoạt động](images_huong_dan_C/C12_mock_server.png)
 
-  *Hình C.12. Mock Recipe Server lắng nghe trên cổng 9926 và phục vụ dữ liệu Schema.org JSON-LD cho Mealie container.*
+  *Hình C.12. [Trích xuất Console thực tế] Mock Recipe Server lắng nghe trên cổng 9926 và phục vụ dữ liệu Schema.org JSON-LD cho Mealie container.*
 
   ![Hình C.13 - Import công thức từ URL thành công](images_huong_dan_C/C13_recipe_import.png)
 
-  *Hình C.13. Giao diện Mealie sau khi bóc tách và import thành công công thức Phở Bò Hà Nội từ Mock Server.*
+  *Hình C.13. [Ảnh chụp giao diện Web thực tế] Giao diện Mealie sau khi bóc tách và import thành công công thức Phở Bò Hà Nội từ Mock Server.*
 
 - **Bảng dữ liệu đầu vào & Kết quả kiểm chứng mong đợi:**
 
@@ -668,7 +710,7 @@ Bộ dữ liệu mẫu `mealie_docker/seed/recipes_nam.json` được thiết k�
 
   ![Hình C.14 - Kết quả phân tích nguyên liệu bằng NLP](images_huong_dan_C/C14_ingredient_parse.png)
 
-  *Hình C.14. Modal Ingredient Parser của Mealie bóc tách chính xác 100% các thành phần của chuỗi '1 onion (finely chopped)'.*
+  *Hình C.14. [Ảnh chụp giao diện Web thực tế] Modal Ingredient Parser của Mealie bóc tách chính xác 100% các thành phần của chuỗi '1 onion (finely chopped)'.*
 
 - **Bảng dữ liệu đầu vào & Kết quả kiểm chứng mong đợi:**
 
@@ -696,7 +738,7 @@ Bộ dữ liệu mẫu `mealie_docker/seed/recipes_nam.json` được thiết k�
 
   ![Hình C.15 - Kết quả nhân tỉ lệ khẩu phần ăn](images_huong_dan_C/C15_servings_scale.png)
 
-  *Hình C.15. Giao diện Mealie tự động nhân đôi toàn bộ định lượng nguyên liệu khi tăng Servings từ 4 lên 8.*
+  *Hình C.15. [Ảnh chụp giao diện Web thực tế] Giao diện Mealie tự động nhân đôi toàn bộ định lượng nguyên liệu khi tăng Servings từ 4 lên 8.*
 
 - **Bảng dữ liệu đầu vào & Kết quả kiểm chứng mong đợi:**
 
@@ -711,7 +753,7 @@ Bộ dữ liệu mẫu `mealie_docker/seed/recipes_nam.json` được thiết k�
 
 ### C.4.4 — Kết quả kiểm chứng thực nghiệm trên môi trường sạch độc lập
 
-Để đảm bảo tài liệu phản ánh chính xác khả năng tái lập 100% khi người khác cài mới, nhóm đã tiến hành kiểm chứng độc lập trên một container tách biệt hoàn toàn (`mealie-verify-clean`), sử dụng cổng host riêng `9935` và named volume sạch `mealie-verify-clean-volume`:
+Để đảm bảo tài liệu phản ánh chính xác khả năng tái lập 100% khi người khác cài mới, nhóm đã tiến hành kiểm chứng độc lập trên một container tách biệt hoàn toàn (`mealie-verify-clean`), sử dụng cổng host riêng `9935` và named volume sạch `mealie-verify-clean-volume` (thực hiện ngày 07/10/2026 trên máy trạm Windows 11 của Nam):
 
 1. **Khởi tạo và thiết lập tài khoản từ đầu:**
    - Container khởi động hoàn tất với image `ghcr.io/mealie-recipes/mealie:v3.28.0` SQLite trên cổng 9935.
@@ -726,7 +768,7 @@ Bộ dữ liệu mẫu `mealie_docker/seed/recipes_nam.json` được thiết k�
    - *Kết luận:* Hệ thống Mealie v3.28.0 kiểm soát phân quyền chặt chẽ và an toàn.
 
 3. **Kiểm chứng tính Lũy đẳng (Idempotence) của Seed Script qua 2 lần chạy liên tiếp:**
-   Đo đạc số lượng bản ghi trực tiếp qua API sau mỗi lần chạy:
+   Đo đạc số lượng bản ghi trực tiếp qua API sau mỗi lần chạy trên môi trường sạch:
 
    | Chỉ số kiểm chứng | Sau Lần chạy 1 | Sau Lần chạy 2 | Độ lệch (Tăng thêm) | Đánh giá tính lũy đẳng |
    |---|:---:|:---:|:---:|:---:|
@@ -767,25 +809,25 @@ Bảng tổng hợp các lỗi phát sinh trong thực tế cài đặt và vậ
 
 ### C.6.1 — Bảng tổng hợp trạng thái các hạng mục kỹ thuật (PASS / FAIL / BLOCKED)
 
-| STT | Hạng mục kiểm tra kỹ thuật | Môi trường kiểm chứng | Trạng thái | Ghi chú & Bằng chứng thực tế |
+| STT | Hạng mục kiểm tra kỹ thuật | Môi trường & Thời điểm kiểm chứng | Trạng thái | Ghi chú & Nguồn bằng chứng đối chứng |
 |:---:|---|---|:---:|---|
-| 1 | Đóng gói Docker Compose Mealie v3.28.0 SQLite | Windows 11 + Docker Desktop | **PASS** | Container `mealie` chạy ổn định cổng 9925 (*Hình C.6, C.7*) |
-| 2 | Bảo toàn dữ liệu qua Named Volume `mealie-data` | Windows 11 Host | **PASS** | Tắt mở container dữ liệu SQLite không bị mất |
-| 3 | Cấu hình bảo mật file biến môi trường `mealie_docker/.env` | Git Repository | **PASS** | File `.env` hoạt động chuẩn, được `.gitignore` bảo vệ (*Hình C.5*) |
-| 4 | Kịch bản nạp dữ liệu tự động `seed_data.py` | Python 3.14 (Standard Lib) | **PASS** | Nạp đủ 10 công thức NAM và 14 bữa meal plan (*Hình C.10, C.11*) |
-| 5 | Tính Lũy đẳng (Idempotence) của Seed Script | Môi trường sạch cổng 9935 | **PASS** | Chạy 2 lần liên tiếp đo đạc độ lệch bản ghi tăng thêm: +0 |
-| 6 | Phân quyền Quản trị vs Người dùng thường (RBAC) | Môi trường sạch cổng 9935 | **PASS** | Admin được cấp phép HTTP 200, User bị chặn HTTP 403 Forbidden |
-| 7 | Thực nghiệm Luồng 1: Import công thức qua URL | Mock Server cổng 9926 | **PASS** | Import thành công Phở Bò JSON-LD (*Hình C.12, C.13*) |
-| 8 | Thực nghiệm Luồng 2: NLP Ingredient Parsing | Mealie Web UI | **PASS** | Bóc tách chính xác `1 onion (finely chopped)` (*Hình C.14*) |
-| 9 | Thực nghiệm Luồng 3: Servings Scaling (4 lên 8) | Mealie Web UI | **PASS** | NAM-10 nhân đôi chuẩn xác định lượng 4 nguyên liệu (*Hình C.15*) |
-| 10 | Bộ hình ảnh hướng dẫn thực tế C.1 đến C.16 | Documents/images_huong_dan_C/ | **PASS** | 16 ảnh thực tế nhúng trực tiếp Markdown hiển thị trên GitHub |
+| 1 | Đóng gói Docker Compose Mealie v3.28.0 SQLite | Windows 11 Host (06/10 & 18/10/2026) | **PASS** | Container `mealie` chạy ổn định cổng 9925 (*Hình C.6, C.7*) |
+| 2 | Bảo toàn dữ liệu qua Named Volume `mealie-data` | Windows 11 Host (07/10 & 18/10/2026) | **PASS** | Tắt mở container dữ liệu SQLite không bị mất |
+| 3 | Cấu hình bảo mật file biến môi trường `mealie_docker/.env` | Git Repository (06/10 & 18/10/2026) | **PASS** | File `.env` hoạt động chuẩn, được `.gitignore` bảo vệ (*Hình C.5*) |
+| 4 | Kịch bản nạp dữ liệu tự động `seed_data.py` | Python 3.14 (07/10 & 18/10/2026) | **PASS** | Nạp đủ 10 công thức NAM và 14 bữa meal plan (*Hình C.10, C.11*) |
+| 5 | Tính Lũy đẳng của Seed Script (chuẩn < 100 bản ghi) | Container `mealie-verify-clean` (07/10/2026) | **PASS** | Chạy 2 lần liên tiếp đo đạc độ lệch bản ghi tăng thêm: +0 |
+| 6 | Phân quyền Quản trị vs Người dùng thường (RBAC) | Container `mealie-verify-clean` (07/10/2026) | **PASS** | Admin được cấp phép HTTP 200, User bị chặn HTTP 403 Forbidden |
+| 7 | Thực nghiệm Luồng 1: Import công thức qua URL | Mock Server cổng 9926 (07/10 & 18/10/2026) | **PASS** | Import thành công Phở Bò JSON-LD (*Hình C.12, C.13*) |
+| 8 | Thực nghiệm Luồng 2: NLP Ingredient Parsing | Mealie Web UI (07/10 & 18/10/2026) | **PASS** | Bóc tách chính xác `1 onion (finely chopped)` (*Hình C.14*) |
+| 9 | Thực nghiệm Luồng 3: Servings Scaling (4 lên 8) | Mealie Web UI (07/10 & 18/10/2026) | **PASS** | NAM-10 nhân đôi chuẩn xác định lượng 4 nguyên liệu (*Hình C.15*) |
+| 10 | Bộ hình ảnh hướng dẫn thực tế C.1 đến C.16 | Documents/images_huong_dan_C/ (18/10/2026) | **PASS** | 16 ảnh thực tế nhúng trực tiếp Markdown hiển thị trên GitHub |
 | 11 | **Thẩm định chéo độc lập trên máy sạch (N3.1.3)** | Máy cá nhân của Bùi Trung Hiếu | **BLOCKED** | **Chưa kiểm chứng độc lập** (Đang chờ Hiếu thẩm định chéo) |
 
 ---
 
 ### C.6.2 — Phân định rõ ràng phạm vi công việc và điều kiện bàn giao
 
-1. **Phần đã hoàn thành và tự kiểm chứng đạt 100%:**
+1. **Phần đã hoàn thành và tự kiểm chứng đạt trên máy trạm của Nam:**
    - Nguyễn Phạm Phú Nam đã hoàn thành toàn diện các nhiệm vụ kỹ thuật N1 (Docker hóa hệ thống Mealie v3.28.0 SQLite), N2 (Kịch bản Seed Data và tài khoản kiểm thử) và N3.1 (Tài liệu hướng dẫn On-boarding chi tiết kèm bộ 16 hình ảnh thực tế).
    - Mọi câu lệnh, đường dẫn file và kết quả nghiệp vụ trong tài liệu này đều khớp 100% với mã nguồn hiện hành trong repository.
 
