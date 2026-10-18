@@ -113,9 +113,9 @@
   - *Kết quả kiểm tra:* Đủ 5 phần nội dung kỹ thuật, chính xác phiên bản máy thật, biến môi trường, đường dẫn và lệnh chạy.
   - *Việc còn thiếu:* Không.
 
-- [x] **N3.1.2** — Trình bày đầy đủ 6 khối minh chứng thực nghiệm trong báo cáo.
-  - *Bằng chứng / File:* 6 khối minh chứng kỹ thuật tương ứng với 6 file ảnh `01_mealie_landing.png` đến `06_servings_scale.png` trong [`Documents/bao_cao_phan_C.md`](bao_cao_phan_C.md).
-  - *Kết quả kiểm tra:* Mô tả chi tiết kết quả thực nghiệm, không tạo broken link trên GitHub, lưu trữ ảnh ngoại tuyến phục vụ demo.
+- [x] **N3.1.2** — Trình bày đầy đủ bộ 16 hình ảnh hướng dẫn thực tế C.1 đến C.16 trong báo cáo.
+  - *Bằng chứng / File:* Bộ 16 file ảnh thực tế tại [`Documents/images_huong_dan_C/`](images_huong_dan_C/) nhúng trực tiếp vào [`Documents/bao_cao_phan_C.md`](bao_cao_phan_C.md).
+  - *Kết quả kiểm tra:* 16 hình ảnh thực tế (C01 đến C16) hiển thị trực tiếp trên GitHub, dung lượng tối ưu (~530 KB), không có liên kết hỏng, mô tả chi tiết từng bước.
   - *Việc còn thiếu:* Không.
 
 - [ ] **N3.1.3** — Bàn giao cho **Bùi Trung Hiếu** cài đặt thẩm định chéo trên máy sạch, tiếp thu góp ý để hoàn thiện.
