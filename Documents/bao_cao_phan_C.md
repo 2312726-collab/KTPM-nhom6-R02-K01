@@ -149,24 +149,40 @@ Nhóm 6 đã thống nhất cố định phiên bản hệ thống Mealie nhằm
 
 ### C.1.6 — Hướng dẫn Khởi động Nhanh (Quick Start)
 
-Dành cho giảng viên hoặc thành viên nhóm **đã có sẵn Git, Docker Desktop và Python** trên máy:
+Dành cho giảng viên hoặc thành viên nhóm **đã có sẵn Git, Docker Desktop và Python** trên máy trạm:
+
+> [!NOTE]
+> **Quy ước thư mục làm việc:** Lệnh bên dưới hỗ trợ bạn mở PowerShell tại **thư mục gốc của repository** hoặc ngay trong thư mục **`mealie_docker/`**. Script tự kiểm tra điều kiện tiên quyết và dừng ngay lập tức nếu không tìm thấy cấu hình Compose của Nam, ngăn chặn việc chạy nhầm Docker Compose ở thư mục gốc.
 
 ```powershell
-# 1. Di chuyển vào thư mục cấu hình Docker của dự án
-cd mealie_docker
+# 1. Xác định đúng thư mục chứa cấu hình Docker của Nam (chặn chạy nhầm ở root repo):
+if ((Test-Path "docker-compose.yml") -and (Test-Path ".env.example") -and (Test-Path "seed/seed_data.py")) {
+    Write-Host "Đang ở sẵn trong thư mục mealie_docker: $(Get-Location)"
+} elseif ((Test-Path "mealie_docker/docker-compose.yml") -and (Test-Path "mealie_docker/.env.example")) {
+    cd mealie_docker
+    Write-Host "Đã chuyển vào thư mục: $(Get-Location)"
+} else {
+    throw "LỖI DỪNG: Không tìm thấy 'docker-compose.yml' và '.env.example' của Mealie tại '$(Get-Location)'. Hãy mở PowerShell tại thư mục gốc repository hoặc thư mục mealie_docker!"
+}
 
-# 2. Tạo file biến môi trường từ mẫu (nếu chưa có, tránh ghi đè cấu hình hiện tại)
-if (-not (Test-Path .env)) { Copy-Item .env.example .env }
+# 2. Tạo file biến môi trường từ mẫu (nếu chưa có, tuyệt đối không ghi đè file .env hiện có):
+if (-not (Test-Path ".env")) {
+    Copy-Item .env.example .env
+    Write-Host "Đã tạo file .env từ .env.example."
+} else {
+    Write-Host "File .env đã sẵn sàng, giữ nguyên cấu hình hiện tại."
+}
 
-# 3. Khởi động Mealie ở chế độ nền
+# 3. Khởi động Mealie v3.28.0 ở chế độ nền (chỉ thực thi khi đã ở đúng mealie_docker):
 docker compose up -d
 
-# 4. Kiểm tra trạng thái sẵn sàng
+# 4. Kiểm tra trạng thái sẵn sàng:
 docker compose ps
 docker compose logs --tail=20 mealie
 ```
 
 Sau khi thấy dòng `Application startup complete`, mở trình duyệt truy cập: **`http://localhost:9925`**.
+*(Nếu cần nạp 10 công thức mẫu và lịch thực đơn, xem hướng dẫn chi tiết tại Bước 11 mục C.2).*
 
 ---
 
@@ -256,6 +272,14 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 
 - **Mục đích:** Lấy đúng mã nguồn đồ án và nhánh phát triển Phần 1 của Nguyễn Phạm Phú Nam chứa cấu hình Docker và bộ dữ liệu seed.
 - **Thao tác:** Chạy lệnh clone repository từ GitHub và checkout sang nhánh `2312695-NguyenPhamPhuNam-Phan1`.
+
+> [!IMPORTANT]
+> **Lưu ý về quyền truy cập GitHub (Private Repository):**
+> Kho lưu trữ `https://github.com/2312726-collab/KTPM-nhom6-R02-K01.git` là kho riêng tư (Private) thuộc tổ chức `2312726-collab`.
+> - Thành viên nhóm hoặc giảng viên chấm thi cần được thêm làm **Collaborator** (quyền Read/Write) trước khi có thể clone hoặc kéo mã nguồn. Nếu gặp thông báo lỗi `Repository not found` hoặc `Authentication failed`, hãy liên hệ quản trị nhóm để được mời vào repo.
+> - Đăng nhập tài khoản GitHub bằng trình duyệt qua Git Credential Manager hoặc GitHub CLI (`gh auth login`).
+> - **Cảnh báo bảo mật:** Tuyệt đối không chia sẻ mã cá nhân, Personal Access Token (PAT) hoặc mật khẩu tài khoản GitHub vào tài liệu hoặc cho bất kỳ ai.
+
 - **Lệnh PowerShell:**
   ```powershell
   # Thư mục làm việc: Thư mục học tập của bạn (ví dụ: C:\Workspace hoặc D:\Projects)
@@ -278,7 +302,7 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 
 - **Kết quả mong đợi:** Dòng đầu tiên thông báo: `On branch 2312695-NguyenPhamPhuNam-Phan1` và `working tree clean`.
 - **Cách xác nhận:** Lệnh `git branch --show-current` trả về đúng tên nhánh `2312695-NguyenPhamPhuNam-Phan1`.
-- **Nếu bị lỗi:** Xem mục C.5 Lỗi 4 (Tải nhầm nhánh hoặc repository).
+- **Nếu bị lỗi:** Xem mục C.5 Lỗi 4 (Tải nhầm nhánh hoặc thiếu quyền truy cập repository).
 
 ---
 
@@ -308,13 +332,23 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 #### Bước 5 — Mở PowerShell đúng thư mục và kiểm tra xung đột cổng
 
 - **Mục đích:** Di chuyển vào thư mục chứa Docker Compose của Nam (`mealie_docker/`) và kiểm tra tránh xung đột cổng `9925` trước khi bật container.
-- **Thao tác:** Di chuyển terminal vào `mealie_docker` và dò quét cổng mạng.
+- **Thao tác:** Kiểm tra vị trí hiện tại và di chuyển terminal vào `mealie_docker`, sau đó dò quét cổng mạng.
 - **Lệnh PowerShell:**
   ```powershell
-  # Từ thư mục gốc repo, chuyển vào mealie_docker:
-  cd mealie_docker
+  # 1. Kiểm tra vị trí hiện tại:
+  Get-Location
 
-  # Kiểm tra cổng 9925 có bị tiến trình nào chiếm giữ không:
+  # 2. Chuyển vào đúng mealie_docker và ngăn chặn chạy nhầm ở thư mục khác:
+  if ((Test-Path "docker-compose.yml") -and (Test-Path ".env.example") -and (Test-Path "seed/seed_data.py")) {
+      Write-Host "Đang ở sẵn trong mealie_docker: $(Get-Location)"
+  } elseif ((Test-Path "mealie_docker/docker-compose.yml") -and (Test-Path "mealie_docker/.env.example")) {
+      cd mealie_docker
+      Write-Host "Đã chuyển vào: $(Get-Location)"
+  } else {
+      throw "LỖI DỪNG: Không tìm thấy 'mealie_docker/docker-compose.yml' tại '$(Get-Location)'. Hãy mở PowerShell tại thư mục gốc repository!"
+  }
+
+  # 3. Kiểm tra cổng 9925 có bị tiến trình nào chiếm giữ không:
   netstat -ano | findstr :9925
   ```
 - **Giải thích:** File Compose của Nam nằm trong `mealie_docker/`, tách biệt hoàn toàn với root compose. Dò cổng giúp phát hiện kịp thời nếu có service khác đang dùng cổng 9925.
@@ -338,17 +372,17 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
       Write-Host "File .env đã tồn tại, giữ nguyên cấu hình hiện tại."
   }
 
-  # Xem nội dung file cấu hình:
-  Get-Content .env
+  # Xác nhận file đã sẵn sàng:
+  Test-Path .env
   ```
-- **Giải thích:** File `.env` chứa các biến cấu hình cổng host, URL, database SQLite và danh sách whitelist mạng. File này được bảo vệ bởi `.gitignore` và không bị commit lên GitHub.
+- **Giải thích:** File `.env` chứa các biến cấu hình cổng host, URL, database SQLite và danh sách whitelist mạng. File này được bảo vệ bởi `.gitignore` và không bị commit lên GitHub. Tránh dùng lệnh in toàn bộ nội dung file ra màn hình nếu sau này có cấu hình thêm mật khẩu hoặc khóa API nhạy cảm.
 - **Hình minh họa:**
 
   ![Hình C.5 - File .env và các biến cấu hình](images_huong_dan_C/C05_env_config.png)
 
-  *Hình C.5. [Trích xuất Console thực tế] Nội dung file cấu hình mealie_docker/.env chuẩn hóa, an toàn bảo mật.*
+  *Hình C.5. [Trích xuất Console thực tế] Cấu trúc file cấu hình mealie_docker/.env chuẩn hóa, an toàn bảo mật.*
 
-- **Nội dung chuẩn của `.env`:**
+- **Nội dung chuẩn của `.env` (file mẫu .env.example):**
   ```env
   MEALIE_PORT=9925
   ALLOW_SIGNUP=true
@@ -357,7 +391,7 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
   DB_ENGINE=sqlite
   HTTP_ALLOW_LIST=host.docker.internal
   ```
-- **Cách xác nhận:** File `mealie_docker/.env` tồn tại với dung lượng khoảng 193 bytes.
+- **Cách xác nhận:** Lệnh `Test-Path .env` trả về `True` và file tồn tại với dung lượng khoảng 193 bytes.
 - **Nếu bị lỗi:** Xem mục C.5 Lỗi 6 (Thiếu file .env hoặc sai cấu hình).
 
 ---
@@ -424,7 +458,7 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 
 #### Bước 9 — Thiết lập tài khoản Quản trị viên lần đầu
 
-- **Mục đích:** Đăng nhập vào giao diện web và thiết lập tài khoản Quản trị viên chính `admin@nhom6.test` cho đồ án.
+- **Mục đích:** Đăng nhập vào giao diện web và thiết lập tài khoản Quản trị viên chính `admin@nhom6.test` cho đồ án (hoặc tài khoản quản trị riêng của bạn).
 - **Thao tác:**
   1. Mở trình duyệt Web truy cập: **`http://localhost:9925`**.
   2. Giao diện Sign In xuất hiện. Nhấn nút **Login** ở góc trên bên phải.
@@ -432,14 +466,15 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
      - **Email:** `changeme@example.com`
      - **Password:** `MyPassword`
   4. Sau khi đăng nhập thành công, truy cập **Admin Panel** (`/admin/manage/users`).
-  5. Nhấn **Create User** và nhập:
-     - **Email:** `admin@nhom6.test`
-     - **Username:** `admin`
-     - **Password:** `Admin123@`
+  5. Nhấn **Create User** và điền đầy đủ các trường thông tin:
+     - **Full Name:** `Admin Nhóm 6` *(hoặc Họ và tên của bạn — Mealie v3.28.0 bắt buộc trường này)*
+     - **Username:** `admin_nhom6` *(Lưu ý quan trọng: Tránh đặt là `admin` vì Mealie v3.28.0 đã cấp username `admin` cho tài khoản gốc `changeme@example.com`, nếu đặt trùng sẽ bị lỗi HTTP 409 Conflict)*
+     - **Email:** `admin@nhom6.test` *(hoặc email cá nhân bạn dùng để quản trị)*
+     - **Password:** `Admin123@` *(hoặc mật khẩu quản trị riêng bạn chọn)*
      - Bật cờ quyền **Admin** (`admin: true`).
   6. **Thực hiện yêu cầu bảo mật:** Đổi mật khẩu hoặc vô hiệu hóa tài khoản gốc `changeme@example.com`.
-  7. (Tùy chọn) Tạo thêm tài khoản người dùng thường phục vụ kiểm thử:
-     - **Email:** `test@nhom6.test` | **Username:** `testuser` | **Password:** `User123@` | **Admin:** Tắt.
+  7. (Tùy chọn) Tạo thêm tài khoản người dùng thường phục vụ kiểm thử phân quyền RBAC:
+     - **Full Name:** `Test User` | **Username:** `testuser` | **Email:** `test@nhom6.test` | **Password:** `User123@` | **Admin:** Tắt.
 - **Hình minh họa:**
 
   ![Hình C.8 - Giao diện thiết lập tài khoản và đăng nhập](images_huong_dan_C/C08_mealie_login.png)
@@ -454,8 +489,8 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 
 #### Bước 10 — Đăng nhập và xác nhận giao diện Dashboard
 
-- **Mục đích:** Xác nhận tài khoản Quản trị viên nhóm `admin@nhom6.test` hoạt động chính xác với đầy đủ quyền quản trị.
-- **Thao tác:** Đăng xuất khỏi tài khoản mặc định và đăng nhập lại bằng `admin@nhom6.test` / `Admin123@`.
+- **Mục đích:** Xác nhận tài khoản Quản trị viên nhóm `admin@nhom6.test` (hoặc tài khoản quản trị bạn vừa tạo) hoạt động chính xác với đầy đủ quyền quản trị.
+- **Thao tác:** Đăng xuất khỏi tài khoản mặc định và đăng nhập lại bằng tài khoản quản trị mới.
 - **Hình minh họa:**
 
   ![Hình C.9 - Dashboard Mealie sau đăng nhập](images_huong_dan_C/C09_mealie_dashboard.png)
@@ -470,26 +505,71 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 #### Bước 11 — Chạy kịch bản nạp dữ liệu mẫu (Seed Data)
 
 - **Mục đích:** Tự động nạp 10 công thức nấu ăn chuẩn hóa (`NAM-01` đến `NAM-10`) và lập kế hoạch thực đơn 7 ngày (14 bữa ăn) phục vụ kiểm thử.
-- **Thao tác:** Mở terminal, đứng từ **thư mục gốc repository** và chạy script `seed_data.py`.
-- **Lệnh PowerShell:**
-  ```powershell
-  # Đứng từ thư mục gốc repository (nếu đang ở mealie_docker/, dùng lệnh quay lại 'cd ..'):
-  cd ..
+- **Thao tác:** Mở terminal, xác định vị trí và chạy script `seed_data.py` từ **thư mục gốc repository**.
 
-  # Trường hợp 1: Nếu sử dụng tài khoản mẫu ban đầu (admin@nhom6.test / Admin123@):
-  python mealie_docker/seed/seed_data.py
+> [!IMPORTANT]
+> **Lưu ý kỹ thuật quan trọng trước khi chạy Seed Script:**
+> 1. **Vị trí thư mục:** Script `seed_data.py` được thực thi từ **thư mục gốc repository**. Các khối lệnh bên dưới đã tích hợp cơ chế tự kiểm tra vị trí: nếu đang ở trong `mealie_docker\`, lệnh sẽ tự lùi về thư mục gốc; nếu mở terminal mới tại thư mục gốc, lệnh sẽ giữ nguyên vị trí an toàn.
+> 2. **Cơ chế nạp biến môi trường:** Script `seed_data.py` chạy qua HTTP REST API độc lập và **KHÔNG tự đọc file `mealie_docker/.env`**.
+> 3. **QUY TẮC LỰA CHỌN:** **CHỈ CHỌN VÀ SAO CHÉP MỘT TRONG HAI CÁCH DƯỚI ĐÂY** để chạy (tuyệt đối không chạy cả hai cách kẻo lặp lệnh).
 
-  # Trường hợp 2: Nếu người cài đặt đã đổi email, mật khẩu hoặc cổng host khác:
-  # Thiết lập biến môi trường tạm thời cho phiên chạy (không lưu mật khẩu vào file hay log):
-  $env:MEALIE_BASE_URL = "http://localhost:9925"
-  $env:MEALIE_EMAIL = "your_admin_email@example.com"
-  $env:MEALIE_PASSWORD = "YourCustomPassword"
+---
 
-  python mealie_docker/seed/seed_data.py
+##### CÁCH 1 (KHUYẾN NGHỊ) — Dành cho tài khoản Quản trị viên bạn đã tạo tại Bước 9 (hoặc tài khoản riêng)
 
-  # Xóa mật khẩu khỏi biến môi trường ngay sau khi nạp xong:
-  Remove-Item env:MEALIE_PASSWORD
-  ```
+Dành cho người dùng đã tạo tài khoản quản trị cá nhân tại Bước 9. Đoạn lệnh bên dưới yêu cầu nhập email thực tế (tránh lỗi dùng placeholder) và mật khẩu ẩn không hiển thị trên màn hình:
+
+```powershell
+# 1. Kiểm tra vị trí và đảm bảo đứng ở THƯ MỤC GỐC REPOSITORY:
+if (Test-Path "mealie_docker/seed/seed_data.py") {
+    Write-Host "Đang ở thư mục gốc repository: $(Get-Location)"
+} elseif ((Test-Path "seed/seed_data.py") -and (Test-Path "docker-compose.yml")) {
+    cd ..
+    Write-Host "Đã lùi về thư mục gốc: $(Get-Location)"
+} else {
+    throw "LỖI DỪNG: Không tìm thấy 'mealie_docker/seed/seed_data.py' tại '$(Get-Location)'. Hãy mở PowerShell tại thư mục gốc repository!"
+}
+
+# 2. Thiết lập địa chỉ URL và nhập email quản trị thực tế (tránh lỗi dùng email mẫu placeholder):
+$env:MEALIE_BASE_URL = "http://localhost:9925"
+$adminEmail = Read-Host -Prompt "Nhập email quản trị Mealie đã tạo tại Bước 9 (ví dụ: admin@nhom6.test)"
+$env:MEALIE_EMAIL = $adminEmail.Trim()
+
+# 3. Nhập mật khẩu bảo mật (ký tự ẩn khi gõ, tránh hiển thị trực tiếp ra màn hình console hay lịch sử lệnh):
+$securePass = Read-Host -Prompt "Nhập mật khẩu quản trị Mealie" -AsSecureString
+
+try {
+    # Nạp tạm thời mật khẩu vào biến môi trường trong phiên thực thi hiện tại:
+    $env:MEALIE_PASSWORD = [System.Net.NetworkCredential]::new("", $securePass).Password
+    python mealie_docker/seed/seed_data.py
+} finally {
+    # Khối finally bảo đảm biến môi trường MEALIE_PASSWORD được xóa dọn dẹp khi kết thúc hoặc khi script gặp lỗi:
+    Remove-Item env:MEALIE_PASSWORD -ErrorAction SilentlyContinue
+    $securePass = $null
+    Write-Host "Đã dọn dẹp biến môi trường mật khẩu trong phiên làm việc."
+}
+```
+
+---
+
+##### CÁCH 2 — Dành riêng cho trường hợp bạn giữ nguyên tài khoản demo mặc định (`admin@nhom6.test` / `Admin123@`)
+
+Nếu tại Bước 9 bạn đã tạo tài khoản quản trị đúng nguyên văn theo thông tin mẫu `admin@nhom6.test` và mật khẩu `Admin123@` trên cổng mặc định 9925, bạn có thể sao chép nguyên khối lệnh độc lập dưới đây:
+
+```powershell
+# 1. Kiểm tra vị trí và đảm bảo đứng ở THƯ MỤC GỐC REPOSITORY:
+if (Test-Path "mealie_docker/seed/seed_data.py") {
+    Write-Host "Đang ở thư mục gốc repository: $(Get-Location)"
+} elseif ((Test-Path "seed/seed_data.py") -and (Test-Path "docker-compose.yml")) {
+    cd ..
+    Write-Host "Đã lùi về thư mục gốc: $(Get-Location)"
+} else {
+    throw "LỖI DỪNG: Không tìm thấy 'mealie_docker/seed/seed_data.py' tại '$(Get-Location)'. Hãy mở PowerShell tại thư mục gốc repository!"
+}
+
+# 2. Thực thi script nạp dữ liệu với tài khoản demo mặc định:
+python mealie_docker/seed/seed_data.py
+```
 - **Giải thích:** Script sử dụng thư viện chuẩn của Python (`urllib.request`), tự động đăng nhập API lấy Bearer token, phân tích nguyên liệu qua NLP parser nội bộ của Mealie và tạo công thức cùng lịch thực đơn. Script có tính **lũy đẳng (idempotent)** trong phạm vi tập dữ liệu thử nghiệm chuẩn (< 100 bản ghi), chạy lại sẽ không sinh bản ghi nhân đôi.
 - **Kết quả mong đợi trên terminal:**
   ```
@@ -514,7 +594,15 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 
   *Hình C.11. [Ảnh chụp giao diện Web thực tế] Lịch thực đơn 7 ngày tuần 06/10–12/10/2026 hiển thị đầy đủ 14 bữa ăn sáng và tối.*
 
-- **Cách xác nhận:** Vào **Recipes** thấy đủ 10 món có tiền tố `NAM-`; vào **Meal Planner** chọn tuần `06/10/2026 - 12/10/2026` thấy đủ 14 bữa.
+> [!NOTE]
+> **Giải thích đặc thù hiển thị Meal Planner (06/10/2026 – 12/10/2026):**
+> Khoảng thời gian 7 ngày thử nghiệm bắt đầu từ **Thứ Ba (06/10/2026)** đến **Thứ Hai tuần kế tiếp (12/10/2026)**:
+> - Vì giao diện Meal Planner của Mealie phân chia lịch theo từng tuần (Thứ Hai đến Chủ Nhật), 14 bữa ăn mẫu sẽ **trải dài qua 2 tuần lịch**:
+>   - **Tuần 1 (05/10 – 11/10/2026):** Hiển thị 12 bữa ăn (từ Thứ Ba 06/10 đến Chủ Nhật 11/10).
+>   - **Tuần 2 (12/10 – 18/10/2026):** Hiển thị 2 bữa ăn còn lại (Thứ Hai 12/10: Sáng NAM-02, Tối NAM-03).
+> - Để xem đủ 14 bữa ăn, bạn chỉ cần nhấn nút mũi tên chuyển tuần (`>`) trên giao diện Mealie. Dữ liệu ngày seed được giữ nguyên vẹn để bảo đảm tính toàn vẹn của tập kiểm thử, không sửa đổi dữ liệu chỉ để dồn vào một tuần lịch.
+
+- **Cách xác nhận:** Vào **Recipes** thấy đủ 10 món có tiền tố `NAM-`; vào **Meal Planner** điều hướng qua 2 tuần lịch thấy đủ 14 bữa ăn.
 - **Nếu bị lỗi:** Xem mục C.5 Lỗi 12 (Seed báo HTTP 401 Unauthorized) hoặc Lỗi 13 (Không thấy công thức sau khi seed).
 
 ---
@@ -524,7 +612,7 @@ Dành cho thành viên nhóm hoặc máy chấm thi chưa từng chạy Mealie. 
 Dành cho thành viên nhóm hoặc giảng viên **đã từng cài đặt và chạy Mealie trước đây**, nay mở lại máy sau khi tắt nguồn hoặc khởi động lại Windows.
 
 > [!TIP]
-> **Tuyệt đối KHÔNG chạy lại các bước cài đặt hoặc seed data.** Toàn bộ tài khoản, công thức và thực đơn đã được lưu trữ an toàn trong named volume `mealie-data`.
+> **Tuyệt đối KHÔNG chạy lại các bước cài đặt hoặc seed data.** Toàn bộ tài khoản, công thức và thực đơn đã được lưu trữ an toàn trong named volume `mealie_docker_mealie-data`.
 
 Quy trình mở lại hệ thống chỉ gồm 3 bước đơn giản:
 
@@ -534,16 +622,25 @@ Mở ứng dụng **Docker Desktop** trên Windows và chờ icon cá voi ở kh
 #### Bước 2 — Khởi động lại container (nếu chưa tự chạy)
 Vì cấu hình `docker-compose.yml` có thiết lập chính sách `restart: always`, Docker Desktop khi khởi động lại thông thường sẽ tự động đánh thức container `mealie`. Nếu container đang ở trạng thái `exited`, mở PowerShell và chạy:
 ```powershell
-# Di chuyển vào thư mục mealie_docker của dự án:
-cd mealie_docker
+# 1. Chuyển vào đúng mealie_docker và ngăn chặn chạy nhầm compose ở thư mục khác:
+if ((Test-Path "docker-compose.yml") -and (Test-Path ".env.example") -and (Test-Path "seed/seed_data.py")) {
+    Write-Host "Đang ở sẵn trong mealie_docker: $(Get-Location)"
+} elseif ((Test-Path "mealie_docker/docker-compose.yml") -and (Test-Path "mealie_docker/.env.example")) {
+    cd mealie_docker
+    Write-Host "Đã chuyển vào: $(Get-Location)"
+} else {
+    throw "LỖI DỪNG: Không tìm thấy 'mealie_docker/docker-compose.yml' tại '$(Get-Location)'. Hãy mở terminal tại thư mục gốc repository!"
+}
+
+# 2. Khởi động lại container (dữ liệu SQLite trong named volume được bảo toàn nguyên vẹn):
 docker compose up -d
 docker compose ps
 ```
 
 #### Bước 3 — Truy cập website và tiếp tục công việc
 Mở trình duyệt truy cập: **`http://localhost:9925`**. Đăng nhập trực tiếp bằng tài khoản quản trị nhóm đã lưu:
-- **Email:** `admin@nhom6.test`
-- **Mật khẩu:** `Admin123@`
+- **Email:** `admin@nhom6.test` *(hoặc email quản trị bạn đã tạo)*
+- **Mật khẩu:** `Admin123@` *(hoặc mật khẩu riêng của bạn)*
 
 Toàn bộ 10 công thức `NAM-01` đến `NAM-10` và kế hoạch thực đơn tuần 06/10–12/10 vẫn được bảo toàn nguyên vẹn trong volume SQLite.
 
@@ -585,18 +682,21 @@ volumes:
     driver: local
 ```
 
-#### Quy tắc kỹ thuật bảo toàn dữ liệu:
+#### Quy tắc kỹ thuật bảo toàn dữ liệu & An toàn Docker:
 1. Cơ sở dữ liệu SQLite (`mealie.db`) và toàn bộ ảnh công thức được lưu tại thư mục `/app/data/` bên trong container.
-2. Thư mục này được Docker mount trực tiếp ra **Named Volume** mang tên `mealie-data` trên máy Host.
+2. Thư mục này được Docker mount trực tiếp ra **Named Volume** trên máy Host.
+   > [!NOTE]
+   > **Lưu ý về tên Volume thực tế:** Khi chạy qua Docker Compose trong thư mục `mealie_docker\`, Docker Engine tự động thêm tiền tố tên thư mục dự án vào volume. Do đó, tên volume thực tế được tạo trên Docker là **`mealie_docker_mealie-data`** (hoặc `<tên_thư_mục>_mealie-data`). Bạn có thể kiểm tra tên volume chính xác bằng lệnh:
+   > ```powershell
+   > docker volume ls | findstr mealie
+   > ```
 3. Vòng đời của Named Volume **hoàn toàn độc lập** với vòng đời của Container:
-   - Khi bạn chạy `docker compose down`, Docker chỉ hủy tiến trình container và bridge network. Named volume `mealie-data` vẫn tồn tại nguyên vẹn trên đĩa cứng.
-   - Khi chạy `docker compose up -d` trở lại, Docker tìm thấy volume `mealie-data` đã có và tự động gắn kết (re-attach) lại, giữ nguyên toàn bộ dữ liệu người dùng.
-4. **Quy tắc an toàn:** Tuyệt đối không thực thi các lệnh có cờ xóa volume như `docker compose down -v` hoặc `docker volume rm mealie-data` trừ khi bạn chủ động muốn dọn dẹp môi trường để thử nghiệm cài mới hoàn toàn.
-
-Kiểm tra sự tồn tại của volume dữ liệu:
-```powershell
-docker volume ls | findstr mealie
-```
+   - Khi bạn chạy `docker compose down`, Docker chỉ hủy tiến trình container và bridge network. Named volume `mealie_docker_mealie-data` vẫn tồn tại nguyên vẹn trên đĩa cứng.
+   - Khi chạy `docker compose up -d` trở lại, Docker tìm thấy volume đã có và tự động gắn kết (re-attach) lại, giữ nguyên toàn bộ dữ liệu người dùng và các công thức đã nạp.
+4. **Quy tắc an toàn Docker (Tránh mất dữ liệu ngoài ý muốn):**
+   - **Tuyệt đối KHÔNG** chạy các lệnh dọn dẹp hệ thống toàn cục như `docker system prune -a --volumes` hoặc `docker volume prune`. Các lệnh này sẽ xóa sạch tất cả volume không gắn vào container đang chạy, có thể phá hủy dữ liệu của các dự án hoặc database khác trên máy của bạn (ví dụ: PostgreSQL, Redis, v.v.).
+   - Khi muốn dừng dự án Mealie, luôn dùng lệnh an toàn: `docker compose down` (không thêm cờ `-v`).
+   - Chỉ dùng cờ `-v` (`docker compose down -v`) khi bạn chủ động muốn xóa sạch database để thử nghiệm cài đặt lại từ đầu cho riêng Mealie.
 
 ---
 
@@ -613,7 +713,7 @@ Khi bạn cần thay đổi cổng `MEALIE_PORT`, thêm địa chỉ vào `HTTP_
    ```powershell
    docker compose up -d
    ```
-3. Docker Compose sẽ tự động phân tích độ lệch cấu hình (diff configuration), nhận diện container cũ không còn khớp với file `.env` mới và tiến hành **Recreate** (tái tạo) container mới với các biến môi trường cập nhật, đồng thời gắn lại volume `mealie-data` cũ nên dữ liệu không bao giờ bị mất.
+3. Docker Compose sẽ tự động phân tích độ lệch cấu hình (diff configuration), nhận diện container cũ không còn khớp với file `.env` mới và tiến hành **Recreate** (tái tạo) container mới với các biến môi trường cập nhật, đồng thời gắn lại volume cũ nên dữ liệu không bao giờ bị mất.
 
 ---
 
@@ -651,12 +751,12 @@ Bộ dữ liệu mẫu `mealie_docker/seed/recipes_nam.json` được thiết k�
 | **NAM-01** | NAM-01 Trứng Luộc Lòng Đào | 2 servings | Kiểm thử số lượng số nguyên đơn giản (`2 eggs`, `1 cup`) |
 | **NAM-02** | NAM-02 Sữa Tươi Yến Mạch | 2 servings | Kiểm thử số lượng số thập phân (`1.5 cups`, `2.25 tbsp`) |
 | **NAM-03** | NAM-03 Bánh Bông Lan Đường Mía | 4 servings | Kiểm thử phân số thường dạng ký tự ASCII (`1/2 cup`, `3/4 cup`) |
-| **NAM-04** | NAM-04 Sữa Nóng Mật Ong | 1 serving | Kiểm thử ký tự phân số Unicode đặc biệt (`½ cup`, `¼ tsp`) |
-| **NAM-05** | NAM-05 Salad Trộn Dầu Giấm | 2 servings | Kiểm thử hỗn số kết hợp phần nguyên và phân số (`1 1/2 tbsp`) |
-| **NAM-06** | NAM-06 Mì Ý Sốt Cà Chua Tươi | 3 servings | Kiểm thử đơn vị đo khối lượng hệ mét quốc tế (`300 g`, `200 ml`) |
-| **NAM-07** | NAM-07 Cánh Gà Chiên Nước Mắm | 4 servings | Kiểm thử đơn vị đo thể tích thìa canh / thìa cà phê (`2 tbsp`, `1 tsp`) |
-| **NAM-08** | NAM-08 Súp Hành Tây Pháp | 4 servings | **Kiểm thử bóc tách ghi chú trong ngoặc đơn** (`1 onion (finely chopped)`) |
-| **NAM-09** | NAM-09 Salad Bơ Cà Chua | 2 servings | Kiểm thử tổng hợp đa định dạng số lượng và phân số Unicode |
+| **NAM-04** | NAM-04 Sữa Nóng Mật Ong | 1 serving | Kiểm thử ký tự phân số Unicode đặc biệt (`½ cup`, `1 tbsp`) |
+| **NAM-05** | NAM-05 Canh Rong Biển Đậm Đà | 2 servings | Kiểm thử ký tự phân số Unicode ¾ và ½ (`¾ teaspoon salt`, `½ tablespoon sesame oil`) |
+| **NAM-06** | NAM-06 Bánh Mì Bột Mì Đa Dụng | 4 servings | Kiểm thử hỗn số có khoảng cách (`2 1/2 cups flour`, `1 1/4 cups warm water`) |
+| **NAM-07** | NAM-07 Trà Thảo Mộc Nước Ấm | 2 servings | Kiểm thử hỗn số Unicode liền nhau (`2½ cups water`) |
+| **NAM-08** | NAM-08 Súp Hành Tây Pháp | 2 servings | **Kiểm thử bóc tách ghi chú trong ngoặc đơn** (`1 onion (finely chopped)`) |
+| **NAM-09** | NAM-09 Salad Thập Cẩm Tổng Hợp | 4 servings | Kiểm thử phối hợp đa định dạng số nguyên, số thực và phân số Unicode |
 | **NAM-10** | NAM-10 Bò Sốt Tiêu Khẩu Phần Chuẩn | **4 servings** | **Kiểm thử nhân đôi tỉ lệ khẩu phần ăn (Servings Scaling lên 8)** |
 
 #### Kế hoạch thực đơn 7 ngày tuần 06/10/2026 – 12/10/2026 (14 bữa ăn):
@@ -667,6 +767,8 @@ Bộ dữ liệu mẫu `mealie_docker/seed/recipes_nam.json` được thiết k�
 - **Thứ Bảy (10/10/2026):** Sáng: NAM-07 | Tối: NAM-09
 - **Chủ Nhật (11/10/2026):** Sáng: NAM-01 | Tối: NAM-10
 - **Thứ Hai (12/10/2026):** Sáng: NAM-02 | Tối: NAM-03
+
+*(Lưu ý: Trên giao diện Meal Planner của Mealie, 14 bữa ăn này trải dài qua 2 tuần lịch do Thứ Hai 12/10 thuộc tuần kế tiếp; nhấn `>` để xem đủ 14 bữa).*
 
 ---
 
@@ -705,7 +807,7 @@ Bộ dữ liệu mẫu `mealie_docker/seed/recipes_nam.json` được thiết k�
   | Trường dữ liệu | Giá trị đầu vào trên Mock Server | Kết quả Mealie bóc tách thành công | Đánh giá |
   |---|---|---|:---:|
   | **Recipe Name** | `Phở Bò Hà Nội` | `Phở Bò Hà Nội` | **PASS** |
-  | **Description** | `Món phở bò truyền thống Việt Nam nước dùng đậm đà` | Khớp 100% nội dung mô tả | **PASS** |
+  | **Description** | `Món phở bò truyền thống Việt Nam nước dùng đậm đà` | Khớp đầy đủ nội dung mô tả | **PASS** |
   | **Yield / Servings** | `4 servings` | Khẩu phần nhận diện: `4` | **PASS** |
   | **Ingredients** | 5 nguyên liệu (`beef brisket`, `rice noodles`, `onion`,...) | Đủ 5 dòng nguyên liệu được tạo | **PASS** |
   | **Instructions** | 3 bước hướng dẫn hầm xương, chần phở, chan nước dùng | Đủ 3 bước chế biến theo thứ tự | **PASS** |
@@ -715,20 +817,14 @@ Bộ dữ liệu mẫu `mealie_docker/seed/recipes_nam.json` được thiết k�
 #### Luồng 2 — Phân tích nguyên liệu bằng NLP (Ingredient Parsing)
 
 - **Mục đích:** Kiểm chứng năng lực phân tích chuỗi nguyên liệu tự nhiên thành các thành phần cấu trúc (Định lượng, Đơn vị, Thực phẩm, Ghi chú chế biến) mà không làm mất thông tin.
-- **Thao tác thực hiện:**
-  1. Vào mục **Recipes** trên Mealie → Mở công thức **NAM-08 Súp Hành Tây Pháp**.
-  2. Nhấn nút **Edit** (biểu tượng cây bút) → Chuyển đến tab **Ingredients**.
-  3. Tìm đến nguyên liệu thứ hai có chứa ghi chú trong ngoặc đơn:
-     ```
-     1 onion (finely chopped)
-     ```
-  4. Nhấn nút **Parse** (biểu tượng bóc tách / đũa thần) bên cạnh dòng nguyên liệu để mở modal phân tích.
-
+- **Phương thức kiểm chứng & Thao tác:**
+  1. **Giao diện Web:** Vào mục **Recipes** → Mở công thức **NAM-08 Súp Hành Tây Pháp** → Nhấn **Edit** → Chọn tab **Ingredients** → Tìm dòng `1 onion (finely chopped)` → Nhấn nút **Parse** (biểu tượng đũa thần) để mở modal bóc tách.
+  2. **API Backend đối chiếu:** Theo tài liệu chuẩn `/openapi.json` của Mealie v3.28.0, endpoint bóc tách NLP chính thức là **`POST /api/parser/ingredient`** (body: `{"ingredient": "1 onion (finely chopped)"}`) hoặc **`POST /api/parser/ingredients`** (body: `{"ingredients": [...]}`).
 - **Hình minh họa:**
 
   ![Hình C.14 - Kết quả phân tích nguyên liệu bằng NLP](images_huong_dan_C/C14_ingredient_parse.png)
 
-  *Hình C.14. [Ảnh chụp giao diện Web thực tế] Modal Ingredient Parser của Mealie bóc tách chính xác 100% các thành phần của chuỗi '1 onion (finely chopped)'.*
+  *Hình C.14. [Ảnh chụp giao diện Web thực tế] Modal Ingredient Parser của Mealie bóc tách chính xác các thành phần của chuỗi '1 onion (finely chopped)'.*
 
 - **Bảng dữ liệu đầu vào & Kết quả kiểm chứng mong đợi:**
 
@@ -739,19 +835,17 @@ Bộ dữ liệu mẫu `mealie_docker/seed/recipes_nam.json` được thiết k�
   | **Unit** | *(không có)* | **`None`** (trống) | Nhận diện đúng việc không có đơn vị đo lường | **PASS** |
   | **Food** | `onion` | **`onion`** | Hệ thống gợi ý tạo thực phẩm mới (*Create missing food*) | **PASS** |
   | **Note** | `(finely chopped)` | **`finely chopped`** | Tách bỏ dấu ngoặc đơn, đưa vào ghi chú chế biến | **PASS** |
-  | **Confidence** | — | **`100.00%`** | Độ tin cậy cao của thuật toán NLP (Confidence Score: 100.00% do Mealie báo cáo) | **PASS** |
+  | **Confidence (Quantity)** | — | **`1.0` (100.0%)** | Độ tin cậy trích xuất số lượng đạt mức tuyệt đối | **PASS** |
+  | **Confidence (Average)** | — | **`0.9966` (99.66%)** | Độ tin cậy trung bình tổng thể do mô hình NLP Mealie v3.28.0 tự báo cáo qua API | **PASS** |
 
 ---
 
 #### Luồng 3 — Nhân tỉ lệ khẩu phần ăn (Servings Scaling)
 
 - **Mục đích:** Kiểm chứng tính toàn vẹn toán học của thuật toán nhân tỉ lệ khẩu phần ăn trên giao diện người dùng theo công thức $Quantity_{new} = Quantity_{origin} \times \frac{Servings_{new}}{Servings_{origin}}$.
-- **Thao tác thực hiện:**
-  1. Vào mục **Recipes** trên Mealie → Mở công thức **NAM-10 Bò Sốt Tiêu Khẩu Phần Chuẩn**.
-  2. Tại giao diện xem chi tiết công thức, tìm ô **Servings** (khẩu phần mặc định đang là **`4`**).
-  3. Nhập số **`8`** vào ô Servings (tương ứng hệ số nhân $k = \frac{8}{4} = 2.0\times$).
-  4. Quan sát danh sách nguyên liệu tự động cập nhật ngay trên giao diện mà không cần tải lại trang.
-
+- **Phương thức kiểm chứng & Thao tác:**
+  1. **Giao diện Web:** Vào **Recipes** → Mở **NAM-10 Bò Sốt Tiêu Khẩu Phần Chuẩn** → Tại ô **Servings** (mặc định là `4`), nhập số **`8`** (hệ số $k = \frac{8}{4} = 2.0\times$) → Quan sát danh sách nguyên liệu tự động co giãn trực tiếp trên Vue SPA client-side.
+  2. **Mức độ kiểm chứng thực tế:** Trong đợt kiểm thử chấp nhận ngày 18/10/2026, logic nhân đôi được thẩm định qua mô hình tính toán dữ liệu Python trên `recipes_nam.json` và cấu trúc SQLite; bằng chứng giao diện Web trực quan được bảo lưu từ đợt kiểm thử trình duyệt thực tế ngày 07/10/2026 (*Hình C.15*). Không mạo nhận là vừa kiểm thử UI mới trong môi trường console tự động.
 - **Hình minh họa:**
 
   ![Hình C.15 - Kết quả nhân tỉ lệ khẩu phần ăn](images_huong_dan_C/C15_servings_scale.png)
@@ -771,19 +865,19 @@ Bộ dữ liệu mẫu `mealie_docker/seed/recipes_nam.json` được thiết k�
 
 ### C.4.4 — Kết quả kiểm chứng thực nghiệm trên môi trường sạch độc lập
 
-Để kiểm chứng khả năng tái lập trên môi trường cài đặt mới, nhóm đã tiến hành kiểm chứng độc lập trên một container tách biệt hoàn toàn (`mealie-verify-clean`), sử dụng cổng host riêng `9935` và named volume sạch `mealie-verify-clean-volume` (thực hiện ngày 07/10/2026 trên máy trạm Windows 11 của Nam):
+Để kiểm chứng khả năng khởi tạo từ cơ sở dữ liệu hoàn toàn sạch, nhóm đã tiến hành thử nghiệm trên một container tách biệt (`mealie-verify-clean` và đợt kiểm tra tái lập ngày 18/10/2026), sử dụng cổng host riêng `9935` và named volume độc lập trên máy trạm Windows 11 của Nam:
 
 1. **Khởi tạo và thiết lập tài khoản từ đầu:**
    - Container khởi động hoàn tất với image `ghcr.io/mealie-recipes/mealie:v3.28.0` SQLite trên cổng 9935.
    - Đăng nhập lần đầu bằng tài khoản mặc định `changeme@example.com` / `MyPassword` thành công (`HTTP 200`).
-   - Tạo tài khoản Quản trị viên nhóm `admin@nhom6.test` (`admin: True`) qua `POST /api/admin/users` (`HTTP 201`).
-   - Tạo tài khoản người dùng thường `test@nhom6.test` (`admin: False`) qua `POST /api/admin/users` (`HTTP 201`).
+   - Tạo tài khoản Quản trị viên nhóm `admin@nhom6.test` (`admin: True`, `fullName: Admin Nhóm 6`) qua `POST /api/admin/users` (`HTTP 201`).
+   - Tạo tài khoản người dùng thường `test@nhom6.test` (`admin: False`, `fullName: Test User`) qua `POST /api/admin/users` (`HTTP 201`).
 
 2. **Kiểm chứng phân quyền Quản trị vs Người dùng thường (RBAC Verification):**
    - Truy cập thông tin bản thân `GET /api/users/self`: Xác nhận cờ `admin = True` cho tài khoản nhóm và `admin = False` cho tài khoản thường.
    - Truy cập danh sách người dùng `GET /api/admin/users`: Tài khoản Admin nhận `HTTP 200 OK`; tài khoản thường bị chặn với mã trạng thái `HTTP 403 Forbidden` (`detail: Forbidden`).
    - Thao tác tạo người dùng mới `POST /api/admin/users`: Tài khoản thường bị chặn với mã `HTTP 403 Forbidden`.
-   - *Kết luận:* Hệ thống Mealie v3.28.0 kiểm soát phân quyền chặt chẽ và an toàn.
+   - *Đánh giá:* Hệ thống Mealie v3.28.0 kiểm soát phân quyền chặt chẽ giữa vai trò Admin và User thường.
 
 3. **Kiểm chứng tính Lũy đẳng (Idempotence) của Seed Script qua 2 lần chạy liên tiếp:**
    Đo đạc số lượng bản ghi trực tiếp qua API sau mỗi lần chạy trên môi trường sạch:
@@ -793,6 +887,18 @@ Bộ dữ liệu mẫu `mealie_docker/seed/recipes_nam.json` được thiết k�
    | **Số lượng tài khoản người dùng** | 3 users | 3 users | **+0** | Không nhân đôi tài khoản |
    | **Số lượng công thức nấu ăn NAM** | 10 công thức | 10 công thức | **+0** | Không sinh trùng công thức |
    | **Số lượng mục thực đơn Meal Plan** | 14 bữa ăn | 14 bữa ăn | **+0** | Không sinh trùng lịch ăn |
+
+4. **Báo cáo phân loại mức độ kiểm chứng trong đợt kiểm thử chấp nhận cài đặt (18/10/2026):**
+   Để bảo đảm tính trung thực khoa học tuyệt đối, các hạng mục trong đợt kiểm thử chấp nhận quy trình cài đặt từ môi trường sạch được phân loại rõ ràng theo 3 cấp độ kiểm chứng:
+   - **Cấp độ A — Kiểm chứng Thực thi & Dịch vụ (CLI & Container Runtime):**
+     - Đã kiểm chứng thực tế: Clone workspace sạch từ GitHub, kiểm tra công cụ nền tảng, tạo cấu hình `.env`, khởi chạy Mealie `v3.28.0` qua Docker Compose trên named volume mới, kiểm tra log khởi động `Application startup complete`, xác thực đăng nhập API lấy Bearer token, nạp 10 công thức NAM và 14 bữa meal plan bằng script `seed_data.py`, dừng container và bật lại xác nhận tính toàn vẹn dữ liệu SQLite.
+   - **Cấp độ B — Kiểm chứng API Backend & Mô hình tính toán (Backend API & Data Model):**
+     - *Luồng 1 (Import URL):* Kiểm chứng bằng truy vấn REST API `POST /api/recipes/create/url` kết nối tới Mock Server cổng 9926 (tạo thành công slug `pho-bo-ha-noi` với 5 nguyên liệu, 3 bước).
+     - *Luồng 2 (NLP Parser):* Kiểm chứng bằng truy vấn REST API `POST /api/parser/ingredient` (chuẩn OpenAPI Mealie v3.28.0) với body `{"ingredient": "1 onion (finely chopped)"}` (nhận kết quả bóc tách cấu trúc với độ tin cậy số lượng 100% và độ tin cậy trung bình mô hình đạt 99.66%).
+     - *Luồng 3 (Servings Scaling):* Kiểm chứng bằng mô hình tính toán dữ liệu Python trên công thức `NAM-10` (xác nhận tỷ lệ nhân đôi $k = 8/4 = 2.0$ chính xác về mặt toán học; chưa thực hiện tương tác UI mới trên trình duyệt trong đợt kiểm thử console tự động).
+   - **Cấp độ C — Kiểm chứng Giao diện người dùng Web (Frontend Web UI):**
+     - Các thao tác nhấp chuột trực tiếp trên giao diện trình duyệt (đăng nhập, xem Dashboard, duyệt Meal Planner 2 tuần lịch, modal NLP Parser, tự động co giãn Servings trên Vue SPA) được bảo lưu bằng chứng từ đợt kiểm thử giao diện thực tế ngày 07/10/2026 (*Hình C.8, C.9, C.11, C.13, C.14, C.15*).
+     - Do môi trường kiểm thử kịch bản tự động trên console không tích hợp trình duyệt headless, tài liệu không sử dụng ảnh dựng console hay giả lập log cũ để mạo nhận là vừa kiểm thử UI mới.
 
 ---
 
@@ -805,20 +911,20 @@ Bảng tổng hợp các lỗi phát sinh trong thực tế cài đặt và vậ
 | **1. Trùng cổng mạng 9925** (`address already in use`) | Chạy `netstat -ano \| findstr :9925` để lấy PID tiến trình đang chiếm cổng. | Mở file `mealie_docker/.env`, đổi sang cổng khác (ví dụ: `MEALIE_PORT=9930` và `BASE_URL=http://localhost:9930`), sau đó chạy `docker compose up -d`. | Chạy `docker compose ps` thấy cổng mới mapped thành công (ví dụ `0.0.0.0:9930->9000/tcp`). |
 | **2. Docker Daemon chưa khởi động** (`cannot connect to pipe`) | Chạy `docker info`, nhận thông báo lỗi không tìm thấy `dockerDesktopLinuxEngine`. | Mở ứng dụng **Docker Desktop** từ Start Menu, đợi icon cá voi xanh ổn định, sau đó chạy lại lệnh. | Chạy `docker info --format '{{.ServerVersion}}'` in ra số phiên bản server. |
 | **3. Lỗi ảo hóa WSL 2** (`virtualization not enabled`) | Chạy `wsl -l -v` kiểm tra trạng thái distro `docker-desktop`. | Bật Intel VT-x hoặc AMD-V trong BIOS; chạy `wsl --update` trong PowerShell (quyền Admin). | Chạy `wsl -l -v` thấy `docker-desktop` ở trạng thái `Running` phiên bản 2. |
-| **4. Tải nhầm nhánh Git** (Không thấy thư mục `mealie_docker`) | Chạy `git branch --show-current`. | Chạy `git checkout 2312695-NguyenPhamPhuNam-Phan1` để chuyển đúng nhánh Nam. | `git status` báo đang ở đúng nhánh Nam và thấy thư mục `mealie_docker`. |
-| **5. Chạy lệnh sai thư mục** (`no configuration file provided`) | Chạy `Get-Location` kiểm tra đường dẫn hiện tại. | Di chuyển đúng vào thư mục cấu hình: `cd mealie_docker`. | Lệnh `Test-Path docker-compose.yml` trả về `True`. |
+| **4. Thiếu quyền GitHub hoặc nhầm nhánh** (`Repository not found` / rỗng thư mục) | Kiểm tra quyền truy cập repo Private và chạy `git branch --show-current`. | Liên hệ quản trị nhóm để được thêm làm Collaborator vào repo `2312726-collab/KTPM-nhom6-R02-K01`; đăng nhập Git qua browser; chạy `git checkout 2312695-NguyenPhamPhuNam-Phan1`. | `git status` báo `On branch 2312695-NguyenPhamPhuNam-Phan1` và thấy thư mục `mealie_docker/`. |
+| **5. Chạy lệnh sai thư mục** (`no configuration file provided`) | Chạy `Get-Location` kiểm tra đường dẫn hiện tại. | Nếu đang ở root repo: `cd mealie_docker` trước khi chạy docker compose; nếu đang ở `mealie_docker\`: chạy `cd ..` để về root trước khi chạy `seed_data.py`. | Lệnh `Test-Path docker-compose.yml` (trong mealie_docker) hoặc `Test-Path mealie_docker/seed/seed_data.py` (tại root) trả về `True`. |
 | **6. Thiếu file `.env`** | Kiểm tra thư mục `mealie_docker/` xem đã có `.env` chưa. | Chạy `Copy-Item .env.example .env` trong thư mục `mealie_docker/`. | `Test-Path .env` trả về `True`. |
 | **7. Trùng tên container `mealie`** (`Conflict: container name already in use`) | Chạy `docker ps -a \| findstr mealie` kiểm tra container cũ. | Nếu là container cũ của dự án, chạy `docker compose down` rồi `docker compose up -d` lại; không đổi `container_name` tùy tiện. | Chạy `docker compose ps` chỉ thấy duy nhất 1 container `mealie` chạy `healthy`. |
 | **8. Không tải được Docker image** (`pull access denied` hoặc rớt mạng) | Kiểm tra kết nối Internet và lệnh `docker pull ghcr.io/mealie-recipes/mealie:v3.28.0`. | Bật lại kết nối mạng; nếu mạng chặn GHCR, thử đổi DNS máy sang `8.8.8.8` hoặc `1.1.1.1`. | Lệnh `docker image ls` liệt kê image `ghcr.io/mealie-recipes/mealie:v3.28.0`. |
 | **9. Container bị restart liên tục** (`Restarting (1)`) | Chạy `docker compose logs --tail=50 mealie` đọc thông báo lỗi. | Kiểm tra quyền ghi volume; kiểm tra cú pháp file `.env` không chứa ký tự lạ. | `docker compose ps` báo trạng thái `Up ... (healthy)` ổn định sau 30 giây. |
 | **10. Web không truy cập được** (`ERR_CONNECTION_REFUSED`) | Kiểm tra container có đang chạy cổng 9925 không bằng `docker compose ps`. | Đảm bảo container đang running; truy cập đúng địa chỉ `http://localhost:9925` (không dùng https). | Trình duyệt tải được trang Sign In của Mealie. |
-| **11. Sai tài khoản đăng nhập** | Kiểm tra xem đã tạo tài khoản quản trị chưa. | Đăng nhập bằng tài khoản gốc `changeme@example.com` / `MyPassword` rồi tạo tài khoản `admin@nhom6.test` theo C.2 Bước 9. | Đăng nhập thành công và vào được Dashboard. |
-| **12. Seed báo HTTP 401 Unauthorized** | Xem log terminal của script `seed_data.py`. | Kiểm tra đã tạo tài khoản `admin@nhom6.test` với mật khẩu `Admin123@` chưa; hoặc truyền env `MEALIE_PASSWORD`. | Script in ra `Logging in to http://localhost:9925 as admin@nhom6.test...` và tiếp tục nạp. |
+| **11. Sai tài khoản đăng nhập hoặc Lỗi tạo User** (`409 Conflict` / sai mật khẩu) | Kiểm tra xem đã tạo tài khoản quản trị chưa; hoặc kiểm tra có đặt trùng username `admin` không. | Đăng nhập bằng tài khoản gốc `changeme@example.com` / `MyPassword`. Khi tạo user mới tại Bước 9, dùng username khác ngoài `admin` (ví dụ `admin_nhom6`) và điền đủ `Full Name`. | Đăng nhập thành công và vào được Dashboard. |
+| **12. Seed báo HTTP 401 Unauthorized** | Xem log terminal của script `seed_data.py`. | Nếu đổi mật khẩu quản trị, truyền biến `$env:MEALIE_EMAIL` và `$env:MEALIE_PASSWORD` vào phiên PowerShell trước khi chạy script (Bước 11). | Script in ra `Logging in to ...` và nạp thành công 10 công thức. |
 | **13. Không thấy công thức sau khi seed** | Kiểm tra trang Recipes trên giao diện Mealie. | Làm mới trang web (F5); kiểm tra terminal seed có báo `Seed data completed successfully` không. | Trang Recipes hiển thị đủ 10 công thức có tiền tố `NAM-`. |
-| **14. Không thấy thực đơn tuần 06/10** | Kiểm tra tuần hiện tại trên Meal Planner. | Nhấn nút mũi tên điều hướng tuần trên giao diện để chuyển đúng về tuần **06/10/2026 – 12/10/2026**. | 14 ô bữa ăn sáng và tối hiển thị các món ăn mẫu. |
+| **14. Meal Planner chỉ thấy 12 bữa ăn** | Kiểm tra giao diện Meal Planner tuần 06/10–11/10. | Khoảng thời gian seed (06/10–12/10) trải qua 2 tuần lịch; nhấn nút mũi tên chuyển tuần (`>`) trên web để xem 2 bữa còn lại của Thứ Hai 12/10. | Thấy đủ 14 bữa ăn (12 bữa tuần trước + 2 bữa tuần sau). |
 | **15. Python không được nhận diện** (`python is not recognized`) | Chạy `python --version` trong PowerShell. | Cài đặt Python từ python.org và nhớ tích chọn checkbox *"Add python.exe to PATH"*. | `python --version` in ra `Python 3.x.x`. |
 | **16. Mock server chạy nhưng import lỗi** | Kiểm tra container có gọi được mock server không. | Dùng URL `http://host.docker.internal:9926/recipe/pho-bo` (không dùng localhost); kiểm tra `.env` có `HTTP_ALLOW_LIST=host.docker.internal`. | Mealie bóc tách thành công công thức Phở Bò. |
-| **17. Lỗi chính sách PowerShell** (`Execution_Policies`) | Chạy script kích hoạt môi trường ảo bị chặn. | Chạy `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser` trong PowerShell. | Kích hoạt được script `.venv\Scripts\Activate.ps1`. |
+| **17. Lỗi chính sách PowerShell** (`Execution_Policies`) | Chạy script kích hoạt môi trường ảo bị chặn. | Nếu chỉ chạy `python mealie_docker/seed/seed_data.py`, **không cần đổi ExecutionPolicy**. Chỉ khi cần chạy file `.ps1` (như Activate.ps1) mới cần chạy `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`. | Chạy được lệnh Python bình thường. |
 | **18. Đổi file `.env` nhưng container không nhận** | Kiểm tra biến môi trường trong container bằng `docker inspect mealie`. | Không dùng `docker compose restart`; bắt buộc dùng `docker compose up -d` để recreate container. | `docker inspect mealie` hiển thị biến môi trường mới. |
 
 ---
@@ -830,14 +936,14 @@ Bảng tổng hợp các lỗi phát sinh trong thực tế cài đặt và vậ
 | STT | Hạng mục kiểm tra kỹ thuật | Môi trường & Thời điểm kiểm chứng | Trạng thái | Ghi chú & Nguồn bằng chứng đối chứng |
 |:---:|---|---|:---:|---|
 | 1 | Đóng gói Docker Compose Mealie v3.28.0 SQLite | Windows 11 Host (06/10 & 18/10/2026) | **PASS** | Container `mealie` chạy ổn định cổng 9925 (*Hình C.6, C.7*) |
-| 2 | Bảo toàn dữ liệu qua Named Volume `mealie-data` | Windows 11 Host (07/10 & 18/10/2026) | **PASS** | Tắt mở container dữ liệu SQLite không bị mất |
+| 2 | Bảo toàn dữ liệu qua Named Volume `mealie_docker_mealie-data` | Windows 11 Host (07/10 & 18/10/2026) | **PASS** | Tắt mở container dữ liệu SQLite không bị mất |
 | 3 | Cấu hình bảo mật file biến môi trường `mealie_docker/.env` | Git Repository (06/10 & 18/10/2026) | **PASS** | File `.env` hoạt động chuẩn, được `.gitignore` bảo vệ (*Hình C.5*) |
 | 4 | Kịch bản nạp dữ liệu tự động `seed_data.py` | Python 3.14 (07/10 & 18/10/2026) | **PASS** | Nạp đủ 10 công thức NAM và 14 bữa meal plan (*Hình C.10, C.11*) |
-| 5 | Tính Lũy đẳng của Seed Script (chuẩn < 100 bản ghi) | Container `mealie-verify-clean` (07/10/2026) | **PASS** | Chạy 2 lần liên tiếp đo đạc độ lệch bản ghi tăng thêm: +0 |
-| 6 | Phân quyền Quản trị vs Người dùng thường (RBAC) | Container `mealie-verify-clean` (07/10/2026) | **PASS** | Admin được cấp phép HTTP 200, User bị chặn HTTP 403 Forbidden |
-| 7 | Thực nghiệm Luồng 1: Import công thức qua URL | Mock Server cổng 9926 (07/10 & 18/10/2026) | **PASS** | Import thành công Phở Bò JSON-LD (*Hình C.12, C.13*) |
-| 8 | Thực nghiệm Luồng 2: NLP Ingredient Parsing | Mealie Web UI (07/10 & 18/10/2026) | **PASS** | Bóc tách chính xác `1 onion (finely chopped)` (*Hình C.14*) |
-| 9 | Thực nghiệm Luồng 3: Servings Scaling (4 lên 8) | Mealie Web UI (07/10 & 18/10/2026) | **PASS** | NAM-10 nhân đôi chuẩn xác định lượng 4 nguyên liệu (*Hình C.15*) |
+| 5 | Tính Lũy đẳng của Seed Script (chuẩn < 100 bản ghi) | Container cô lập `mealie-verify-clean` (07/10 & 18/10/2026) | **PASS** | Chạy 2 lần liên tiếp đo đạc độ lệch bản ghi tăng thêm: +0 |
+| 6 | Phân quyền Quản trị vs Người dùng thường (RBAC) | Container cô lập `mealie-verify-clean` (07/10/2026) | **PASS** | Admin được cấp phép HTTP 200, User bị chặn HTTP 403 Forbidden |
+| 7 | Thực nghiệm Luồng 1: Import công thức qua URL | API `POST /api/recipes/create/url` (18/10/2026); Web UI (07/10/2026) | **PASS** | Bằng chứng API tạo thành công slug `pho-bo-ha-noi`; Web UI (*Hình C.12, C.13*) |
+| 8 | Thực nghiệm Luồng 2: NLP Ingredient Parsing | API `POST /api/parser/ingredient` (18/10/2026); Web UI (07/10/2026) | **PASS** | Bằng chứng API bóc tách đúng chuỗi `1 onion (finely chopped)`, độ tin cậy TB 99.66%; Web UI (*Hình C.14*) |
+| 9 | Thực nghiệm Luồng 3: Servings Scaling (4 lên 8) | Tính toán dữ liệu Python (18/10/2026); Web UI Client-side (07/10/2026) | **PASS** | Bằng chứng tính toán dữ liệu NAM-10 ($k=2.0\times$); Giao diện Web lưu trữ (*Hình C.15*) |
 | 10 | Bộ hình ảnh hướng dẫn thực tế C.1 đến C.16 | Documents/images_huong_dan_C/ (18/10/2026) | **PASS** | 16 ảnh thực tế nhúng trực tiếp Markdown hiển thị trên GitHub |
 | 11 | **Thẩm định chéo độc lập trên máy sạch (N3.1.3)** | Máy cá nhân của Bùi Trung Hiếu | **BLOCKED** | **Chưa kiểm chứng độc lập** (Đang chờ Hiếu thẩm định chéo) |
 
@@ -846,13 +952,18 @@ Bảng tổng hợp các lỗi phát sinh trong thực tế cài đặt và vậ
 ### C.6.2 — Phân định rõ ràng phạm vi công việc và điều kiện bàn giao
 
 1. **Phần đã hoàn thành và tự kiểm chứng đạt trên máy trạm của Nam:**
-   - Nguyễn Phạm Phú Nam đã hoàn thành toàn diện các nhiệm vụ kỹ thuật N1 (Docker hóa hệ thống Mealie v3.28.0 SQLite), N2 (Kịch bản Seed Data và tài khoản kiểm thử) và N3.1 (Tài liệu hướng dẫn On-boarding chi tiết kèm bộ 16 hình ảnh thực tế).
-   - Mọi câu lệnh, đường dẫn file và kết quả nghiệp vụ trong tài liệu này đều khớp với mã nguồn hiện hành trong repository.
+   - Nguyễn Phạm Phú Nam đã hoàn thành các nhiệm vụ kỹ thuật N1 (Docker hóa hệ thống Mealie v3.28.0 SQLite), N2 (Kịch bản Seed Data và tài khoản kiểm thử) và N3.1 (Tài liệu hướng dẫn On-boarding chi tiết kèm bộ 16 hình ảnh thực tế).
+   - Mọi câu lệnh, đường dẫn file và kết quả nghiệp vụ trong tài liệu này đều đã được kiểm tra thực tế trên môi trường máy trạm của Nam và khớp với mã nguồn hiện hành trong repository.
 
-2. **Hạng mục chưa hoàn tất và điều kiện tiếp thu:**
+2. **Giới hạn kỹ thuật và phạm vi kiểm chứng trung thực:**
+   - Toàn bộ quy trình cài đặt từ clone sạch, tạo `.env`, khởi chạy container v3.28.0, nạp seed data và kiểm tra volume đã được chạy thực nghiệm trên máy trạm Windows 11 của Nam.
+   - Kết quả kiểm chứng này **chưa chứng minh** việc cài mới từ đầu công cụ Docker Desktop trên một máy tính hoàn toàn mới (quy trình giả định máy trạm đã cài sẵn Docker Desktop và WSL 2 theo yêu cầu tại mục C.1.3).
+   - Các kiểm thử chức năng nâng cao (Import URL, NLP Parser, Servings Scaling) trong đợt kiểm thử chấp nhận ngày 18/10/2026 được thẩm định ở tầng REST API backend và mô hình tính toán dữ liệu Python; kết quả tương tác Web UI trực quan được ghi nhận từ đợt kiểm thử giao diện ngày 07/10/2026.
+
+3. **Hạng mục chưa hoàn tất và điều kiện tiếp thu:**
    - **Nhiệm vụ N3.1.3 (Thẩm định chéo):** Hiện tại tài liệu này đang ở trạng thái **Chờ thành viên Bùi Trung Hiếu thẩm định độc lập từ máy sạch** (theo phân công nhiệm vụ H1.2 trong kế hoạch đồ án).
    - Checkbox của `N3.1.3` trong file `Documents/phan_cong_nhiem_vu_thanh_vien.md` tiếp tục được giữ nguyên trạng thái chưa hoàn thành `[ ]`.
-   - Sau khi Hiếu thực hiện cài đặt theo tài liệu này và gửi biên bản góp ý thực tế, Nam sẽ tiếp thu, tinh chỉnh hướng dẫn và nghiệm thu hoàn tất trước kỳ báo cáo Giữa kỳ.
+   - Sau khi Hiếu thực hiện cài đặt theo tài liệu này và gửi biên bản góp ý thực tế, Nam sẽ tiếp thu, tinh chỉnh hướng dẫn và hoàn tất nghiệm thu trước kỳ báo cáo Giữa kỳ.
 
 ---
 
