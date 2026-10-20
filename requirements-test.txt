@@ -6,6 +6,7 @@
 # Core testing framework & PBT
 pytest>=8.0.0,<9.0.0
 hypothesis>=6.100.0,<7.0.0
+pint>=0.23,<1.0.0
 
 # Code coverage
 pytest-cov>=5.0.0,<6.0.0
