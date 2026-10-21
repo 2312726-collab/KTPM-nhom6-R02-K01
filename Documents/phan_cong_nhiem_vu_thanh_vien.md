@@ -64,6 +64,8 @@
 - [ ] Q2.2.1 Viết mục tiêu hệ thống Mealie, các Actor chính (**Home User**, **Admin**) và 5 Use Case cốt lõi.
 - [ ] Q2.2.2 Mô tả cây thư mục tổng thể của Mealie, tập trung vào `mealie/services/parser_services/`.
 - [ ] Q2.2.3 Commit: `docs: add system description Phan A`.
+- [ ] Q2.2.4 Xây dựng Ma trận Truy xuất Nguồn gốc Yêu cầu (Requirements Traceability Matrix - RTM) ánh xạ 5 Use Case sang 5 Property PBT.
+- [ ] Q2.2.5 Tài liệu hóa các giả định kỹ thuật và bảng câu hỏi nghiệp vụ (Q&A Document) của hệ thống Mealie.
 
 ### Q2.3 — Soạn thảo Phần B: Kiến trúc & Luồng dữ liệu (`Documents/bao_cao_phan_B.md`)
 - [ ] Q2.3.1 Vẽ sơ đồ kiến trúc tổng thể C4 Container (`Browser → Vue Frontend → FastAPI Backend → SQLite`) lưu ảnh vào `Documents/assets/kien_truc_container.png`.
@@ -131,11 +133,13 @@
 - [ ] Q4.1.3 Soạn Slide báo cáo Giữa kỳ (tối thiểu 12 slides).
 
 ### Q4.2 — Tổng hợp Báo cáo Cuối kỳ, Phần H & Điều phối Bảo vệ (Tháng 12)
+- [ ] Q4.2.0 Lập bảng Ước lượng Nỗ lực Kiểm thử (Test Effort Estimation) tổng hợp phân bổ giờ công (Man-Hours) của 5 thành viên.
 - [ ] Q4.2.1 Thu nhận Phần D & E từ **Hiếu**, Phần F từ **Phước**, Phần G từ **Mạnh**.
 - [ ] Q4.2.2 Biên tập cuốn Báo cáo Cuối kỳ hoàn chỉnh 8 phần từ A đến H.
 - [ ] Q4.2.3 Soạn thảo Phần H: Lưu trữ commit SHA, gắn Git Tag `v1.0-final`, hướng dẫn nghiệm thu tái lập.
-- [ ] Q4.2.4 Gắn Git Tag chính thức: `git tag v1.0-final && git push origin v1.0-final`.
-- [ ] Q4.2.5 Soạn Slide bảo vệ cuối kỳ, phân vai thuyết trình và kịch bản demo live script kiểm thử.
+- [ ] Q4.2.4 Đánh giá Tiêu chí Nghiệm thu (Exit Criteria Evaluation) và tổ chức họp tổng kết rút ra bài học kinh nghiệm (Retrospective / Lessons Learned).
+- [ ] Q4.2.5 Gắn Git Tag chính thức: `git tag v1.0-final && git push origin v1.0-final`.
+- [ ] Q4.2.6 Soạn Slide bảo vệ cuối kỳ, phân vai thuyết trình và kịch bản demo live script kiểm thử.
 
 ---
 ---
@@ -186,6 +190,7 @@
 ### N3.1 — Soạn thảo `Documents/bao_cao_phan_C.md`
 - [x] N3.1.1 Soạn thảo đầy đủ 5 mục chuẩn: C.1 Yêu cầu môi trường, C.2 Các bước cài đặt chi tiết, C.3 Quản lý dịch vụ docker, C.4 Hướng dẫn nạp Seed Data, C.5 Xử lý sự cố (xung đột port 9925, cấp quyền thư mục).
 - [x] N3.1.2 Nhúng toàn bộ 6 ảnh minh chứng vào đúng vị trí trong báo cáo.
+- [x] N3.1.2b Thực hiện Smoke Test trên môi trường Docker Mealie (kiểm tra HTTP 200, phản hồi API) và ghi nhận kết quả Smoke Test sẵn sàng.
 - [ ] N3.1.3 Bàn giao cho **Hiếu** cài đặt thẩm định chéo trên máy sạch, tiếp thu góp ý để hoàn thiện.
 - [x] N3.1.4 Commit: `docs: complete onboarding guide Phan C with verified evidence`.
 
@@ -244,6 +249,7 @@
 ### H1.2 — Thẩm định chéo (Cross-validation) tài liệu On-boarding
 - [ ] H1.2.1 Tiếp nhận `bao_cao_phan_C.md` từ **Nam**.
 - [ ] H1.2.2 Cài đặt thử nghiệm Mealie từ đầu trên máy cá nhân theo đúng từng dòng lệnh trong tài liệu.
+- [ ] H1.2.2b Chạy Smoke Test xác nhận môi trường hoạt động độc lập trên máy cá nhân, ký biên bản nghiệm thu chéo mục N3.1.3.
 - [ ] H1.2.3 Lập biên bản phản hồi (lỗi phát sinh, lệnh còn thiếu) gửi lại Nam cập nhật.
 - [ ] H1.2.4 Commit: `docs: outline midterm PBT test strategy and cross-validate onboarding`.
 
@@ -260,6 +266,8 @@
 - [ ] H2.2.1 Viết Mục D.1: Bản chất của PBT và bảng so sánh chi tiết giữa Example-Based Testing và PBT.
 - [ ] H2.2.2 Viết Mục D.2: Sơ đồ hóa 4 bước vận hành của Hypothesis (Generate → Check Invariant → Shrink → Report).
 - [ ] H2.2.3 Viết Mục D.3 & D.4: Lý do chọn `parser_services` và ranh giới kiểm thử theo triết lý Ponytail.
+- [ ] H2.2.3b Xây dựng Tiêu chí Bắt đầu kiểm thử (Entry Criteria) và Tiêu chí Kết thúc kiểm thử (Exit Criteria).
+- [ ] H2.2.3c Xây dựng Ma trận Phân loại Mức độ Nghiêm trọng của Lỗi (Defect Severity Matrix S1 $\to$ S4) theo chuẩn IEEE 1044 / ISTQB.
 - [ ] H2.2.4 Viết Mục D.5, D.6 & D.7: Giả định kỹ thuật, tiêu chí Pass/Fail và quản lý rủi ro Flaky test.
 - [ ] H2.2.5 Commit: `docs: complete theoretical foundation and test methodology Phan D`.
 
@@ -269,11 +277,13 @@
 **Deadline: 10/11**
 
 ### H3.1 — Soạn thảo `Documents/bao_cao_phan_E.md`
+- [ ] H3.1.0 Phân loại mức độ ưu tiên (Priority: High / Medium / Low) cho từng kịch bản kiểm thử trong 5 Properties.
 - [ ] H3.1.1 Thiết kế bảng đặc tả chuẩn hóa cho **Property 1 — Tính lũy đẳng (Idempotence)** (Phước code).
 - [ ] H3.1.2 Thiết kế bảng đặc tả chuẩn hóa cho **Property 2 — Tính bảo toàn hai chiều (Round-trip)** (Hiếu code).
 - [ ] H3.1.3 Thiết kế bảng đặc tả chuẩn hóa cho **Property 3 — Tính bền bỉ / Crash-free** (Mạnh code).
 - [ ] H3.1.4 Thiết kế bảng đặc tả chuẩn hóa cho **Property 4 — Tính đơn điệu khi Scaling** (Quân code).
 - [ ] H3.1.5 Thiết kế bảng đặc tả chuẩn hóa cho **Property 5 — Tính bảo toàn phân số** (Nam code).
+- [ ] H3.1.5b Tổ chức họp Review chéo kịch bản kiểm thử (Peer Review Test Design) giữa 5 thành viên trước khi viết mã.
 - [ ] H3.1.6 Bàn giao tài liệu Phần E cho cả nhóm làm căn cứ viết code test.
 - [ ] H3.1.7 Commit: `docs: design standardized PBT test scenarios for all 5 properties Phan E`.
 
@@ -340,8 +350,9 @@
   - Profile `dev`: `max_examples=50` (chạy nhanh khi code).
   - Profile `ci`: `max_examples=300` (chạy CI).
   - Profile `thorough`: `max_examples=1000` (chạy sâu kiểm tra sức bền).
+- [ ] P2.1.2b Xác lập thứ tự phụ thuộc kiểm thử (Test Execution Dependency) phân tầng 3 bước (Hàm chuỗi & đơn vị độc lập $\to$ Số học & Scaling $\to$ Tích hợp Async Parser).
 - [ ] P2.1.3 Cấu hình cache `.hypothesis/` và bổ sung vào `.gitignore`.
-- [ ] P2.1.4 Kiểm tra nhận diện test runner: `pytest tests/ --collect-only`.
+- [ ] P2.1.4 Kiểm tra nhận diện test runner (Discovery Smoke Test): `pytest tests/ --collect-only`.
 - [ ] P2.1.5 Commit: `chore: setup pytest harness and hypothesis multi-profile configuration`.
 
 ---
@@ -483,12 +494,15 @@
 
 ### M4.1 — Soạn thảo `Documents/bao_cao_phan_G.md`
 - [ ] M4.1.1 Trình bày bảng tổng kết số liệu thực nghiệm: Tổng số test cases sinh bởi Hypothesis, tỷ lệ Pass/Fail, bảng số liệu Coverage.
+- [ ] M4.1.2 Thống kê và phân loại số lượng lỗi phát hiện được theo cấp độ nghiêm trọng kỹ thuật (S1 - Critical, S2 - Major, S3 - Minor, S4 - Trivial).
 
 ### M4.2 — Phân tích lỗi Root Cause Analysis (RCA) & Đề xuất bản vá
 - [ ] M4.2.1 Trích xuất thông tin Falsifying Example từ log của Hypothesis.
+- [ ] M4.2.1b Lập hồ sơ lỗi theo Phiếu Báo cáo Lỗi chuẩn (Defect Artefact Template) gồm Bug ID, Shrunk Input, Traceback và phân loại Severity/Priority.
 - [ ] M4.2.2 Tái hiện lỗi độc lập trong môi trường Python tối giản và trích xuất traceback chi tiết từ dưới lên.
 - [ ] M4.2.3 Phân loại và giải thích nguyên nhân cốt lõi (chia cho 0, lỗi ép kiểu, regex backtracking,...).
 - [ ] M4.2.4 Soạn thảo đề xuất bản vá lỗi (Patch Proposal) chuẩn Ponytail dưới dạng mã diff.
+- [ ] M4.2.4b Thực hiện Kiểm thử lại (Re-testing) và Kiểm thử hồi quy (Regression Testing) sau khi áp dụng bản vá đề xuất.
 - [ ] M4.2.5 *(Trường hợp không có bug):* Chứng minh độ tin cậy qua tỷ lệ Code Coverage $\ge 80\%$.
 - [ ] M4.2.6 Hoàn thiện Phần G và bàn giao cho Trưởng nhóm Quân tích hợp vào báo cáo cuối kỳ.
 - [ ] M4.2.7 Commit: `docs: complete test results, defect root cause analysis and patch proposals Phan G`.
@@ -514,6 +528,8 @@
 - [ ] **Cả 5 thành viên đều có ít nhất 1 commit code kiểm thử (`feat(test):`) trực tiếp trên repo.**
 - [ ] Test Runner biệt lập qua Docker chạy thành công trên mọi máy tính (Nam hoàn thành).
 - [ ] Đã chỉ ra được ít nhất 1 lỗi thực tế kèm phân tích RCA và đề xuất bản vá HOẶC chứng minh Coverage đạt chuẩn $\ge 80\%$ (Mạnh hoàn thành).
+- [ ] Đã phân loại đầy đủ mức độ nghiêm trọng của lỗi theo chuẩn IEEE 1044 (S1 $\to$ S4) và nghiệm thu tiêu chí Zero Open S1 Defects (Mạnh & Quân hoàn thành).
+- [ ] Đã thực hiện Re-test và Regression Test chứng minh bản vá không làm vỡ các tính năng khác (Mạnh hoàn thành).
 - [ ] `tests/README.md` đã được kiểm thử chéo và tái lập thành công từ máy sạch độc lập (Phước & Hiếu xác nhận).
 - [ ] Lịch sử Git thể hiện sự đóng góp tích cực, đều đặn của **cả 5 thành viên** xuyên suốt từ Sprint 1 đến Sprint 5.
 - [ ] Đã ghim Commit SHA và gắn Git Tag `v1.0-final` vào repo nhóm (Quân hoàn thành).
