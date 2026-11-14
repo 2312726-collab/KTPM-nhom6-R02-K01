@@ -64,8 +64,8 @@
 - [ ] Q2.2.1 Viết mục tiêu hệ thống Mealie, các Actor chính (**Home User**, **Admin**) và 5 Use Case cốt lõi.
 - [ ] Q2.2.2 Mô tả cây thư mục tổng thể của Mealie, tập trung vào `mealie/services/parser_services/`.
 - [ ] Q2.2.3 Commit: `docs: add system description Phan A`.
-- [ ] Q2.2.4 Xây dựng Ma trận Truy xuất Nguồn gốc Yêu cầu (Requirements Traceability Matrix - RTM) ánh xạ 5 Use Case sang 5 Property PBT.
-- [ ] Q2.2.5 Tài liệu hóa các giả định kỹ thuật và bảng câu hỏi nghiệp vụ (Q&A Document) của hệ thống Mealie.
+- [x] Q2.2.4 Xây dựng Ma trận Truy xuất Nguồn gốc Yêu cầu (Requirements Traceability Matrix - RTM) ánh xạ 5 Use Case sang 5 Property PBT.
+- [x] Q2.2.5 Tài liệu hóa các giả định kỹ thuật và bảng câu hỏi nghiệp vụ (Q&A Document) của hệ thống Mealie.
 
 ### Q2.3 — Soạn thảo Phần B: Kiến trúc & Luồng dữ liệu (`Documents/bao_cao_phan_B.md`)
 - [ ] Q2.3.1 Vẽ sơ đồ kiến trúc tổng thể C4 Container (`Browser → Vue Frontend → FastAPI Backend → SQLite`) lưu ảnh vào `Documents/assets/kien_truc_container.png`.
