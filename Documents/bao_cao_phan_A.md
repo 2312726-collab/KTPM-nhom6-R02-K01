@@ -10,12 +10,12 @@
 ## 📌 A.1. TỔNG QUAN HỆ THỐNG MEALIE
 
 ### 1. Giới thiệu và Bối cảnh bài toán
-Trong đời sống gia đình hiện đại, việc quản lý dinh dưỡng và nấu nướng thường gặp phải tình trạng phân mảnh thông tin:
-* Các công thức nấu ăn được lưu rải rác trên nhiều website ẩm thực, mạng xã hội, sách báo hoặc ghi chép tay.
-* Định lượng nguyên liệu trong các công thức gốc thường được cố định cho một số lượng người ăn cụ thể (ví dụ: công thức cho 2 người), gây khó khăn khi cần nấu cho gia đình đông người hoặc các bữa tiệc (cần tăng lên 6–8 người).
-* Các hệ thống đo lường ẩm thực trên thế giới thiếu tính đồng nhất: một số công thức dùng hệ đo lường Quốc tế (Metric: gram, kilogram, mililit), trong khi nhiều công thức phương Tây sử dụng hệ đo lường Anh-Mỹ (Imperial: pound, ounce, teaspoon, tablespoon, cup).
+Trong bối cảnh quản lý dữ liệu dinh dưỡng và chế biến ẩm thực gia đình, người dùng thường đối mặt với thách thức phân mảnh dữ liệu:
+* Dữ liệu công thức ẩm thực bị phân tán trên nhiều nguồn không đồng nhất: các cổng thông tin điện tử, mạng xã hội và tài liệu ghi chép thủ công.
+* Định lượng thành phần nguyên liệu trong các công thức gốc thường bị ấn định cho một quy mô khẩu phần cố định (ví dụ: mặc định dành cho 2 người), gây trở ngại lớn khi cần tái cấu trúc và điều chỉnh quy mô khẩu phần ăn (Servings Scaling) phù hợp với quy mô thực tế của đối tượng sử dụng.
+* Thiếu tính chuẩn hóa trong hệ thống đo lường quốc tế: sự đan xen giữa hệ đo lường Quốc tế (Metric: gram, kilogram, mililit) và hệ đo lường Anh - Mỹ (Imperial: pound, ounce, teaspoon, tablespoon, cup) dẫn đến sai số trong quá trình quy đổi và tính toán định lượng.
 
-**Mealie** ra đời như một nền tảng mã nguồn mở tự lưu trữ (**Self-hosted Recipe Management System**) nhằm giải quyết toàn diện bài toán trên. Hệ thống cung cấp giải pháp trọn gói: từ việc tự động "cào" (scrape) dữ liệu công thức từ các trang web, bóc tách nguyên liệu thông minh bằng xử lý ngôn ngữ tự nhiên, tự động nhân chia khẩu phần ăn, cho đến lập kế hoạch thực đơn theo tuần và sinh danh sách mua sắm thực phẩm.
+**Mealie** được phát triển như một nền tảng mã nguồn mở tự lưu trữ (**Self-hosted Recipe Management System**) nhằm cung cấp giải pháp toàn diện cho bài toán quản trị dữ liệu ẩm thực. Hệ thống cung cấp chu trình xử lý khép kín: từ việc tự động trích xuất dữ liệu web (**Web Scraping**) từ các nguồn phân tán bên ngoài, phân tích cú pháp chuỗi nguyên liệu tự nhiên bằng kỹ thuật xử lý ngôn ngữ tự nhiên (**Natural Language Processing - NLP**), tự động co giãn khẩu phần ăn theo tỉ lệ toán học, cho đến lập lịch trình thực đơn dinh dưỡng và tổng hợp danh mục mua sắm nguyên liệu.
 
 ### 2. Mục tiêu và Phạm vi của hệ thống
 * **Tự động hóa số hóa công thức:** Cho phép người dùng nhập đường dẫn (URL) của bất kỳ trang web ẩm thực phổ biến nào; hệ thống sẽ tự động trích xuất tiêu đề, hình ảnh, thời gian nấu, danh mục nguyên liệu và các bước thực hiện.
@@ -37,7 +37,7 @@ Qua khảo sát trực tiếp từ tệp cấu hình đóng gói mã nguồn `me
 | **Kiểm thực dữ liệu** | `Pydantic` | `2.13.5` | Định nghĩa Schema, ép kiểu và kiểm tra tính hợp lệ dữ liệu vào/ra nghiêm ngặt. |
 | **Phân tích nguyên liệu** | `ingredient-parser-nlp` | `2.7.0` | Mô hình NLP chuyên bóc tách thành phần ngữ nghĩa của chuỗi nguyên liệu. |
 | **Quy đổi đơn vị** | `Pint` | `0.26.1` | Thư viện vật lý/toán học xử lý chuyển đổi giữa các hệ thống đo lường. |
-| **Cào dữ liệu web** | `recipe-scrapers` | `15.12.0` | Engine bóc tách cấu trúc schema JSON-LD/Microdata từ hơn 100 website ẩm thực. |
+| **Trích xuất dữ liệu web (Web Scraping)** | `recipe-scrapers` | `15.12.0` | Thư viện tự động phân tích và trích xuất cấu trúc dữ liệu schema JSON-LD/Microdata từ hơn 100 website ẩm thực. |
 | **Xử lý chuỗi nâng cao** | `RapidFuzz` & `text-unidecode` | `3.14.6` | So khớp chuỗi mờ và chuẩn hóa các ký tự Unicode phân số (`½`, `¼`, `¾`). |
 | **Giao diện Frontend** | `Vue.js` (Nuxt) | 3.x | Ứng dụng trang đơn (SPA) tương tác mượt mà, giao tiếp với Backend qua REST API. |
 | **Đóng gói triển khai** | `Docker` & `Docker Compose` | — | Đóng gói toàn bộ ứng dụng thành container chạy độc lập trên mọi hệ điều hành. |
@@ -49,23 +49,23 @@ Qua khảo sát trực tiếp từ tệp cấu hình đóng gói mã nguồn `me
 Hệ thống Mealie phân định rõ ranh giới quyền hạn thông qua 2 tác nhân chính:
 
 ```text
-       ┌──────────────────┐               ┌──────────────────┐
-       │    Home User     │               │  Administrator   │
-       │ (Người dùng nhà) │               │ (Quản trị viên)  │
-       └────────┬─────────┘               └────────┬─────────┘
-                │                                  │
-    ┌───────────┴───────────┐          ┌───────────┴───────────┐
-    │  Quản lý công thức    │          │  Cấu hình hệ thống    │
-    │  Bóc tách nguyên liệu │          │  Quản lý tài khoản    │
-    │  Co giãn khẩu phần    │          │  Sao lưu & phục hồi   │
-    │  Lên thực đơn tuần    │          │  Tích hợp Email/OIDC  │
-    └───────────────────────┘          └───────────────────────┘
+       ┌──────────────────────┐           ┌──────────────────────┐
+       │      Home User       │           │    Administrator     │
+       │ (Người dùng gia đình)│           │   (Quản trị viên)    │
+       └──────────┬───────────┘           └──────────┬───────────┘
+                  │                                  │
+      ┌───────────┴───────────┐          ┌───────────┴───────────┐
+      │  Quản lý công thức    │          │  Cấu hình hệ thống    │
+      │  Bóc tách nguyên liệu │          │  Quản lý tài khoản    │
+      │  Co giãn khẩu phần    │          │  Sao lưu & phục hồi   │
+      │  Lên thực đơn tuần    │          │  Tích hợp Email/OIDC  │
+      └───────────────────────┘          └───────────────────────┘
 ```
 
 ### 1. Tác nhân "Người dùng gia đình" (Home User)
 * **Định nghĩa:** Là người dùng thông thường trong gia đình, tham gia vào hoạt động nấu ăn, lên thực đơn và mua sắm thực phẩm.
 * **Quyền hạn và Hành vi chính:**
-  * Thêm mới công thức bằng cách dán đường dẫn trang web ẩm thực hoặc nhập trực tiếp.
+  * Khởi tạo công thức mới thông qua việc cung cấp liên kết (URL) của trang web ẩm thực hoặc nhập liệu thủ công.
   * Tùy biến thông số khẩu phần ăn (Servings) của từng món để xem định lượng nguyên liệu mới.
   * Lập kế hoạch bữa ăn theo ngày/tuần (gán món ăn vào bữa sáng, trưa, tối).
   * Đánh dấu các nguyên liệu cần mua vào Danh sách đi chợ (Shopping List).
@@ -109,10 +109,10 @@ Dưới đây là đặc tả chi tiết 5 trường hợp sử dụng (Use Case
 ### 1. UC-01: Thêm và Import công thức nấu ăn (Recipe Import & Management)
 * **Mã Use Case:** `UC-01`
 * **Tác nhân:** Home User
-* **Mô tả:** Người dùng nhập một đường link từ internet; hệ thống tự động cào thông tin và lưu công thức thành một bản ghi hoàn chỉnh trong cơ sở dữ liệu.
+* **Mô tả:** Người dùng cung cấp đường dẫn liên kết (URL) từ Internet; hệ thống tự động trích xuất thông tin (Web Scraping) và lưu trữ công thức thành một bản ghi hoàn chỉnh trong cơ sở dữ liệu.
 * **Tiền điều kiện:** Người dùng đã đăng nhập vào hệ thống; đường dẫn URL hợp lệ và máy chủ Mealie có kết nối internet.
 * **Luồng sự kiện chính (Main Flow):**
-  1. Người dùng chọn chức năng *"Create Recipe from URL"* trên giao diện và dán đường link bài viết ẩm thực.
+  1. Người dùng chọn chức năng *"Create Recipe from URL"* trên giao diện và cung cấp liên kết (URL) bài viết ẩm thực.
   2. Giao diện gửi yêu cầu `POST /api/recipes/create-url` kèm theo URL tới Backend.
   3. Module `mealie.services.scraper` sử dụng thư viện `recipe-scrapers` để tải mã HTML, trích xuất cấu trúc dữ liệu schema JSON-LD/OpenGraph.
   4. Hệ thống tải ảnh đại diện của món ăn, chuẩn hóa danh sách các bước thực hiện (instructions) và danh mục nguyên liệu (ingredients).
@@ -176,7 +176,7 @@ Dưới đây là đặc tả chi tiết 5 trường hợp sử dụng (Use Case
   1. Người dùng truy cập trang *"Meal Planner"*, chọn khoảng thời gian tuần cần lên kế hoạch.
   2. Người dùng kéo thả (drag & drop) hoặc chọn công thức từ thư viện món ăn vào từng ô thời gian cụ thể (Bữa sáng, Bữa trưa, Bữa tối).
   3. Hệ thống lưu thông tin kế hoạch vào bảng `mealplans` kèm theo ngày thực hiện (`entry_date`).
-  4. Người dùng bấm nút *"Add to Shopping List"*, hệ thống tự động tổng hợp tất cả nguyên liệu của các món ăn trong tuần và gom vào danh sách mua sắm.
+  4. Người dùng kích hoạt chức năng *"Add to Shopping List"*, hệ thống tự động tổng hợp và hợp nhất (aggregate) toàn bộ nguyên liệu của các món ăn trong tuần vào danh sách mua sắm.
 * **Hậu điều kiện:** Lịch trình ăn uống của gia đình được thiết lập rõ ràng, hạn chế lãng phí thực phẩm.
 
 ---
@@ -186,13 +186,13 @@ Dưới đây là đặc tả chi tiết 5 trường hợp sử dụng (Use Case
 
 * **Mã Use Case:** `UC-05`
 * **Tác nhân:** Home User, hoặc được kích hoạt tự động khi tổng hợp danh sách mua sắm.
-* **Mô tả:** Chuyển đổi định lượng nguyên liệu giữa các đơn vị đo lường tương đương hoặc khác hệ thống đo lường (Metric $\leftrightarrow$ Imperial).
+* **Mô tả:** Chuyển đổi định lượng nguyên liệu giữa các đơn vị đo lường tương đương hoặc khác hệ thống đo lường (Metric ↔ Imperial).
 * **Luồng sự kiện chính (Main Flow):**
-  1. Người dùng có công thức nấu ăn xuất xứ từ Mỹ sử dụng đơn vị Imperial (ví dụ: $2\text{ cups sữa}$ hoặc $16\text{ oz bột mì}$).
+  1. Người dùng có công thức nấu ăn xuất xứ từ Mỹ sử dụng đơn vị Imperial (ví dụ: 2 cups sữa hoặc 16 oz bột mì).
   2. Người dùng kích hoạt tính năng chuyển đổi sang hệ đo lường Quốc tế (Metric).
   3. Lớp `UnitConverter` (trong `mealie/services/parser_services/parser_utils/unit_utils.py`) sử dụng thư viện `Pint` để thực hiện phép ánh xạ:
      * Kiểm tra hai đơn vị có cùng thứ nguyên vật lý hay không (ví dụ: cùng là thể tích hoặc cùng là khối lượng).
-     * Áp dụng hệ số chuyển đổi chuẩn (ví dụ: $1\text{ cup} \approx 236.588\text{ ml}$; $1\text{ kg} = 1000\text{ gram}$).
+     * Áp dụng hệ số chuyển đổi chuẩn (ví dụ: 1 cup ≈ 236.588 ml; 1 kg = 1000 gram).
   4. Hệ thống trả về kết quả quy đổi chính xác kèm đơn vị mới.
 * **Hậu điều kiện:** Người dùng có thể dễ dàng chuẩn bị nguyên liệu bằng các dụng cụ cân đong sẵn có tại gia đình.
 
@@ -226,7 +226,7 @@ mealie_src/
     │
     ├── services/                  # TẦNG XỬ LÝ NGHIỆP VỤ CỐT LÕI (CORE BUSINESS SERVICES)
     │   ├── recipe/                # Nghiệp vụ quản lý công thức, tính toán khẩu phần ăn (Scaling)
-    │   ├── scraper/               # Engine cào dữ liệu từ URL ẩm thực bên ngoài
+    │   ├── scraper/               # Phân hệ trích xuất dữ liệu (Scraper) từ URL ẩm thực bên ngoài
     │   ├── scheduler/             # Lập lịch tác vụ chạy nền (Cron jobs, dọn dẹp token)
     │   │
     │   └── parser_services/       # TÂM ĐIỂM KIỂM THỬ CỦA ĐỒ ÁN (PARSER & UTILS)

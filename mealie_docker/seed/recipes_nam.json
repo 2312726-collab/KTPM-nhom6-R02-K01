@@ -1,0 +1,176 @@
+[
+  {
+    "id": "NAM-01",
+    "name": "NAM-01 Trứng Luộc Lòng Đào",
+    "description": "Món trứng luộc kiểm tra nguyên liệu số nguyên.",
+    "recipeServings": 2.0,
+    "recipeYield": "2 servings",
+    "ingredients": [
+      "2 eggs",
+      "1 cup water",
+      "1 pinch salt"
+    ],
+    "instructions": [
+      "Đun sôi 1 cup nước trong nồi nhỏ.",
+      "Cho 2 quả trứng vào luộc đúng 6 phút.",
+      "Vớt trứng ra ngâm nước đá rồi bóc vỏ."
+    ]
+  },
+  {
+    "id": "NAM-02",
+    "name": "NAM-02 Sữa Tươi Yến Mạch",
+    "description": "Món yến mạch kiểm tra nguyên liệu số thập phân.",
+    "recipeServings": 2.0,
+    "recipeYield": "2 servings",
+    "ingredients": [
+      "1.5 cups milk",
+      "0.5 cup rolled oats",
+      "2.25 tablespoons honey"
+    ],
+    "instructions": [
+      "Đổ 1.5 cups sữa tươi vào nồi đun ấm.",
+      "Thêm 0.5 cup yến mạch khuấy đều trong 3 phút.",
+      "Tắt bếp, thêm 2.25 tablespoons mật ong thưởng thức."
+    ]
+  },
+  {
+    "id": "NAM-03",
+    "name": "NAM-03 Bánh Bông Lan Đường Mía",
+    "description": "Món bánh kiểm tra phân số thường dạng a/b.",
+    "recipeServings": 4.0,
+    "recipeYield": "4 servings",
+    "ingredients": [
+      "1/2 cup sugar",
+      "3/4 cup flour",
+      "1/4 teaspoon baking powder",
+      "3 eggs"
+    ],
+    "instructions": [
+      "Đánh bông trứng với 1/2 cup đường.",
+      "Rây 3/4 cup bột mì và 1/4 teaspoon bột nở vào âu.",
+      "Nướng bánh ở nhiệt độ 160 độ C trong 25 phút."
+    ]
+  },
+  {
+    "id": "NAM-04",
+    "name": "NAM-04 Sữa Nóng Mật Ong",
+    "description": "Thức uống kiểm tra ký tự phân số Unicode ½.",
+    "recipeServings": 1.0,
+    "recipeYield": "1 serving",
+    "ingredients": [
+      "½ cup milk",
+      "1 tablespoon honey"
+    ],
+    "instructions": [
+      "Hâm nóng ½ cup sữa tươi trong lò vi sóng.",
+      "Khuấy đều cùng 1 tablespoon mật ong."
+    ]
+  },
+  {
+    "id": "NAM-05",
+    "name": "NAM-05 Canh Rong Biển Đậm Đà",
+    "description": "Món canh kiểm tra ký tự phân số Unicode ¾ và ½.",
+    "recipeServings": 2.0,
+    "recipeYield": "2 servings",
+    "ingredients": [
+      "¾ teaspoon salt",
+      "½ tablespoon sesame oil",
+      "10 grams dried seaweed",
+      "2 cups water"
+    ],
+    "instructions": [
+      "Ngâm nở rong biển khô trong nước lạnh.",
+      "Xào thơm với ½ tablespoon dầu mè và ¾ teaspoon muối.",
+      "Đổ nước đun sôi 5 phút."
+    ]
+  },
+  {
+    "id": "NAM-06",
+    "name": "NAM-06 Bánh Mì Bột Mì Đa Dụng",
+    "description": "Món bánh kiểm tra hỗn số có khoảng cách 2 1/2.",
+    "recipeServings": 4.0,
+    "recipeYield": "4 servings",
+    "ingredients": [
+      "2 1/2 cups flour",
+      "1 1/4 cups warm water",
+      "1/2 teaspoon yeast",
+      "1 teaspoon salt"
+    ],
+    "instructions": [
+      "Trộn 2 1/2 cups bột mì với men và muối.",
+      "Thêm 1 1/4 cups nước ấm nhào mịn trong 10 phút.",
+      "Ủ nở gấp đôi rồi nướng 200 độ C trong 20 phút."
+    ]
+  },
+  {
+    "id": "NAM-07",
+    "name": "NAM-07 Trà Thảo Mộc Nước Ấm",
+    "description": "Thức uống kiểm tra hỗn số Unicode 2½.",
+    "recipeServings": 2.0,
+    "recipeYield": "2 servings",
+    "ingredients": [
+      "2½ cups water",
+      "1 bag herbal tea",
+      "1 slice lemon"
+    ],
+    "instructions": [
+      "Đun sôi 2½ cups nước.",
+      "Hãm túi trà thảo mộc trong 5 phút.",
+      "Thêm lát chanh và dùng nóng."
+    ]
+  },
+  {
+    "id": "NAM-08",
+    "name": "NAM-08 Súp Hành Tây Pháp",
+    "description": "Món súp kiểm tra chú thích trong ngoặc đơn.",
+    "recipeServings": 2.0,
+    "recipeYield": "2 servings",
+    "ingredients": [
+      "1 onion (finely chopped)",
+      "2 tablespoons butter (unsalted)",
+      "2 cups beef broth (low sodium)"
+    ],
+    "instructions": [
+      "Xào 1 củ hành tây thái nhỏ với 2 tablespoons bơ cho vàng óng.",
+      "Đổ 2 cups nước dùng bò vào ninh nhỏ lửa 15 phút.",
+      "Múc ra bát thưởng thức."
+    ]
+  },
+  {
+    "id": "NAM-09",
+    "name": "NAM-09 Salad Thập Cẩm Tổng Hợp",
+    "description": "Salad kiểm tra phối hợp đa dạng số nguyên, số thực và phân số.",
+    "recipeServings": 4.0,
+    "recipeYield": "4 servings",
+    "ingredients": [
+      "2 tomatoes",
+      "1.5 cucumbers",
+      "1/2 cup olive oil",
+      "¾ teaspoon black pepper",
+      "1 lettuce"
+    ],
+    "instructions": [
+      "Thái lát 2 quả cà chua, 1.5 quả dưa chuột và xà lách.",
+      "Pha sốt trộn gồm 1/2 cup dầu olive và ¾ teaspoon tiêu.",
+      "Rưới sốt lên rau quả và trộn đều."
+    ]
+  },
+  {
+    "id": "NAM-10",
+    "name": "NAM-10 Bò Sốt Tiêu Khẩu Phần Chuẩn",
+    "description": "Món chính khẩu phần gốc 4 phục vụ kiểm tra nhân đôi (scaling) thành 8.",
+    "recipeServings": 4.0,
+    "recipeYield": "4 servings",
+    "ingredients": [
+      "400 grams beef",
+      "2 tablespoons black pepper",
+      "1/2 cup beef broth",
+      "4 cloves garlic"
+    ],
+    "instructions": [
+      "Ướp 400g thịt bò với tỏi băm và 2 tablespoons tiêu đen.",
+      "Áp chảo thịt bò chín tái.",
+      "Thêm 1/2 cup nước dùng bò đun sôi sệt lại."
+    ]
+  }
+]

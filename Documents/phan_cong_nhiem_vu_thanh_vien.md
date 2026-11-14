@@ -64,6 +64,8 @@
 - [ ] Q2.2.1 Viết mục tiêu hệ thống Mealie, các Actor chính (**Home User**, **Admin**) và 5 Use Case cốt lõi.
 - [ ] Q2.2.2 Mô tả cây thư mục tổng thể của Mealie, tập trung vào `mealie/services/parser_services/`.
 - [ ] Q2.2.3 Commit: `docs: add system description Phan A`.
+- [ ] Q2.2.4 Xây dựng Ma trận Truy xuất Nguồn gốc Yêu cầu (Requirements Traceability Matrix - RTM) ánh xạ 5 Use Case sang 5 Property PBT.
+- [ ] Q2.2.5 Tài liệu hóa các giả định kỹ thuật và bảng câu hỏi nghiệp vụ (Q&A Document) của hệ thống Mealie.
 
 ### Q2.3 — Soạn thảo Phần B: Kiến trúc & Luồng dữ liệu (`Documents/bao_cao_phan_B.md`)
 - [ ] Q2.3.1 Vẽ sơ đồ kiến trúc tổng thể C4 Container (`Browser → Vue Frontend → FastAPI Backend → SQLite`) lưu ảnh vào `Documents/assets/kien_truc_container.png`.
@@ -131,11 +133,13 @@
 - [ ] Q4.1.3 Soạn Slide báo cáo Giữa kỳ (tối thiểu 12 slides).
 
 ### Q4.2 — Tổng hợp Báo cáo Cuối kỳ, Phần H & Điều phối Bảo vệ (Tháng 12)
+- [ ] Q4.2.0 Lập bảng Ước lượng Nỗ lực Kiểm thử (Test Effort Estimation) tổng hợp phân bổ giờ công (Man-Hours) của 5 thành viên.
 - [ ] Q4.2.1 Thu nhận Phần D & E từ **Hiếu**, Phần F từ **Phước**, Phần G từ **Mạnh**.
 - [ ] Q4.2.2 Biên tập cuốn Báo cáo Cuối kỳ hoàn chỉnh 8 phần từ A đến H.
 - [ ] Q4.2.3 Soạn thảo Phần H: Lưu trữ commit SHA, gắn Git Tag `v1.0-final`, hướng dẫn nghiệm thu tái lập.
-- [ ] Q4.2.4 Gắn Git Tag chính thức: `git tag v1.0-final && git push origin v1.0-final`.
-- [ ] Q4.2.5 Soạn Slide bảo vệ cuối kỳ, phân vai thuyết trình và kịch bản demo live script kiểm thử.
+- [ ] Q4.2.4 Đánh giá Tiêu chí Nghiệm thu (Exit Criteria Evaluation) và tổ chức họp tổng kết rút ra bài học kinh nghiệm (Retrospective / Lessons Learned).
+- [ ] Q4.2.5 Gắn Git Tag chính thức: `git tag v1.0-final && git push origin v1.0-final`.
+- [ ] Q4.2.6 Soạn Slide bảo vệ cuối kỳ, phân vai thuyết trình và kịch bản demo live script kiểm thử.
 
 ---
 ---
@@ -151,16 +155,16 @@
 **Deadline: 15/10**
 
 ### N1.1 — Dựng Mealie bằng Docker Compose
-- [ ] N1.1.1 Tạo thư mục `mealie_docker/` trong repo.
-- [ ] N1.1.2 Tạo file `mealie_docker/docker-compose.yml` (phiên bản SQLite chuẩn) và `mealie_docker/.env` mở cổng `9925`.
-- [ ] N1.1.3 Chạy container: `docker-compose up -d`.
-- [ ] N1.1.4 Kiểm tra log: `docker-compose logs -f mealie` xác nhận FastAPI khởi động mượt mà.
-- [ ] N1.1.5 Truy cập `http://localhost:9925`, chụp ảnh Landing Page → lưu `Documents/assets/01_mealie_landing.png`.
+- [x] N1.1.1 Tạo thư mục `mealie_docker/` trong repo.
+- [x] N1.1.2 Tạo file `mealie_docker/docker-compose.yml` (phiên bản SQLite chuẩn) và `mealie_docker/.env` mở cổng `9925`.
+- [x] N1.1.3 Chạy container: `docker-compose up -d`.
+- [x] N1.1.4 Kiểm tra log: `docker-compose logs -f mealie` xác nhận FastAPI khởi động mượt mà.
+- [x] N1.1.5 Truy cập `http://localhost:9925`, chụp ảnh Landing Page → lưu `Documents/assets/01_mealie_landing.png`.
 
 ### N1.2 — Đăng ký tài khoản Admin & Xác nhận Dashboard
-- [ ] N1.2.1 Đăng ký tài khoản Admin (`admin@nhom6.test` / `Admin123@`).
-- [ ] N1.2.2 Đăng nhập Dashboard thành công, chụp ảnh Dashboard → lưu `Documents/assets/02_mealie_dashboard.png`.
-- [ ] N1.2.3 Commit: `chore: setup docker-compose environment and initial admin credentials`.
+- [x] N1.2.1 Đăng ký tài khoản Admin (`admin@nhom6.test` / `Admin123@`).
+- [x] N1.2.2 Đăng nhập Dashboard thành công, chụp ảnh Dashboard → lưu `Documents/assets/02_mealie_dashboard.png`.
+- [x] N1.2.3 Commit: `chore: setup docker-compose environment and initial admin credentials`.
 
 ---
 
@@ -168,15 +172,15 @@
 **Deadline: 17/10**
 
 ### N2.1 — Nạp dữ liệu mẫu (Seed Data)
-- [ ] N2.1.1 Tạo tài khoản kiểm thử thường (`test@nhom6.test` / `User123@`).
-- [ ] N2.1.2 Tạo 10 công thức mẫu đa dạng (nguyên liệu đơn giản, phân số thường, phân số unicode `½`, chú thích trong ngoặc, công thức dài nhiều bước).
-- [ ] N2.1.3 Tạo kế hoạch thực đơn (Meal Plan) 7 ngày tuần 06/10–12/10, chụp ảnh → lưu `Documents/assets/03_meal_plan.png`.
+- [x] N2.1.1 Tạo tài khoản kiểm thử thường (`test@nhom6.test` / `User123@`).
+- [x] N2.1.2 Tạo 10 công thức mẫu đa dạng (nguyên liệu đơn giản, phân số thường, phân số unicode `½`, chú thích trong ngoặc, công thức dài nhiều bước).
+- [x] N2.1.3 Tạo kế hoạch thực đơn (Meal Plan) 7 ngày tuần 06/10–12/10, chụp ảnh → lưu `Documents/assets/03_meal_plan.png`.
 
 ### N2.2 — Thu thập bằng chứng 3 luồng nghiệp vụ cốt lõi
-- [ ] N2.2.1 Luồng 1 — Import công thức từ URL: Chụp ảnh công thức đã import → lưu `04_recipe_import.png`.
-- [ ] N2.2.2 Luồng 2 — Phân tích nguyên liệu (Ingredient Parsing): Nhập chuỗi bóc tách Qty, Unit, Food, Note → chụp `05_ingredient_parse.png`.
-- [ ] N2.2.3 Luồng 3 — Nhân tỉ lệ khẩu phần ăn (Servings Scaling): Đổi 4 thành 8 servings, kiểm tra nhân đôi → chụp `06_servings_scale.png`.
-- [ ] N2.2.4 Commit: `docs: seed test recipes and capture evidence for 3 core business flows`.
+- [x] N2.2.1 Luồng 1 — Import công thức từ URL: Chụp ảnh công thức đã import → lưu `04_recipe_import.png`.
+- [x] N2.2.2 Luồng 2 — Phân tích nguyên liệu (Ingredient Parsing): Nhập chuỗi bóc tách Qty, Unit, Food, Note → chụp `05_ingredient_parse.png`.
+- [x] N2.2.3 Luồng 3 — Nhân tỉ lệ khẩu phần ăn (Servings Scaling): Đổi 4 thành 8 servings, kiểm tra nhân đôi → chụp `06_servings_scale.png`.
+- [x] N2.2.4 Commit: `docs: seed test recipes and capture evidence for 3 core business flows`.
 
 ---
 
@@ -184,10 +188,11 @@
 **Deadline: 18/10**
 
 ### N3.1 — Soạn thảo `Documents/bao_cao_phan_C.md`
-- [ ] N3.1.1 Soạn thảo đầy đủ 5 mục chuẩn: C.1 Yêu cầu môi trường, C.2 Các bước cài đặt chi tiết, C.3 Quản lý dịch vụ docker, C.4 Hướng dẫn nạp Seed Data, C.5 Xử lý sự cố (xung đột port 9925, cấp quyền thư mục).
-- [ ] N3.1.2 Nhúng toàn bộ 6 ảnh minh chứng vào đúng vị trí trong báo cáo.
+- [x] N3.1.1 Soạn thảo đầy đủ 5 mục chuẩn: C.1 Yêu cầu môi trường, C.2 Các bước cài đặt chi tiết, C.3 Quản lý dịch vụ docker, C.4 Hướng dẫn nạp Seed Data, C.5 Xử lý sự cố (xung đột port 9925, cấp quyền thư mục).
+- [x] N3.1.2 Nhúng toàn bộ 6 ảnh minh chứng vào đúng vị trí trong báo cáo.
+- [x] N3.1.2b Thực hiện Smoke Test trên môi trường Docker Mealie (kiểm tra HTTP 200, phản hồi API) và ghi nhận kết quả Smoke Test sẵn sàng.
 - [ ] N3.1.3 Bàn giao cho **Hiếu** cài đặt thẩm định chéo trên máy sạch, tiếp thu góp ý để hoàn thiện.
-- [ ] N3.1.4 Commit: `docs: complete onboarding guide Phan C with verified evidence`.
+- [x] N3.1.4 Commit: `docs: complete onboarding guide Phan C with verified evidence`.
 
 ---
 
@@ -227,6 +232,7 @@
 ---
 
 # 👤 THÀNH VIÊN 3: BÙI TRUNG HIẾU
+> **MSSV:** `2110037` *(GitHub username: `2312611-Hieu`)*  
 > **Vai trò:** Test Architect & PBT Methodology Specialist  
 > **Báo cáo phụ trách chính:** Phần D (Cơ sở lý thuyết PBT) + Phần E (Thiết kế kịch bản kiểm thử)  
 > **Kịch bản Code PBT trực tiếp:** **Property 2 (Unit Conversion Round-trip)** trong `tests/unit_tests/test_pbt_unit_converter.py`
@@ -237,15 +243,15 @@
 **Deadline: 18/10**
 
 ### H1.1 — Khảo sát module mục tiêu & Lập đề cương kiểm thử
-- [ ] H1.1.1 Đọc cấu trúc module `mealie/services/parser_services/`.
-- [ ] H1.1.2 Xác định phạm vi kiểm thử: 3 file cốt lõi (`ingredient_parser.py`, `string_utils.py`, `unit_utils.py`).
-- [ ] H1.1.3 Soạn thảo đề cương kế hoạch kiểm thử PBT sơ bộ nộp Trưởng nhóm Quân đưa vào Báo cáo Giữa kỳ.
+- [x] H1.1.1 Đọc cấu trúc module `mealie/services/parser_services/`.
+- [x] H1.1.2 Xác định phạm vi kiểm thử: 3 file cốt lõi (`ingredient_parser.py`, `string_utils.py`, `unit_utils.py`).
+- [x] H1.1.3 Soạn thảo đề cương kế hoạch kiểm thử PBT sơ bộ nộp Trưởng nhóm Quân đưa vào Báo cáo Giữa kỳ.
 
 ### H1.2 — Thẩm định chéo (Cross-validation) tài liệu On-boarding
-- [ ] H1.2.1 Tiếp nhận `bao_cao_phan_C.md` từ **Nam**.
-- [ ] H1.2.2 Cài đặt thử nghiệm Mealie từ đầu trên máy cá nhân theo đúng từng dòng lệnh trong tài liệu.
-- [ ] H1.2.3 Lập biên bản phản hồi (lỗi phát sinh, lệnh còn thiếu) gửi lại Nam cập nhật.
-- [ ] H1.2.4 Commit: `docs: outline midterm PBT test strategy and cross-validate onboarding`.
+- [x] H1.2.1 Tiếp nhận `bao_cao_phan_C.md` từ **Nam**.
+- [ ] H1.2.2 Cài đặt thử nghiệm Mealie từ đầu trên máy cá nhân theo đúng từng dòng lệnh trong tài liệu (đã thử, bị chặn do Docker; chưa cài đặt thành công).
+- [x] H1.2.3 Lập biên bản phản hồi (lỗi phát sinh, lệnh còn thiếu) gửi lại Nam cập nhật.
+- [x] H1.2.4 Commit: `docs: outline midterm PBT test strategy and cross-validate onboarding`.
 
 ---
 
@@ -260,6 +266,8 @@
 - [ ] H2.2.1 Viết Mục D.1: Bản chất của PBT và bảng so sánh chi tiết giữa Example-Based Testing và PBT.
 - [ ] H2.2.2 Viết Mục D.2: Sơ đồ hóa 4 bước vận hành của Hypothesis (Generate → Check Invariant → Shrink → Report).
 - [ ] H2.2.3 Viết Mục D.3 & D.4: Lý do chọn `parser_services` và ranh giới kiểm thử theo triết lý Ponytail.
+- [ ] H2.2.3b Xây dựng Tiêu chí Bắt đầu kiểm thử (Entry Criteria) và Tiêu chí Kết thúc kiểm thử (Exit Criteria).
+- [ ] H2.2.3c Xây dựng Ma trận Phân loại Mức độ Nghiêm trọng của Lỗi (Defect Severity Matrix S1 $\to$ S4) theo chuẩn IEEE 1044 / ISTQB.
 - [ ] H2.2.4 Viết Mục D.5, D.6 & D.7: Giả định kỹ thuật, tiêu chí Pass/Fail và quản lý rủi ro Flaky test.
 - [ ] H2.2.5 Commit: `docs: complete theoretical foundation and test methodology Phan D`.
 
@@ -269,11 +277,13 @@
 **Deadline: 10/11**
 
 ### H3.1 — Soạn thảo `Documents/bao_cao_phan_E.md`
+- [ ] H3.1.0 Phân loại mức độ ưu tiên (Priority: High / Medium / Low) cho từng kịch bản kiểm thử trong 5 Properties.
 - [ ] H3.1.1 Thiết kế bảng đặc tả chuẩn hóa cho **Property 1 — Tính lũy đẳng (Idempotence)** (Phước code).
 - [ ] H3.1.2 Thiết kế bảng đặc tả chuẩn hóa cho **Property 2 — Tính bảo toàn hai chiều (Round-trip)** (Hiếu code).
 - [ ] H3.1.3 Thiết kế bảng đặc tả chuẩn hóa cho **Property 3 — Tính bền bỉ / Crash-free** (Mạnh code).
 - [ ] H3.1.4 Thiết kế bảng đặc tả chuẩn hóa cho **Property 4 — Tính đơn điệu khi Scaling** (Quân code).
 - [ ] H3.1.5 Thiết kế bảng đặc tả chuẩn hóa cho **Property 5 — Tính bảo toàn phân số** (Nam code).
+- [ ] H3.1.5b Tổ chức họp Review chéo kịch bản kiểm thử (Peer Review Test Design) giữa 5 thành viên trước khi viết mã.
 - [ ] H3.1.6 Bàn giao tài liệu Phần E cho cả nhóm làm căn cứ viết code test.
 - [ ] H3.1.7 Commit: `docs: design standardized PBT test scenarios for all 5 properties Phan E`.
 
@@ -409,16 +419,16 @@
 **Deadline: 18/10**
 
 ### M1.1 — Phân tích kiến trúc Async của bộ Parser
-- [ ] M1.1.1 Đọc mã nguồn `mealie/services/parser_services/ingredient_parser.py`.
-- [ ] M1.1.2 Xác định hàm `BruteForceParser.parse_one(text)` là hàm bất đồng bộ (`async def`).
-- [ ] M1.1.3 Xác định các tham số khởi tạo cần thiết: `session`, `group_id`, `household_id`.
+- [x] M1.1.1 Đọc mã nguồn `mealie/services/parser_services/ingredient_parser.py`.
+- [x] M1.1.2 Xác định hàm `BruteForceParser.parse_one(text)` là hàm bất đồng bộ (`async def`).
+- [x] M1.1.3 Xác định các tham số khởi tạo cần thiết: `session`, `group_id`, `household_id`.
 
 ### M1.2 — Thiết lập môi trường và fixture Mock
-- [ ] M1.2.1 Cài đặt thư viện: `pip install pytest-asyncio pytest-cov`.
-- [ ] M1.2.2 Cập nhật `pytest.ini` bổ sung: `asyncio_mode = auto`.
-- [ ] M1.2.3 Tạo mock fixture trong `tests/conftest.py` dùng `unittest.mock.MagicMock` cô lập database.
-- [ ] M1.2.4 Đóng góp nội dung phân tích kỹ thuật Async/Mock vào Báo cáo giữa kỳ của Trưởng nhóm Quân.
-- [ ] M1.2.5 Commit: `chore: setup async test runner and parser mock fixtures`.
+- [x] M1.2.1 Cài đặt thư viện: `pip install pytest-asyncio pytest-cov`.
+- [ ] M1.2.2 Cập nhật `pytest.ini` bổ sung: `asyncio_mode = auto` *(Tạm hoãn: test dùng marker tường minh `@pytest.mark.asyncio` chạy mượt mà độc lập, không sửa file cấu hình dùng chung để tránh ảnh hưởng test đồng bộ khác)*.
+- [ ] M1.2.3 Tạo mock fixture trong `tests/conftest.py` dùng `unittest.mock.MagicMock` cô lập database *(Đã hiện thực hoàn chỉnh 5 fixtures trong `test_manh_m1_async_mock.py`; sẽ trích xuất lên `conftest.py` khi làm Property 3 ở Sprint 4 để giữ PR cô lập)*.
+- [ ] M1.2.4 Đóng góp nội dung phân tích kỹ thuật Async/Mock vào Báo cáo giữa kỳ của Trưởng nhóm Quân *(Đã chuẩn bị sẵn sàng toàn bộ nội dung bàn giao tại `bao_cao_M1_VoHungManh.md`, chờ Trưởng nhóm Quân biên tập tích hợp vào Báo cáo Giữa kỳ chung)*.
+- [x] M1.2.5 Commit: `chore: setup async test runner and parser mock fixtures`.
 
 ---
 
@@ -483,12 +493,15 @@
 
 ### M4.1 — Soạn thảo `Documents/bao_cao_phan_G.md`
 - [ ] M4.1.1 Trình bày bảng tổng kết số liệu thực nghiệm: Tổng số test cases sinh bởi Hypothesis, tỷ lệ Pass/Fail, bảng số liệu Coverage.
+- [ ] M4.1.2 Thống kê và phân loại số lượng lỗi phát hiện được theo cấp độ nghiêm trọng kỹ thuật (S1 - Critical, S2 - Major, S3 - Minor, S4 - Trivial).
 
 ### M4.2 — Phân tích lỗi Root Cause Analysis (RCA) & Đề xuất bản vá
 - [ ] M4.2.1 Trích xuất thông tin Falsifying Example từ log của Hypothesis.
+- [ ] M4.2.1b Lập hồ sơ lỗi theo Phiếu Báo cáo Lỗi chuẩn (Defect Artefact Template) gồm Bug ID, Shrunk Input, Traceback và phân loại Severity/Priority.
 - [ ] M4.2.2 Tái hiện lỗi độc lập trong môi trường Python tối giản và trích xuất traceback chi tiết từ dưới lên.
 - [ ] M4.2.3 Phân loại và giải thích nguyên nhân cốt lõi (chia cho 0, lỗi ép kiểu, regex backtracking,...).
 - [ ] M4.2.4 Soạn thảo đề xuất bản vá lỗi (Patch Proposal) chuẩn Ponytail dưới dạng mã diff.
+- [ ] M4.2.4b Thực hiện Kiểm thử lại (Re-testing) và Kiểm thử hồi quy (Regression Testing) sau khi áp dụng bản vá đề xuất.
 - [ ] M4.2.5 *(Trường hợp không có bug):* Chứng minh độ tin cậy qua tỷ lệ Code Coverage $\ge 80\%$.
 - [ ] M4.2.6 Hoàn thiện Phần G và bàn giao cho Trưởng nhóm Quân tích hợp vào báo cáo cuối kỳ.
 - [ ] M4.2.7 Commit: `docs: complete test results, defect root cause analysis and patch proposals Phan G`.
@@ -505,7 +518,7 @@
 - [ ] Tài liệu On-boarding `Documents/bao_cao_phan_C.md` chi tiết, đã được Hiếu cài đặt thẩm định thành công từ máy sạch độc lập.
 - [ ] Sơ đồ kiến trúc tổng thể và Data Flow đầy đủ trong `Documents/bao_cao_phan_B.md` (Quân hoàn thành).
 - [ ] Đề cương kế hoạch kiểm thử PBT rõ phạm vi và giả định kỹ thuật (Hiếu & Quân hoàn thành).
-- [ ] Cấu hình async/mock cơ bản cho bộ parser sẵn sàng (Mạnh hoàn thành).
+- [x] Cấu hình async/mock cơ bản cho bộ parser sẵn sàng (Mạnh hoàn thành).
 - [ ] **Cả 5 thành viên đều có ít nhất 1–2 commit Git hợp lệ trong Sprint 1 & 2.**
 
 ## Mốc Cuối kỳ — Tháng 12
@@ -514,6 +527,8 @@
 - [ ] **Cả 5 thành viên đều có ít nhất 1 commit code kiểm thử (`feat(test):`) trực tiếp trên repo.**
 - [ ] Test Runner biệt lập qua Docker chạy thành công trên mọi máy tính (Nam hoàn thành).
 - [ ] Đã chỉ ra được ít nhất 1 lỗi thực tế kèm phân tích RCA và đề xuất bản vá HOẶC chứng minh Coverage đạt chuẩn $\ge 80\%$ (Mạnh hoàn thành).
+- [ ] Đã phân loại đầy đủ mức độ nghiêm trọng của lỗi theo chuẩn IEEE 1044 (S1 $\to$ S4) và nghiệm thu tiêu chí Zero Open S1 Defects (Mạnh & Quân hoàn thành).
+- [ ] Đã thực hiện Re-test và Regression Test chứng minh bản vá không làm vỡ các tính năng khác (Mạnh hoàn thành).
 - [ ] `tests/README.md` đã được kiểm thử chéo và tái lập thành công từ máy sạch độc lập (Phước & Hiếu xác nhận).
 - [ ] Lịch sử Git thể hiện sự đóng góp tích cực, đều đặn của **cả 5 thành viên** xuyên suốt từ Sprint 1 đến Sprint 5.
 - [ ] Đã ghim Commit SHA và gắn Git Tag `v1.0-final` vào repo nhóm (Quân hoàn thành).

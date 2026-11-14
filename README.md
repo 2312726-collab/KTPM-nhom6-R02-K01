@@ -22,7 +22,7 @@
 | 2 | **Nguyễn Phạm Phú Nam** | `2111874` | **Phần C** (Tài liệu On-boarding & Bằng chứng 3 luồng) | **Property 5** (Fraction Normalization & Numeric Preservation) + Docker Runner |
 | 3 | **Bùi Trung Hiếu** | `2110037` | **Phần D & E** (Lý thuyết PBT & Thiết kế 5 kịch bản) | **Property 2** (Unit Conversion Round-trip) |
 | 4 | **Trần Ngọc Bảo Phước** | `2111883` | **Phần F** (Test Harness & Hướng dẫn tái lập `README.md`) | **Property 1** (String Utils Idempotence & Robustness) |
-| 5 | **Võ Hùng Mạnh** | `2111867` | **Phần G** (Log, Đo Coverage HTML & Phân tích RCA) | **Property 3** (Crash-free Ingredient Parser with Async Mock) |
+| 5 | **Võ Hùng Mạnh** | `2312687` | **Phần G** (Log, Đo Coverage HTML & Phân tích RCA) | **Property 3** (Crash-free Ingredient Parser with Async Mock) |
 
 ---
 
