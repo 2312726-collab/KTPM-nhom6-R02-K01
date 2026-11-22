@@ -215,31 +215,16 @@ Nghiệp vụ Meal Planning liên quan trực tiếp đến dữ liệu chuỗi 
 - **Nhiệm vụ cốt lõi:** Đóng vai trò là façade điều phối cấp cao nhất trong nghiệp vụ trích xuất nguyên liệu. Module tiếp nhận chuỗi mô tả tự nhiên từ người dùng (ví dụ: `"2 1/2 cups organic all-purpose flour, sifted"`), điều phối qua các parser chuyên biệt (`NLPParser`, `BruteForceParser`), sau đó chuẩn hóa và liên kết dữ liệu với cơ sở dữ liệu để trả về cấu trúc dữ liệu hoàn chỉnh.
 
 #### 2. Cấu trúc Lớp & Phương thức Quan trọng
-
-```
-                         ┌───────────────────────┐
-                         │  ABCIngredientParser  │
-                         └───────────┬───────────┘
-                                     │ (kế thừa)
-                 ┌───────────────────┴───────────────────┐
-                 ▼                                       ▼
-       ┌───────────────────┐                   ┌───────────────────┐
-       │ BruteForceParser  │                   │     NLPParser     │
-       └───────────────────┘                   └───────────────────┘
-```
+Hệ thống tổ chức theo mẫu thiết kế Template Method / Strategy: lớp cơ sở trừu tượng `ABCIngredientParser` định nghĩa giao diện chung, được kế thừa bởi hai lớp thực thi chuyên biệt:
 
 * **Lớp `BruteForceParser`:**
-  * `parse_one(ingredient_string: str) -> ParsedIngredient`: Sử dụng thuật toán bóc tách dựa trên luật Heuristic và Regular Expression thuần túy trong submodule `brute`. Dùng trong trường hợp hệ thống không tải được mô hình NLP học máy hoặc cấu hình chế độ tiết kiệm tài nguyên.
-  * Tự động tính toán điểm tin cậy trung bình (`IngredientConfidence`) dựa trên sự hiện diện của số lượng (`quantity`), đơn vị (`unit`), tên thực phẩm (`food`) và ghi chú (`note`).
+  * `parse_one(ingredient_string: str) -> ParsedIngredient`: Sử dụng thuật toán bóc tách dựa trên luật Heuristic và Regular Expression thuần túy trong submodule `brute`. Dùng khi hệ thống chạy ở chế độ tiết kiệm tài nguyên hoặc không nạp được mô hình NLP học máy.
+  * Tự động tính toán điểm tin cậy (`IngredientConfidence`) dựa trên độ đầy đủ của các trường số lượng (`quantity`), đơn vị (`unit`), tên thực phẩm (`food`) và ghi chú (`note`).
 * **Lớp `NLPParser`:**
-  * `parse_one(ingredient_string: str) -> ParsedIngredient`: Gọi thư viện NLP `parse_ingredient()` kết hợp truyền từ điển đơn vị tùy chỉnh lấy từ CSDL (`custom_units=database_units`).
-  * `_convert_ingredient(ingredient: IngredientParserParsedIngredient) -> ParsedIngredient`: Xử lý phân rã các thành phần phân tích phức hợp (`CompositeIngredientAmount`), tách biệt lượng chính và lượng phụ, bóc tách tên thực phẩm (`food`), đơn vị (`unit`), số lượng (`qty`) và ghi chú (`note`).
-  * `_extract_quantity(ingredient_amount: IngredientAmount) -> tuple[float, float]`: Chuyển đổi an toàn giá trị số lượng từ dạng phân số chuỗi hoặc số thực, trả về bộ `(qty, confidence)`. Bắt ngoại lệ `ValueError` để tránh crash và hạ điểm tin cậy về 0.
-  * `_extract_unit(ingredient_amount: IngredientAmount) -> tuple[str, float]`: Chuẩn hóa đơn vị đo lường và điểm tin cậy đi kèm.
-  * `_extract_note(...)`: Tổng hợp các trường kích thước (`size`), cách sơ chế (`preparation`), bình luận (`comment`), mục đích (`purpose`) thành chuỗi ghi chú thống nhất.
-  * `_convert_extra_ingredients(...)`: Tự động nhận diện nguyên liệu thay thế (ví dụ: `"1 cup stock or broth"` $\to$ trích xuất `broth` thành `RecipeIngredientSubstitution`).
-* **Hàm khởi tạo dạng Factory `get_parser`:**
-  * `get_parser(parser: RegisteredParser, group_id: UUID4, session: Session, translator: Translator) -> ABCIngredientParser`: Khởi tạo đúng parser tương ứng với cấu hình hệ thống (`RegisteredParser.nlp`, `RegisteredParser.brute` hoặc `RegisteredParser.openai`).
+  * `parse_one(ingredient_string: str) -> ParsedIngredient`: Tích hợp thư viện `ingredient_parser-nlp` kết hợp từ điển đơn vị tùy chỉnh từ CSDL.
+  * Cơ chế bóc tách thành phần: Sử dụng tập hợp các hàm xử lý nội bộ (`_convert_ingredient`, `_extract_quantity`, `_extract_unit`, `_extract_note`, `_convert_extra_ingredients`) để phân rã lượng phức hợp, chuẩn hóa số lượng và đơn vị đo, bóc tách ghi chú sơ chế và nhận diện nguyên liệu thay thế.
+* **Hàm Factory `get_parser`:**
+  * `get_parser(...) -> ABCIngredientParser`: Khởi tạo parser tương ứng theo cấu hình hệ thống (`RegisteredParser.nlp`, `RegisteredParser.brute` hoặc `RegisteredParser.openai`).
 
 #### 3. Các Rủi ro Tiềm ẩn & Ý nghĩa Kiểm thử PBT
 * **Xử lý chuỗi nhập tùy ý (Arbitrary Input Robustness):** Người dùng có thể nhập các chuỗi cực đoan (chuỗi rỗng, khoảng trắng, ký tự Unicode đặc thù, chuỗi dài hàng nghìn ký tự, thẻ HTML/Script). Parser không bao giờ được phép phát sinh Unhandled Exception làm sập tiến trình FastAPI.
@@ -261,10 +246,8 @@ Nghiệp vụ Meal Planning liên quan trực tiếp đến dữ liệu chuỗi 
 #### 2. Chi tiết các Hàm Nòng cốt & Thuật toán
 
 ##### a) `convert_vulgar_fractions_to_regular_fractions(text: str) -> str`
-* **Cơ chế:** Ánh xạ từ điển 18 ký tự phân số Unicode cổ điển sang chuỗi phân số ASCII chuẩn:
-  * Phân số 1 chữ số: `¼` $\to$ `" 1/4"`, `½` $\to$ `" 1/2"`, `¾` $\to$ `" 3/4"`, `⅓` $\to$ `" 1/3"`, `⅔` $\to$ `" 2/3"`...
-  * Phân số mẫu số lớn: `⅐` $\to$ `" 1/7"`, `⅛` $\to$ `" 1/8"`, `⅑` $\to$ `" 1/9"`, `⅒` $\to$ `" 1/10"`...
-* **Kỹ thuật chống lỗi dính số:** Hàm chủ động chèn thêm một khoảng trắng (`" "`) phía trước phân số chuẩn (`f" {regular_fraction}"`). Điều này ngăn chặn lỗi nghiêm trọng khi chuyển đổi hỗn số dạng `"1½"`: nếu không có khoảng trắng, chuỗi sẽ biến thành `"11/2"` (tức 5.5 thay vì 1.5).
+* **Cơ chế:** Ánh xạ từ điển 18 ký tự phân số Unicode cổ điển (Vulgar Fractions như `½`, `¼`, `¾`, `⅓`, `⅒`...) sang chuỗi phân số ASCII chuẩn (`" 1/2"`, `" 1/4"`...).
+* **Kỹ thuật chống lỗi dính số:** Hàm chủ động chèn khoảng trắng (`" "`) phía trước phân số ASCII (`f" {regular_fraction}"`). Điều này ngăn ngừa lỗi nghiêm trọng khi chuyển đổi hỗn số như `"1½"`: nếu không có khoảng trắng, chuỗi sẽ biến thành `"11/2"` (tương đương $5.5$ thay vì $1.5$).
 
 ##### b) `extract_quantity_from_string(source_str: str) -> tuple[float, str]`
 * **Cơ chế nhận dạng phân tầng (Hierarchical Regex Matching):**
@@ -304,14 +287,8 @@ Module `string_utils.py` là đối tượng hoàn hảo nhất cho kỹ thuật
 #### 2. Cấu trúc Lớp & Phương thức Quan trọng
 
 ##### a) Singleton Cache `_shared_unit_registry()`
-* Việc khởi tạo đối tượng `UnitRegistry` trong thư viện `pint` tốn chi phí CPU và bộ nhớ rất lớn (nạp định nghĩa hàng nghìn đơn vị vật lý quốc tế).
-* Module sử dụng decorator `@lru_cache(maxsize=1)` để lưu trữ một singleton `UnitRegistry` dùng chung cho toàn bộ ứng dụng:
-  ```python
-  @lru_cache(maxsize=1)
-  def _shared_unit_registry() -> UnitRegistry:
-      from pint import UnitRegistry
-      return UnitRegistry()
-  ```
+* Việc khởi tạo đối tượng `UnitRegistry` trong thư viện `pint` tiêu tốn chi phí CPU và bộ nhớ đáng kể (nạp định nghĩa hàng nghìn đơn vị đo lường vật lý quốc tế).
+* Module áp dụng cơ chế Singleton Cache thông qua decorator `@lru_cache(maxsize=1)` để tái sử dụng một cá thể `UnitRegistry` duy nhất xuyên suốt vòng đời ứng dụng, tối ưu hóa hiệu năng và tránh rò rỉ bộ nhớ.
 
 ##### b) Lớp `UnitConverter`
 * Hỗ trợ cờ `private_registry: bool`: Nếu cần định nghĩa các đơn vị tùy biến cục bộ (ví dụ đơn vị tùy biến của Mealie `_mealie_unit_1`), hệ thống khởi tạo registry riêng biệt để tránh làm ô nhiễm không gian tên đơn vị dùng chung.
