@@ -617,7 +617,7 @@ Nếu bạn gặp khó khăn trong quá trình thao tác, hãy tra cứu nhanh b
 
 ## C.6 — Kết luận trạng thái kiểm thử Phần 1 & Phụ lục minh chứng
 
-### C.6.1 — Bảng tổng hợp trạng thái các hạng mục (PASS / BLOCKED)
+### C.6.1 — Bảng tổng hợp trạng thái các hạng mục (Trạng thái thực hiện và thẩm định)
 
 | STT | Hạng mục kiểm tra kỹ thuật | Phạm vi | Trạng thái | Nguồn bằng chứng đối chứng |
 |:---:|---|---|:---:|---|
@@ -631,7 +631,7 @@ Nếu bạn gặp khó khăn trong quá trình thao tác, hãy tra cứu nhanh b
 | 8 | Nghiệp vụ 2: NLP Ingredient Parsing | N2 | **PASS** | Bóc tách đúng `1 onion (finely chopped)`, độ tin cậy TB 99.66% (*Hình C.14*) |
 | 9 | Nghiệp vụ 3: Servings Scaling (4 lên 8) | N2 | **PASS** | Định lượng nguyên liệu tự động nhân đôi chính xác (*Hình C.15*) |
 | 10 | Bộ 16 hình ảnh hướng dẫn thực tế | N3 | **PASS** | Nhúng markdown hiển thị trực tiếp trên GitHub |
-| 11 | **Bàn giao tài liệu & tiếp nhận biên bản thẩm định (N3.1.3)** | N3 | **ĐÃ BÀN GIAO & TIẾP NHẬN PHẢN HỒI** | Nam đã bàn giao tài liệu và tiếp nhận biên bản phản hồi ([bien_ban_tham_dinh_cheo_onboarding.md](bien_ban_tham_dinh_cheo_onboarding.md) commit `6fe35aa` trên `origin/develop`) từ Hiếu; nghiệm thu chính thức phía Hiếu vẫn chờ xác nhận chéo |
+| 11 | **Bàn giao tài liệu & tiếp nhận biên bản thẩm định (N3.1.3)** | N3 | **ĐÃ BÀN GIAO & TIẾP NHẬN PHẢN HỒI** | Nam đã bàn giao tài liệu và tiếp nhận biên bản phản hồi ([bien_ban_tham_dinh_cheo_onboarding.md](https://github.com/2312726-collab/KTPM-nhom6-R02-K01/blob/develop/Documents/bien_ban_tham_dinh_cheo_onboarding.md) commit `6fe35aa` trên `origin/develop`) từ Hiếu; nghiệm thu chính thức phía Hiếu vẫn chờ xác nhận chéo |
 
 ---
 
