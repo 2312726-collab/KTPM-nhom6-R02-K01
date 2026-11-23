@@ -631,18 +631,19 @@ Nếu bạn gặp khó khăn trong quá trình thao tác, hãy tra cứu nhanh b
 | 8 | Nghiệp vụ 2: NLP Ingredient Parsing | N2 | **PASS** | Bóc tách đúng `1 onion (finely chopped)`, độ tin cậy TB 99.66% (*Hình C.14*) |
 | 9 | Nghiệp vụ 3: Servings Scaling (4 lên 8) | N2 | **PASS** | Định lượng nguyên liệu tự động nhân đôi chính xác (*Hình C.15*) |
 | 10 | Bộ 16 hình ảnh hướng dẫn thực tế | N3 | **PASS** | Nhúng markdown hiển thị trực tiếp trên GitHub |
-| 11 | **Thẩm định chéo độc lập trên máy sạch (N3.1.3)** | N3 | **BLOCKED** | **Chưa hoàn thành** (Đang chờ bạn Bùi Trung Hiếu thẩm định độc lập) |
+| 11 | **Bàn giao tài liệu & tiếp nhận biên bản thẩm định (N3.1.3)** | N3 | **ĐÃ BÀN GIAO & TIẾP NHẬN PHẢN HỒI** | Nam đã bàn giao tài liệu và tiếp nhận biên bản phản hồi ([bien_ban_tham_dinh_cheo_onboarding.md](bien_ban_tham_dinh_cheo_onboarding.md) commit `6fe35aa` trên `origin/develop`) từ Hiếu; nghiệm thu chính thức phía Hiếu vẫn chờ xác nhận chéo |
 
 ---
 
-### C.6.2 — Phân định rõ ràng phạm vi kiểm chứng và kế hoạch bàn giao N3.1.3
+### C.6.2 — Phân định rõ ràng phạm vi kiểm chứng và tiến độ bàn giao N3.1.3
 
 1. **Phạm vi kiểm chứng thực tế:**
    - **Docker & CLI Runtime:** Kiểm chứng thực tế qua Docker Compose, container running healthy, volume SQLite nguyên vẹn, script seed nạp thành công 10 công thức và 14 bữa ăn.
    - **API Backend & Data Model:** Kiểm chứng API OpenAPI chuẩn v3.28.0 (`POST /api/parser/ingredient`, `POST /api/recipes/create/url`), xác nhận các trường dữ liệu và độ tin cậy trung bình đạt 99.66%.
    - **Web UI:** Giao diện đăng nhập, Dashboard, Meal Planner, NLP Parser modal, Servings scaling tự động được ghi nhận bằng ảnh chụp trực tiếp từ trình duyệt ngày 07/10/2026.
-2. **Kế hoạch bàn giao và nghiệm thu:**
-   - Hạng mục **N3.1.3** tiếp tục được giữ nguyên trạng thái chưa hoàn thành `[ ]` để chờ bạn **Bùi Trung Hiếu** thực hiện cài đặt độc lập trên máy tính của Hiếu và gửi biên bản phản hồi/góp ý thực tế trước khi nghiệm thu chéo chính thức.
+2. **Tiến độ bàn giao và nghiệm thu hạng mục N3.1.3:**
+   - **Phần việc của Nam (Đã hoàn thành):** Nam đã hoàn thành việc bàn giao tài liệu On-boarding Phần C và môi trường Docker Mealie cho bạn Bùi Trung Hiếu, đồng thời đã tiếp nhận biên bản phản hồi thẩm định chéo chính thức tại file `Documents/bien_ban_tham_dinh_cheo_onboarding.md` (commit `6fe35aa` trên nhánh `origin/develop`). Biên bản của Hiếu ghi nhận toàn bộ các bước B1–B6 (chuẩn bị env, docker compose up, Web UI 200 OK, admin setup, seed data 10 món, mock server import) đều đạt chuẩn kỹ thuật.
+   - **Nghiệm thu chính thức phía Hiếu (Chờ xác nhận):** Biên bản thẩm định của Hiếu ghi nhận trạng thái: *"ĐÃ RÀ SOÁT TÀI LIỆU H1; CÒN CHỜ HOÀN TẤT THẨM ĐỊNH CÀI ĐẶT THỰC TẾ"* để chuẩn bị cho buổi họp nghiệm thu chung của nhóm. Do đó, cần phân biệt rõ ràng: Nam đã hoàn thành đầy đủ phần việc bàn giao và tiếp thu ý kiến phản hồi, còn việc nghiệm thu chính thức phía Hiếu vẫn đang ở trạng thái chờ xác nhận chéo, không tự ý ghi nhận là đã được nghiệm thu chính thức.
 
 ---
 
