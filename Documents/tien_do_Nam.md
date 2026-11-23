@@ -16,7 +16,8 @@
 | **N1** | Thiết lập môi trường Docker Mealie SQLite v3.28.0 | 8 | 8 | 0 | **Đạt 100%** |
 | **N2** | Nạp dữ liệu mẫu (Seed Data) & Minh chứng 3 luồng | 7 | 7 | 0 | **Đạt 100%** |
 | **N3** | Soạn thảo Báo cáo On-boarding Phần C | 4 | 3 | 1 | **Chờ Hiếu thẩm định** |
-| **Tổng cộng** | **Phần 1 phục vụ Giữa kỳ 20/10** | **19** | **18** | **1** | **Sẵn sàng nghiệm thu Giữa kỳ** |
+| **N4** | Lập trình PBT Property 5 & Docker Runner | 6 | 6 | 0 | **Đạt 100% (28/28 PASS)** |
+| **Tổng cộng** | **Toàn bộ nhiệm vụ của Nam** | **25** | **24** | **1** | **Sẵn sàng nghiệm thu** |
 
 ---
 
@@ -130,12 +131,51 @@
 
 ---
 
-## 4. PHẦN 2 (CUỐI KỲ — PROPERTY-BASED TESTING & RUNNER)
-- **Trạng thái:** **TẠM DỪNG / CHƯA TRIỂN KHAI TRONG ĐỢT NÀY** (theo chỉ đạo tập trung hoàn thành Phần 1 phục vụ Giữa kỳ 20/10).
-- **Lưu trữ an toàn:** Toàn bộ mã nguồn PBT Property 5 (`test_pbt_fraction.py`), Docker Test Runner (`Dockerfile.test`, `docker-compose.test.yml`) và lịch sử Git các nhánh cũ đã được đóng gói an toàn vào:
-  - Git Bundle: `d:\Nam 4\Kiểm thử phần mềm CTK47-PM\backup_nam_ktpm_20261007\nam_repo_all_branches.bundle` (đã verify).
-  - Thư mục sao lưu ngoài repo: `d:\Nam 4\Kiểm thử phần mềm CTK47-PM\backup_nam_ktpm_20261007\`.
-- Sẽ mở lại và triển khai khi có yêu cầu chuyển sang Phần 2 sau mốc Giữa kỳ 20/10.
+## 4. NHÓM VIỆC N4: LẬP TRÌNH KIỂM THỬ PBT — PROPERTY 5 (FRACTION NORMALIZATION)
+**Mục tiêu:** Xây dựng bộ kiểm thử tự động Property-Based Testing (Hypothesis) kiểm chứng tính chuẩn hóa phân số và bảo toàn giá trị số học cho module `string_utils.py`, đóng gói Docker Test Runner độc lập.
+
+- [x] **N4.1.1** — Nghiên cứu logic xử lý phân số trong `mealie/services/parser_services/parser_utils/string_utils.py`.
+  - *Bằng chứng / File:* Mã nguồn thực tế Mealie v3.28.0 tại [`mealie_src/mealie/services/parser_services/parser_utils/string_utils.py`](../mealie_src/mealie/services/parser_services/parser_utils/string_utils.py).
+  - *Kết quả phân tích:* Khảo sát chi tiết 2 hàm cốt lõi: `convert_vulgar_fractions_to_regular_fractions` (ánh xạ từ điển 18 ký tự Unicode sang ASCII `n/d`) và `extract_quantity_from_string` (bóc tách định lượng hỗn số, phân số thường, số thực, bọc trong `try...except ZeroDivisionError`).
+  - *Việc còn thiếu:* Không.
+
+- [x] **N4.1.2** — Xác định Invariant toán học:
+  - $\forall (n, d) \in \mathbb{N}^*, \quad |\text{parse}(f"{n}/{d}") - (n/d)| \le \epsilon = 10^{-4}$.
+  - Tính bảo toàn thông tin văn bản: phần nguyên liệu đi kèm sau lượng số không bị nuốt hay cắt xén.
+  - Tính lũy đẳng (Idempotence): $f(f(x)) == f(x)$ với hàm chuẩn hóa phân số Unicode.
+  - Tính bền bỉ (Crash-free): không ném Unhandled Exception với ca biên (tử số 0, mẫu số 0, chuỗi rỗng).
+  - *Việc còn thiếu:* Không.
+
+- [x] **N4.2.1** — Thiết lập file kiểm thử `tests/unit_tests/test_pbt_fraction.py`.
+  - *Bằng chứng / File:* [`tests/unit_tests/test_pbt_fraction.py`](../tests/unit_tests/test_pbt_fraction.py).
+  - *Kỹ thuật:* Nạp linh hoạt qua `importlib.util` để cô lập khỏi chuỗi import SQLAlchemy trong `parser_services/__init__.py`. Kế thừa profile Hypothesis từ `tests/conftest.py`.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N4.2.2** — Hiện thực 6 nhóm kiểm thử PBT & ca biên:
+  - **P5a:** Bảo toàn giá trị phân số thông thường (`n/d`) với sinh mẫu `st.integers(1, 999)`.
+  - **P5b:** Chuyển đổi và trích xuất chuẩn hóa toàn bộ 18 ký tự phân số Unicode (`¼`, `½`, `¾`, `⅐`, `⅑`, `⅒`, `⅓`, `⅔`, `⅕`, `⅖`, `⅗`, `⅘`, `⅙`, `⅚`, `⅛`, `⅜`, `⅝`, `⅞`).
+  - **P5c:** Bảo toàn giá trị hỗn số Unicode (`w½`, `w ½`).
+  - **P5d:** Bảo toàn giá trị hỗn số ASCII (`w n/d`).
+  - **P5e:** Bảo toàn văn bản tên nguyên liệu đi kèm (Remaining text preservation).
+  - **P5f:** Tính lũy đẳng của hàm chuẩn hóa ($f(f(x)) == f(x)$).
+  - **P5g:** Ca biên (tử số 0, mẫu số 0 an toàn không crash, chuỗi rỗng, chuỗi không số, số thập phân).
+  - *Việc còn thiếu:* Không.
+
+- [x] **N4.2.3** — Thực thi kiểm thử và đo Coverage thực tế:
+  - *Lệnh chạy:* `pytest tests/unit_tests/test_pbt_fraction.py -v --cov=mealie_string_utils --cov-report=term-missing`
+  - *Kết quả thực tế:* **28/28 test cases PASSED (100%)** trong `0.60s`.
+  - *Coverage đạt được:* **86%** trên file `string_utils.py` (56 statements, chỉ miss các dòng thuộc P1 của Phước). Khi chạy phối hợp với P1 (`test_pbt_string_utils.py`), độ bao phủ đạt **91%**.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N4.2.4** — Đóng gói và xác minh Docker Test Runner độc lập:
+  - *Bằng chứng / File:* [`Dockerfile.test`](../Dockerfile.test) và [`docker-compose.test.yml`](../docker-compose.test.yml).
+  - *Cơ chế:* Chạy test trong môi trường container `python:3.14-slim` độc lập, mount mã nguồn, trả exit code thật về host.
+  - *Kết quả thực thi thực tế trong Docker:*
+    - Lệnh thực thi: `docker compose -f docker-compose.test.yml run --rm test-runner`
+    - Kết quả kiểm thử: **28/28 test cases PASSED** trong `1.71s` (Exit code: **0**).
+    - Lệnh đo coverage trong Docker: `docker compose -f docker-compose.test.yml run --rm test-runner pytest tests/unit_tests/test_pbt_fraction.py -v --cov=mealie_string_utils --cov-report=term-missing`
+    - Kết quả coverage trong Docker: **86%** trên `string_utils.py` (56 statements, 8 miss, Exit code: **0**).
+  - *Việc còn thiếu:* Không.
 
 ---
 
