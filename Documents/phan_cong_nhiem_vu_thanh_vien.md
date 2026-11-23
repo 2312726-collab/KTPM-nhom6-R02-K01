@@ -186,7 +186,7 @@
 ### N3.1 — Soạn thảo `Documents/bao_cao_phan_C.md`
 - [x] N3.1.1 Soạn thảo đầy đủ 5 mục chuẩn: C.1 Yêu cầu môi trường, C.2 Các bước cài đặt chi tiết, C.3 Quản lý dịch vụ docker, C.4 Hướng dẫn nạp Seed Data, C.5 Xử lý sự cố (xung đột port 9925, cấp quyền thư mục).
 - [x] N3.1.2 Nhúng toàn bộ 6 ảnh minh chứng vào đúng vị trí trong báo cáo.
-- [ ] N3.1.3 Bàn giao cho **Hiếu** cài đặt thẩm định chéo trên máy sạch, tiếp thu góp ý để hoàn thiện.
+- [x] N3.1.3 Bàn giao cho **Hiếu** cài đặt thẩm định chéo trên máy sạch, tiếp thu góp ý và tiếp nhận biên bản phản hồi (nghiệm thu chính thức phía Hiếu vẫn chờ xác nhận).
 - [x] N3.1.4 Commit: `docs: complete onboarding guide Phan C with verified evidence`.
 
 ---
@@ -195,13 +195,13 @@
 **Deadline: 25/11** | File code: `tests/unit_tests/test_pbt_fraction.py`
 
 ### N4.1 — Nghiên cứu logic xử lý phân số trong Mealie
-- [ ] N4.1.1 Đọc hàm chuẩn hóa phân số trong `mealie/services/parser_services/parser_utils/string_utils.py`.
-- [ ] N4.1.2 Xác định Invariant: Khi phân số dạng chuỗi (ví dụ `"1/2"`, `"3/4"`, hỗn số `"2 1/2"`) được bóc tách sang số thực, giá trị toán học phải được bảo toàn chính xác trong sai số $\epsilon \le 10^{-4}$.
+- [x] N4.1.1 Đọc hàm chuẩn hóa phân số trong `mealie/services/parser_services/parser_utils/string_utils.py`.
+- [x] N4.1.2 Xác định Invariant: Khi phân số dạng chuỗi (ví dụ `"1/2"`, `"3/4"`, hỗn số `"2 1/2"`) được bóc tách sang số thực, giá trị toán học phải được bảo toàn chính xác trong sai số $\epsilon \le 10^{-4}$.
 
 ### N4.2 — Viết mã kiểm thử tự động PBT Property 5
-- [ ] N4.2.1 Tạo nhánh `feat/nam-property-5-fraction` từ `develop`.
-- [ ] N4.2.2 Tạo file `tests/unit_tests/test_pbt_fraction.py`.
-- [ ] N4.2.3 Viết kiểm thử bảo toàn giá trị toán học cho phân số:
+- [x] N4.2.1 Tạo nhánh kiểm thử: Ban đầu tạo nhánh `feat/nam-property-5-fraction`, sau đó đã chuyển hoàn toàn commit `1920f50` vào nhánh chính của Nam `2312695-NguyenPhamPhuNam-Phan1`, đóng PR #10 và không còn duy trì nhánh riêng.
+- [x] N4.2.2 Tạo file `tests/unit_tests/test_pbt_fraction.py`.
+- [x] N4.2.3 Viết kiểm thử bảo toàn giá trị toán học cho phân số (28 test cases kiểm thử Property 5: phân số thường, 18 ký tự phân số Unicode, hỗn số, bảo toàn văn bản đi kèm, tính lũy đẳng, crash-free):
   ```python
   from hypothesis import given, strategies as st, assume, settings
   from fractions import Fraction
@@ -219,9 +219,9 @@
       parsed_val = float(Fraction(fraction_str))
       assert abs(parsed_val - expected_val) < 1e-6
   ```
-- [ ] N4.2.4 Đóng gói container chạy test độc lập: Tạo file `docker-compose.test.yml` để chạy toàn bộ suite test bên trong Docker.
-- [ ] N4.2.5 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_fraction.py -v`.
-- [ ] N4.2.6 Commit & tạo Pull Request vào `develop`: `feat(test): add PBT Property 5 fraction normalization and docker runner`.
+- [x] N4.2.4 Đóng gói container chạy test độc lập: Tạo file `Dockerfile.test` và `docker-compose.test.yml`, đã kiểm chứng chạy thành công Property 5 trong Docker (28/28 PASS, exit code 0; lưu ý chỉ xác nhận test P5, chưa kiểm chứng toàn bộ test suite khác).
+- [x] N4.2.5 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_fraction.py -v` (kết quả thực tế: 28/28 PASS, coverage 86% trên module `string_utils.py`).
+- [x] N4.2.6 Commit & bàn giao Git: Commit `1920f50` chứa toàn bộ 4 file N4 đã tích hợp vào nhánh chính `2312695-NguyenPhamPhuNam-Phan1`, push lên GitHub; PR #10 tạm thời đã đóng, không còn duy trì nhánh riêng.
 
 ---
 ---

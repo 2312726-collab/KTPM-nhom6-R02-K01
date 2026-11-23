@@ -15,9 +15,11 @@
 |---|---|:---:|:---:|:---:|:---:|
 | **N1** | Thiết lập môi trường Docker Mealie SQLite v3.28.0 | 8 | 8 | 0 | **Đạt 100%** |
 | **N2** | Nạp dữ liệu mẫu (Seed Data) & Minh chứng 3 luồng | 7 | 7 | 0 | **Đạt 100%** |
-| **N3** | Soạn thảo Báo cáo On-boarding Phần C | 4 | 3 | 1 | **Chờ Hiếu thẩm định** |
-| **N4** | Lập trình PBT Property 5 & Docker Runner | 6 | 6 | 0 | **Đạt 100% (28/28 PASS)** |
-| **Tổng cộng** | **Toàn bộ nhiệm vụ của Nam** | **25** | **24** | **1** | **Sẵn sàng nghiệm thu** |
+| **N3** | Soạn thảo Báo cáo On-boarding Phần C | 4 | 4 | 0 | **Đạt 100% (Phần việc của Nam)\*** |
+| **N4** | Lập trình PBT Property 5 & Docker Runner | 8 | 8 | 0 | **Đạt 100% (28/28 PASS, cov 86%)** |
+| **Tổng cộng** | **Toàn bộ nhiệm vụ của Nam** | **27** | **27** | **0** | **Đạt 100% phần việc của Nam** |
+
+*\* Ghi chú N3: Nam đã hoàn thành bàn giao và tiếp nhận biên bản phản hồi từ Hiếu; kết quả nghiệm thu chính thức phía Hiếu vẫn chờ xác nhận chéo trong buổi họp của nhóm.*
 
 ---
 
@@ -119,10 +121,11 @@
   - *Kết quả kiểm tra:* 16 hình ảnh thực tế (C01 đến C16) hiển thị trực tiếp trên GitHub, dung lượng tối ưu (~530 KB), không có liên kết hỏng, mô tả chi tiết từng bước.
   - *Việc còn thiếu:* Không.
 
-- [ ] **N3.1.3** — Bàn giao cho **Bùi Trung Hiếu** cài đặt thẩm định chéo trên máy sạch, tiếp thu góp ý để hoàn thiện.
-  - *Bằng chứng / File:* Đang chờ biên bản thẩm định chéo bước H1.2 từ Hiếu.
-  - *Kết quả kiểm tra:* Tài liệu đã sẵn sàng để bàn giao cho Hiếu kiểm thử độc lập từ máy sạch.
-  - *Việc còn thiếu:* **Chờ Hiếu thực hiện thẩm định chéo và phản hồi.** (Không tự ý tích hoàn thành).
+- [x] **N3.1.3** — Bàn giao cho **Bùi Trung Hiếu** cài đặt thẩm định chéo trên máy sạch, tiếp thu góp ý để hoàn thiện.
+  - *Bằng chứng / File:* Đã bàn giao tài liệu và tiếp nhận phản hồi qua `Documents/bien_ban_tham_dinh_cheo_onboarding.md` (commit `6fe35aa` trên `origin/develop`) từ Bùi Trung Hiếu.
+  - *Kết quả kiểm tra:* Tài liệu và môi trường Docker của Nam được Hiếu thẩm định chéo độc lập; các bước B1–B6 (chuẩn bị env, docker compose up, Web UI 200 OK, admin setup, seed data 10 món, mock server import) đều được đánh giá ĐẠT.
+  - *Ghi chú:* Nam đã hoàn thành phần việc bàn giao và tiếp thu ý kiến khuyến nghị bổ sung; nghiệm thu chính thức phía Hiếu vẫn ở trạng thái chờ xác nhận chung của nhóm.
+  - *Việc còn thiếu:* Không (đã hoàn tất phần việc của Nam).
 
 - [x] **N3.1.4** — Commit tài liệu On-boarding Phần C và bảng tiến độ riêng.
   - *Bằng chứng / File:* Nhánh `2312695-NguyenPhamPhuNam-Phan1`.
@@ -146,12 +149,17 @@
   - Tính bền bỉ (Crash-free): không ném Unhandled Exception với ca biên (tử số 0, mẫu số 0, chuỗi rỗng).
   - *Việc còn thiếu:* Không.
 
-- [x] **N4.2.1** — Thiết lập file kiểm thử `tests/unit_tests/test_pbt_fraction.py`.
+- [x] **N4.2.1** — Tạo nhánh kiểm thử & quản lý Git branch:
+  - *Bằng chứng / Lịch sử:* Ban đầu tạo nhánh `feat/nam-property-5-fraction`, sau đó đã chuyển hoàn toàn commit `1920f50` vào nhánh chính của Nam `2312695-NguyenPhamPhuNam-Phan1` bằng `git merge --ff-only`, đóng PR #10 (`CLOSED`) và xóa nhánh riêng cả local và remote theo chỉ đạo.
+  - *Kết quả kiểm tra:* Nhánh `2312695-NguyenPhamPhuNam-Phan1` đồng bộ tuyệt đối với `origin`, sạch sẽ, không phân nhánh dư thừa.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N4.2.2** — Thiết lập file kiểm thử `tests/unit_tests/test_pbt_fraction.py`:
   - *Bằng chứng / File:* [`tests/unit_tests/test_pbt_fraction.py`](../tests/unit_tests/test_pbt_fraction.py).
   - *Kỹ thuật:* Nạp linh hoạt qua `importlib.util` để cô lập khỏi chuỗi import SQLAlchemy trong `parser_services/__init__.py`. Kế thừa profile Hypothesis từ `tests/conftest.py`.
   - *Việc còn thiếu:* Không.
 
-- [x] **N4.2.2** — Hiện thực 6 nhóm kiểm thử PBT & ca biên:
+- [x] **N4.2.3** — Hiện thực 6 nhóm kiểm thử PBT Property 5 & ca biên (28 test cases):
   - **P5a:** Bảo toàn giá trị phân số thông thường (`n/d`) với sinh mẫu `st.integers(1, 999)`.
   - **P5b:** Chuyển đổi và trích xuất chuẩn hóa toàn bộ 18 ký tự phân số Unicode (`¼`, `½`, `¾`, `⅐`, `⅑`, `⅒`, `⅓`, `⅔`, `⅕`, `⅖`, `⅗`, `⅘`, `⅙`, `⅚`, `⅛`, `⅜`, `⅝`, `⅞`).
   - **P5c:** Bảo toàn giá trị hỗn số Unicode (`w½`, `w ½`).
@@ -161,20 +169,25 @@
   - **P5g:** Ca biên (tử số 0, mẫu số 0 an toàn không crash, chuỗi rỗng, chuỗi không số, số thập phân).
   - *Việc còn thiếu:* Không.
 
-- [x] **N4.2.3** — Thực thi kiểm thử và đo Coverage thực tế:
-  - *Lệnh chạy:* `pytest tests/unit_tests/test_pbt_fraction.py -v --cov=mealie_string_utils --cov-report=term-missing`
-  - *Kết quả thực tế:* **28/28 test cases PASSED (100%)** trong `0.60s`.
-  - *Coverage đạt được:* **86%** trên file `string_utils.py` (56 statements, chỉ miss các dòng thuộc P1 của Phước). Khi chạy phối hợp với P1 (`test_pbt_string_utils.py`), độ bao phủ đạt **91%**.
-  - *Việc còn thiếu:* Không.
-
 - [x] **N4.2.4** — Đóng gói và xác minh Docker Test Runner độc lập:
   - *Bằng chứng / File:* [`Dockerfile.test`](../Dockerfile.test) và [`docker-compose.test.yml`](../docker-compose.test.yml).
   - *Cơ chế:* Chạy test trong môi trường container `python:3.14-slim` độc lập, mount mã nguồn, trả exit code thật về host.
   - *Kết quả thực thi thực tế trong Docker:*
     - Lệnh thực thi: `docker compose -f docker-compose.test.yml run --rm test-runner`
-    - Kết quả kiểm thử: **28/28 test cases PASSED** trong `1.71s` (Exit code: **0**).
+    - Kết quả kiểm thử: **28/28 test cases PASSED** trong `1.71s` (Exit code: **0**). Lưu ý: Chỉ xác nhận suite Property 5 trong Docker, chưa kiểm chứng toàn bộ test suite khác của dự án.
     - Lệnh đo coverage trong Docker: `docker compose -f docker-compose.test.yml run --rm test-runner pytest tests/unit_tests/test_pbt_fraction.py -v --cov=mealie_string_utils --cov-report=term-missing`
     - Kết quả coverage trong Docker: **86%** trên `string_utils.py` (56 statements, 8 miss, Exit code: **0**).
+  - *Việc còn thiếu:* Không.
+
+- [x] **N4.2.5** — Thực thi kiểm thử và đo Coverage thực tế:
+  - *Lệnh chạy:* `pytest tests/unit_tests/test_pbt_fraction.py -v --cov=mealie_string_utils --cov-report=term-missing`
+  - *Kết quả thực tế:* **28/28 test cases PASSED (100%)** trong `0.60s` trên host (1.71s trong Docker).
+  - *Coverage đạt được:* **86%** trên file mục tiêu `string_utils.py` (56 statements, chỉ miss các dòng thuộc P1 của Phước). Khi chạy phối hợp với P1 (`test_pbt_string_utils.py`), độ bao phủ đạt **91%**.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N4.2.6** — Bàn giao Git và Pull Request:
+  - *Bằng chứng / Git:* Toàn bộ 4 file N4 (`test_pbt_fraction.py`, `Dockerfile.test`, `docker-compose.test.yml`, `Documents/tien_do_Nam.md`) đã được commit an toàn trong `1920f50`, tích hợp đầy đủ vào nhánh chính `2312695-NguyenPhamPhuNam-Phan1` và push lên GitHub.
+  - *Trạng thái PR:* PR #10 tạm thời đã được đóng (`CLOSED`), không còn duy trì nhánh riêng.
   - *Việc còn thiếu:* Không.
 
 ---
@@ -225,9 +238,10 @@ Chạy script `seed_data.py` hai lần liên tiếp trên môi trường sạch 
 6. `06_servings_scale.png`: Món `NAM-10 Bò Sốt Tiêu Khẩu Phần Chuẩn` scale từ 4 lên 8 servings, nhân đôi 4 nguyên liệu. Khớp ảnh thật.
 
 ### 5.5. Kết luận trạng thái nghiệm thu Phần 1 (Yêu cầu 5)
-- **Phần đã tự kiểm tra thực nghiệm đạt:**
-  - Nhóm việc N1: Môi trường Docker Mealie SQLite v3.28.0, Admin setup, 2 ảnh minh chứng Landing/Dashboard.
-  - Nhóm việc N2: Seed data 10 món NAM, thực đơn 7 ngày, 4 ảnh minh chứng 3 luồng, idempotent test đạt +0, scaling chính xác.
-  - Nhóm việc N3: Tài liệu On-boarding C.1 đến C.5 đầy đủ, kết quả thực nghiệm môi trường sạch C.4.4.
-- **Phần còn thiếu / Đang chờ:**
-  - **N3.1.3:** Đang chờ bạn **Bùi Trung Hiếu** thẩm định chéo độc lập từ máy sạch theo phân công bước H1.2. Giữ nguyên ô trống `[ ]` cho đến khi có biên bản phản hồi chính thức.
+- **Phần đã tự kiểm tra thực nghiệm đạt (27/27 mục hoàn thành phần việc của Nam):**
+  - Nhóm việc N1: Môi trường Docker Mealie SQLite v3.28.0, Admin setup, 2 ảnh minh chứng Landing/Dashboard (8/8 mục).
+  - Nhóm việc N2: Seed data 10 món NAM, thực đơn 7 ngày, 4 ảnh minh chứng 3 luồng, idempotent test đạt +0, scaling chính xác (7/7 mục).
+  - Nhóm việc N3: Tài liệu On-boarding C.1 đến C.5 đầy đủ, kết quả thực nghiệm môi trường sạch C.4.4, đã bàn giao và tiếp nhận biên bản phản hồi từ Hiếu (4/4 mục hoàn thành phần việc của Nam).
+  - Nhóm việc N4: Nghiên cứu P5, viết 28 test cases PBT, chạy 28/28 PASS, coverage 86%, Docker Test Runner độc lập (chạy P5 PASS 100%, exit code 0), bàn giao Git đầy đủ trên nhánh chính `2312695-NguyenPhamPhuNam-Phan1` (8/8 mục).
+- **Ghi chú nghiệm thu:**
+  - **N3.1.3:** Nam đã hoàn thành việc bàn giao và tiếp nhận biên bản phản hồi từ Hiếu (`Documents/bien_ban_tham_dinh_cheo_onboarding.md`). Phần nghiệm thu chính thức phía Hiếu vẫn chờ xác nhận chéo cuối cùng tại buổi họp nhóm theo quy trình.
