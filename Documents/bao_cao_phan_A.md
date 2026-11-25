@@ -265,3 +265,49 @@ Phần A đã phác họa bức tranh toàn cảnh về hệ thống Mealie `v3.
 2. **Stack công nghệ mạnh mẽ:** Nền tảng hiện đại với Python FastAPI, SQLAlchemy, Pydantic và Vue.js.
 3. **5 Use Case cốt lõi:** Định hình rõ các luồng nghiệp vụ quan trọng, trong đó làm nổi bật 3 nghiệp vụ trọng tâm sẽ được kiểm thử bằng PBT: *Bóc tách nguyên liệu*, *Quy đổi đơn vị*, và *Co giãn khẩu phần ăn*.
 4. **Cấu trúc mã nguồn tường minh:** Xác định chính xác vị trí các module mục tiêu tại `mealie/services/parser_services/`, tạo tiền đề vững chắc cho việc vẽ **Sơ đồ kiến trúc C4 Container và 3 Luồng dữ liệu (Data Flow)** tại **Phần B** tiếp theo.
+
+---
+
+## 📋 A.5. MA TRẬN TRUY XUẤT NGUỒN GỐC YÊU CẦU (REQUIREMENTS TRACEABILITY MATRIX - RTM)
+
+> **Mục tiêu STLC:** Đảm bảo $100\%$ các yêu cầu nghiệp vụ cốt lõi và Use Case được phân tích trong hệ thống Mealie đều có các kịch bản kiểm thử tự động PBT tương ứng bảo vệ và xác thực tính đúng đắn.
+
+| Mã Use Case | Tên Use Case nghiệp vụ | Module mã nguồn Mealie chịu trách nhiệm | Property PBT kiểm chứng | Thành viên phụ trách | Mục tiêu chất lượng & Bất biến kiểm định |
+| :---: | :--- | :--- | :---: | :---: | :--- |
+| **UC-01** | **Recipe Import**<br>(Nhập công thức từ URL) | `mealie/services/recipe/recipe_service.py`<br>`mealie/services/scraper/` | Hỗ trợ cho **P3** | Toàn nhóm | Chuỗi HTML/JSON-LD cào từ Internet không chứa payload làm sập bộ bóc tách. |
+| **UC-02** | **Ingredient Parsing**<br>(Bóc tách chuỗi nguyên liệu) | `mealie/services/parser_services/ingredient_parser.py`<br>`mealie/services/parser_services/parser_utils/string_utils.py` | **Property 1**<br>&<br>**Property 3** | **Trần Ngọc Bảo Phước** (P1)<br>**Võ Hùng Mạnh** (P3) | • **P1:** Tính lũy đẳng ($f(f(x)) \equiv f(x)$) khi chuẩn hóa chuỗi và tách footnote.<br>• **P3:** Tính bền bỉ (Crash-free), không bao giờ ném Unhandled Exception trước chuỗi dị thường. |
+| **UC-03** | **Servings Scaling**<br>(Điều chỉnh khẩu phần ăn) | `mealie/services/recipe/recipe_service.py`<br>`mealie/schema/recipe/recipe_ingredient.py` | **Property 4** | **Trần Quốc Quân**<br>*(Trưởng nhóm)* | • **Tính đơn điệu (Monotonicity):** Tăng khẩu phần ($k > 1$) định lượng không giảm ($Q_{\text{mới}} \ge Q_{\text{gốc}}$).<br>• **Tính khả nghịch (Reversibility):** Nhân rồi chia tỉ lệ khôi phục định lượng ban đầu ($\epsilon \le 10^{-4}$). |
+| **UC-04** | **Meal Planning**<br>(Lập kế hoạch thực đơn) | `mealie/services/mealplan/` | Kế thừa dữ liệu | Toàn nhóm | Đảm bảo tính nhất quán dữ liệu công thức và khẩu phần sau khi scale khi đưa vào lịch ăn tuần. |
+| **UC-05** | **Unit Conversion**<br>(Quy đổi đơn vị đo lường) | `mealie/services/parser_services/parser_utils/unit_utils.py`<br>`mealie/services/parser_services/parser_utils/string_utils.py` | **Property 2**<br>&<br>**Property 5** | **Bùi Trung Hiếu** (P2)<br>**Nguyễn Phạm Phú Nam** (P5) | • **P2:** Tính bảo toàn hai chiều Round-trip ($A \leftrightarrow B$) giữa các đơn vị tương thích.<br>• **P5:** Bảo toàn giá trị số học khi chuẩn hóa phân số Unicode (`½`, `¼`) và hỗn số ($1\frac{1}{2} \to 1.5 \ne 5.5$). |
+
+---
+
+## ❓ A.6. TÀI LIỆU HỎI ĐÁP NGHIỆP VỤ & GIẢ ĐỊNH KỸ THUẬT (Q&A LOG & SYSTEM ASSUMPTIONS)
+
+> **Quy chuẩn thực hành STLC:** Nhóm kiểm thử tiến hành rà soát các vùng xám (ambiguities), điểm biên (edge cases) và xác lập các giả định kỹ thuật tường minh trước khi bước vào giai đoạn thiết kế và lập trình kiểm thử tự động.
+
+### Nhóm 1: Tiền xử lý chuỗi và độ bền vững của bộ Parser (Liên đới UC-02, P1, P3)
+* **Q1: Hệ thống xử lý thế nào khi chuỗi nguyên liệu chứa các thẻ chú thích (Footnote markers) như `*`, `[1]`, `(optional)`?**  
+  * *Phản hồi / Giả định kỹ thuật:* Hàm `remove_footnote_markers()` loại bỏ các ký hiệu tham chiếu; hàm `move_parens_to_end()` tự động chuyển các phần chú thích trong ngoặc về cuối chuỗi gán vào trường `note`. Việc tiền xử lý này phải có tính lũy đẳng (chạy 1 lần hay nhiều lần liên tiếp kết quả không đổi).
+* **Q2: Bộ parser `BruteForceParser.parse_one()` phản ứng ra sao trước chuỗi rỗng `""`, chuỗi chỉ chứa toàn khoảng trắng `"   "`, hoặc ký tự null `\x00`?**  
+  * *Phản hồi / Giả định kỹ thuật:* Hệ thống không được phép văng lỗi sập máy chủ (`500 Internal Server Error` hoặc `IndexError`). Bộ parser phải bắt lỗi có kiểm soát và trả về kết quả rỗng an toàn. Đây là bất biến kiểm định trọng tâm của Property 3.
+* **Q3: Bộ parser có hỗ trợ tiếng Việt và các ký tự đặc biệt ngoài bảng mã ASCII không?**  
+  * *Phản hồi / Giả định kỹ thuật:* Mealie ưu tiên từ khóa tiếng Anh ẩm thực chuẩn; tuy nhiên toàn bộ chuỗi đầu vào bắt buộc phải được mã hóa chuẩn UTF-8 để không bị lỗi `UnicodeDecodeError` khi gặp tiếng Việt có dấu.
+
+### Nhóm 2: Chuẩn hóa phân số và bảo toàn số học (Liên đới UC-02, UC-05, P5)
+* **Q4: Làm thế nào để phân biệt hỗn số $1\frac{1}{2}$ với phân số thông thường để không bị gộp sai thành $11/2 = 5.5$?**  
+  * *Phản hồi / Giả định kỹ thuật:* Trong `string_utils.py`, khi chuyển phân số Unicode `½` sang dạng phân số thường, bắt buộc phải chèn một khoảng trắng ngăn cách phía trước (`f" {regular_fraction}"`), đảm bảo chuỗi trở thành `"1 1/2"` và giá trị số học được bảo toàn chính xác là $1.5$ chứ không bị biến dạng thành $5.5$.
+* **Q5: Đối với các phân số vô hạn tuần hoàn như $1/3$ hoặc $2/3$, hệ thống lưu trữ và làm tròn ra sao?**  
+  * *Phản hồi / Giả định kỹ thuật:* Trong tính toán nội bộ Python, hệ thống chấp nhận sai số dấu phẩy động IEEE 754 với ngưỡng $\epsilon \le 10^{-5}$; khi hiển thị lên giao diện Frontend, Vue.js định dạng làm tròn 2 chữ số thập phân hoặc quy đổi về ký hiệu phân số thông dụng.
+
+### Nhóm 3: Quy tắc co giãn khẩu phần ăn (Servings Scaling) (Liên đới UC-03, P4)
+* **Q6: Người dùng có thể nhập số khẩu phần (Servings) bằng 0, số âm, hoặc số thập phân (như `2.5` người ăn) không?**  
+  * *Phản hồi / Giả định kỹ thuật:* Số khẩu phần bắt buộc phải là số thực dương ($S > 0$). Trường hợp $S \le 0$ bị chặn ngay tại tầng Pydantic Validation Schema. Khẩu phần số lẻ (như $2.5$ phần ăn) là hợp lệ về mặt toán học.
+* **Q7: Tính đơn điệu (Monotonicity) có luôn được đảm bảo với mọi nguyên liệu khi nhân khẩu phần không?**  
+  * *Phản hồi / Giả định kỹ thuật:* Có. Với mọi nguyên liệu có định lượng $Q > 0$, nếu hệ số nhân $k > 1$ thì lượng mới $Q_{\text{mới}} \ge Q_{\text{gốc}}$. Không có trường hợp nào được phép tăng số người ăn mà lượng nguyên liệu cần nấu lại giảm đi.
+
+### Nhóm 4: Quy đổi đơn vị đo lường (Unit Conversion) (Liên đới UC-05, P2)
+* **Q8: Khi nào phép quy đổi đơn vị hai chiều (Round-trip) được phép thực hiện?**  
+  * *Phản hồi / Giả định kỹ thuật:* Chỉ thực hiện quy đổi giữa các đơn vị **có cùng thứ nguyên vật lý** (khối lượng $\leftrightarrow$ khối lượng: `gram` $\leftrightarrow$ `kg`; thể tích $\leftrightarrow$ thể tích: `ml` $\leftrightarrow$ `liter`). Hệ thống bắt buộc phải ném ngoại lệ có kiểm soát nếu người dùng yêu cầu đổi giữa hai thứ nguyên không tương thích (như `gram` sang `ml`) mà không có khối lượng riêng.
+* **Q9: Thư viện Pint xử lý thế nào với sự khác biệt giữa Ounce khối lượng (oz) và Fluid Ounce thể tích (fl oz)?**  
+  * *Phản hồi / Giả định kỹ thuật:* Lớp `UnitConverter` trong `unit_utils.py` thiết lập bộ từ điển tiền xử lý tùy biến để phân giải tường minh giữa đơn vị khối lượng và thể tích trước khi gọi vào Pint `UnitRegistry`, tránh lỗi xung đột thứ nguyên.
