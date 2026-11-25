@@ -11,13 +11,18 @@
 
 Nhóm 6 xây dựng 5 kịch bản kiểm thử PBT độc lập, phân bổ đều cho 5 thành viên, bao phủ toàn bộ các góc cạnh xử lý dữ liệu của Mealie:
 
-| Mã | Tên tính chất kiểm thử (Property) | Loại bất biến | Module mục tiêu trong Mealie | Thành viên phụ trách | File mã nguồn kiểm thử |
-| :---: | :--- | :--- | :--- | :---: | :--- |
-| **P1** | **Tính lũy đẳng khi làm sạch chuỗi (String Idempotence)** | Idempotence: $f(f(x)) == f(x)$ | `mealie/services/parser_services/parser_utils/string_utils.py` | Trần Ngọc Bảo Phước | `tests/unit_tests/test_pbt_string_utils.py` |
-| **P2** | **Tính bảo toàn hai chiều khi đổi đơn vị (Unit Round-trip)** | Round-trip: $f^{-1}(f(x)) \approx x$ | `mealie/services/parser_services/parser_utils/unit_utils.py` | **Bùi Trung Hiếu** | `tests/unit_tests/test_pbt_unit_converter.py` |
-| **P3** | **Tính bền vững bất khả sập (Parser Crash-free Invariant)** | Robustness / Crash-free | `mealie/services/parser_services/ingredient_parser.py` | Võ Hùng Mạnh | `tests/unit_tests/test_pbt_ingredient_parser.py` |
-| **P4** | **Tính đơn điệu khi nhân tỉ lệ khẩu phần (Scaling Monotonicity)** | Monotonicity & Reversibility | `mealie/services/household_services/shopping_lists.py` & `mealie/schema/recipe/recipe_ingredient.py` | Trần Quốc Quân | `tests/unit_tests/test_pbt_scaling.py` |
-| **P5** | **Tính bảo toàn giá trị phân số (Fraction Normalization)** | Numeric Preservation | `mealie/services/parser_services/parser_utils/string_utils.py` | Nguyễn Phạm Phú Nam | `tests/unit_tests/test_pbt_fraction.py` |
+| Mã | Tên tính chất kiểm thử (Property) | Mức độ ưu tiên (Priority) | Loại bất biến | Module mục tiêu trong Mealie | Thành viên phụ trách | File mã nguồn kiểm thử |
+| :---: | :--- | :---: | :--- | :--- | :---: | :--- |
+| **P1** | **Tính lũy đẳng khi làm sạch chuỗi (String Idempotence)** | **High** | Idempotence: $f(f(x)) == f(x)$ | `mealie/services/parser_services/parser_utils/string_utils.py` | Trần Ngọc Bảo Phước | `tests/unit_tests/test_pbt_string_utils.py` |
+| **P2** | **Tính bảo toàn hai chiều khi đổi đơn vị (Unit Round-trip)** | **High** | Round-trip: $f^{-1}(f(x)) \approx x$ | `mealie/services/parser_services/parser_utils/unit_utils.py` | **Bùi Trung Hiếu** | `tests/unit_tests/test_pbt_unit_converter.py` |
+| **P3** | **Tính bền vững bất khả sập (Parser Crash-free Invariant)** | **High** | Robustness / Crash-free | `mealie/services/parser_services/ingredient_parser.py` | Võ Hùng Mạnh | `tests/unit_tests/test_pbt_ingredient_parser.py` |
+| **P4** | **Tính đơn điệu khi nhân tỉ lệ khẩu phần (Scaling Monotonicity)** | **Medium** | Monotonicity & Reversibility | `mealie/services/household_services/shopping_lists.py` & `mealie/schema/recipe/recipe_ingredient.py` | Trần Quốc Quân | `tests/unit_tests/test_pbt_scaling.py` |
+| **P5** | **Tính bảo toàn giá trị phân số (Fraction Normalization)** | **Medium** | Numeric Preservation | `mealie/services/parser_services/parser_utils/string_utils.py` | Nguyễn Phạm Phú Nam | `tests/unit_tests/test_pbt_fraction.py` |
+
+> **Tiêu chí phân loại Priority (`H3.1.0`):**
+> - **High:** Các kịch bản kiểm tra ranh giới dữ liệu thô dễ gây crash (`P3`), hỏng dữ liệu chuỗi qua nhiều lần gọi (`P1`), hoặc sai lệch phép quy đổi đơn vị vật lý (`P2`) — tác động trực tiếp đến độ ổn định toàn bộ pipeline parser.
+> - **Medium:** Các kịch bản kiểm tra tính toán định lượng hiển thị/mua sắm (`P4`) và chuẩn hóa phân số đầu vào (`P5`) — quan trọng với tính chính xác nghiệp vụ nhưng phạm vi cô lập hẹp hơn.
+> - **Low:** Các ca kiểm tra phụ trợ (ví dụ: thông số cấu hình registry riêng lẻ, kiểm tra định dạng phụ trợ không ảnh hưởng logic cốt lõi).
 
 ---
 

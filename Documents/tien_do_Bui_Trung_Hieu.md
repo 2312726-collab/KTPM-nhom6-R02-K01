@@ -41,5 +41,9 @@ Căn cứ vào đề bài của Giảng viên (`ban_phan_cong_de_tai.md`), quy t
 
 ### 4. GHI CHÚ RANH GIỚI VÀ PHÂN ĐỊNH GIAI ĐOẠN
 
-- **Phần 1 (Giữa kỳ — Mốc 20/10):** Đã rà soát tài liệu H1; còn chờ hoàn tất thẩm định cài đặt thực tế. Chốt Phần 1 tại đây.
-- **Phần 2 (Cuối kỳ — Tháng 12):** Các file mã nguồn và báo cáo thuộc Giai đoạn 2 (`bao_cao_phan_D.md`, `bao_cao_phan_E.md`, `test_pbt_unit_converter.py`) đã chuẩn bị trước trên nhánh `2312611-Hieu` được giữ nguyên trạng thái, hoàn toàn độc lập và không đưa vào nghiệm thu sớm của Phần 1. Không tự ý triển khai thêm cho đến khi có yêu cầu tiếp theo.
+- **Phần 1 (Giữa kỳ — Mốc 20/10):** Đã rà soát tài liệu H1; còn chờ hoàn tất xác nhận chính thức mục `H1.2.2` với Nam.
+- **Phần 2 (Cuối kỳ — Tháng 12):** Đã hoàn thiện đầy đủ trên nhánh `2312611-Hieu`:
+  - **H2 (`Documents/bao_cao_phan_D.md`):** Đủ `D.1`–`D.9` (đã bổ sung `H2.2.3b` Entry/Exit Criteria và `H2.2.3c` Ma trận Defect Severity S1→S4 chuẩn IEEE 1044 / ISTQB).
+  - **H3 (`Documents/bao_cao_phan_E.md`):** Đủ ma trận 5 Properties kèm phân loại Priority High/Medium/Low (`H3.1.0`) và đặc tả đồng bộ module thật (`shopping_lists.py`, `unit_utils.py`); còn mục `H3.1.5b` chờ xác nhận họp Review chéo 5 thành viên.
+  - **H4 (`tests/unit_tests/test_pbt_unit_converter.py`):** Đã hoàn thiện `H-FIX-1` → `H-FIX-4` (gắn `@pytest.mark.pbt`, bỏ `or True`, sửa `_resolve_ounce`, bổ sung `merge()` và `merge_quantity_and_unit()`), đạt **13/13 PASSED** và **99% coverage** `unit_utils.py`.
+  - **Kiểm thử chéo `tests/README.md`:** Đã cài `requirements-test.txt` vào `.venv` và chạy toàn bộ `tests/unit_tests/` (64 test cases: **62 passed, 2 xfailed**, 0 lỗi collect). *Lưu ý:* Trên Windows PowerShell, lệnh dùng wildcard `test_pbt_*.py` không tự bung tham số như Linux bash, nên chạy `pytest tests/unit_tests/ -v` hoặc chỉ định từng file.

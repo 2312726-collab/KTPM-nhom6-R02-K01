@@ -116,3 +116,39 @@ Kiểm thử sinh dữ liệu ngẫu nhiên tiềm ẩn nguy cơ kiểm thử ch
 2. **Không phụ thuộc vào biến số thời gian (No Wall-clock Deadlines):** Cấu hình `deadline = None` trong các profile Hypothesis để tránh lỗi fail giả khi máy tính chạy tác vụ nặng làm chậm tốc độ CPU.
 3. **Kiểm soát bộ lọc `assume()`:** Hạn chế việc lọc quá đà khiến tỷ lệ dữ liệu bị từ chối vượt quá 99% (tránh gây lỗi `hypothesis.errors.FailedHealthCheck`).
 4. **Cô lập trạng thái (Stateless Tests):** Mỗi ví dụ sinh ra độc lập, không dùng chung trạng thái biến toàn cục giữa các lần chạy.
+
+---
+
+### D.8. TIÊU CHÍ BẮT ĐẦU (ENTRY CRITERIA) VÀ TIÊU CHÍ KẾT THÚC KIỂM THỬ (EXIT CRITERIA)
+
+Theo quy trình kiểm thử phần mềm chuẩn STLC, nhóm xác lập ranh giới điều kiện đầu vào và đầu ra cho giai đoạn thực thi PBT:
+
+#### 1. Tiêu chí Bắt đầu kiểm thử (Entry Criteria)
+1. **Cố định phiên bản mục tiêu:** Mã nguồn Mealie trong `mealie_src/` được pin chính xác tại release tag **`v3.28.0`** (Commit SHA `0552eaa4a80031b8572849cca0ed95d07f1be001`).
+2. **Sẵn sàng môi trường & phụ thuộc:** Môi trường Python `>=3.14,<3.15` (hoặc Docker Test Runner) đã cài đặt đầy đủ thư viện trong `requirements-test.txt` (`pytest`, `hypothesis`, `pint`, `pytest-cov`, `pytest-asyncio`, `pytest-mock` và các phụ thuộc schema/parser của Mealie).
+3. **Sẵn sàng Test Harness:** Các file `pytest.ini` và `tests/conftest.py` (3 profiles: `dev`, `ci`, `thorough`) hoạt động đúng, lệnh `pytest --collect-only` không phát sinh lỗi cấu hình.
+4. **Hoàn tất thiết kế đặc tả:** Đặc tả 5 Properties (Phần E) cùng cơ chế cô lập mock (`MagicMock` cho SQLAlchemy `Session` và `AllRepositories`) đã được thống nhất trong nhóm.
+
+#### 2. Tiêu chí Kết thúc kiểm thử (Exit Criteria)
+1. **Chạy thông suốt 100% test suite:** Toàn bộ 5 file `tests/unit_tests/test_pbt_*.py` được collect và thực thi bằng 1 lệnh duy nhất, không có lỗi `Collection Error` hay `ImportError`.
+2. **Đạt trạng thái kiểm thử kỳ vọng:** 100% ca kiểm thử đạt `PASSED` (hoặc được đánh dấu `XFAIL` có chủ đích gắn với Defect ID thật đã xác minh trong Defect Log).
+3. **Đạt chuẩn độ phủ hoặc phát hiện lỗi thật:** Tỷ lệ Line Coverage trực tiếp trên các module mục tiêu trong `mealie_src/mealie/` đạt **$\ge 80\%$** hoặc có hồ sơ phân tích nguyên nhân gốc (RCA) + đề xuất bản vá cho các lỗi thực tế phát hiện được.
+4. **Zero Open S1 Defects:** Không còn lỗi nghiêm trọng mức **S1 (Critical)** nào chưa được truy vết RCA, ghi nhận vào Defect Log và đề xuất phương án khắc phục.
+5. **Hoàn tất tài liệu tái lập:** Lưu trữ đầy đủ log thực thi, báo cáo coverage và xác nhận tái lập thành công qua `tests/README.md` và `docker-compose.test.yml`.
+
+---
+
+### D.9. MA TRẬN PHÂN LOẠI MỨC ĐỘ NGHIÊM TRỌNG CỦA LỖI (DEFECT SEVERITY MATRIX — IEEE 1044 / ISTQB)
+
+Để thống nhất cách đánh giá và báo cáo lỗi ở Phần G, mọi khiếm khuyết (Defect) phát hiện bởi Hypothesis hoặc kiểm thử đơn vị được phân loại theo **4 mức độ nghiêm trọng (Severity S1 → S4)** tham chiếu chuẩn **IEEE 1044 / ISTQB**:
+
+| Cấp độ | Tên mức độ | Định nghĩa kỹ thuật (theo IEEE 1044 / ISTQB) | Ví dụ minh họa trong Mealie `v3.28.0` | Yêu cầu xử lý & Nghiệm thu |
+| :---: | :--- | :--- | :--- | :--- |
+| **S1** | **Critical (Nghiêm trọng / Blocker)** | Lỗi gây sập hệ thống (`Unhandled Exception`, HTTP 500), treo tiến trình, hỏng/mất dữ liệu cốt lõi hoặc chặn hoàn toàn chức năng chính; không có workaround. | `BruteForceParser.parse_one()` ném `IndexError` khi chuỗi rỗng `""` hoặc `"a cup"` (`brute/process.py:152, 110`). | **Ưu tiên xử lý cao nhất.** Bắt buộc lập Defect Log + RCA + bản vá diff; phải đạt **Zero Open S1 Defects** trước khi đóng gói. |
+| **S2** | **Major (Lỗi lớn)** | Chức năng chính chạy không sập nhưng sai lệch nghiêm trọng kết quả nghiệp vụ, tính toán hoặc vi phạm tính bất biến cốt lõi; gây sai dữ liệu đầu ra. | `ShoppingListService` quên nhân `* scale` khi gộp 2 dòng nguyên liệu trùng (`shopping_lists.py:403`); `move_parens_to_end()` vi phạm lũy đẳng với đa ngoặc (`string_utils.py:9-20`). | Lập hồ sơ Defect Log + RCA, gắn `@pytest.mark.xfail` nếu là bug nền của `v3.28.0` và đề xuất bản vá trong Phần G. |
+| **S3** | **Minor (Lỗi nhỏ)** | Sai lệch nhỏ ở trường hợp biên ít gặp, hiệu năng chưa tối ưu hoặc thông báo ngoại lệ chưa chuẩn, nhưng không làm sai kết quả chính và có thể chấp nhận tạm thời. | `_format_quantity_for_display()` dùng vòng lặp $O(N)$ (`recipe_ingredient.py:372-374`) gây chậm khi số lượng cực lớn. | Ghi nhận vào Defect Log / Backlog tối ưu và đề xuất cải tiến thuật toán. |
+| **S4** | **Trivial (Không đáng kể)** | Lỗi thẩm mỹ, chính tả trong thông điệp/tài liệu, khoảng trắng phụ không làm thay đổi logic xử lý hay trải nghiệm chính. | Sai khác nhỏ về định dạng chuỗi hiển thị phụ hoặc lỗi chính tả trong log nội bộ. | Ghi nhận cải thiện nếu thuận tiện, không chặn nghiệm thu. |
+
+> **Phân biệt Severity (Mức độ nghiêm trọng) và Priority (Mức độ ưu tiên):**
+> - **Severity (`S1`–`S4`)** phản ánh *mức độ tàn phá kỹ thuật* của lỗi lên hệ thống (do QA/Test Architect đánh giá).
+> - **Priority (`High` / `Medium` / `Low`)** phản ánh *thứ tự ưu tiên sửa lỗi hoặc thực thi kiểm thử* theo tác động nghiệp vụ và tiến độ bàn giao. Trong dự án này, các ca kiểm thử chạm trực tiếp ranh giới nhập liệu tự do và tính toán tài chính/định lượng (`P1`, `P2`, `P3`, `P4`) được xếp ưu tiên từ **High** đến **Medium** theo bảng tại Phần E.
