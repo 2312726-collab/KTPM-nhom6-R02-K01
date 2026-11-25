@@ -214,7 +214,7 @@
 ---
 
 # 👤 THÀNH VIÊN 3: BÙI TRUNG HIẾU
-> **MSSV:** `2110037` *(GitHub username: `2312611-Hieu`)*  
+> **MSSV:** `2312611` *(GitHub username: `2312611-Hieu`)*  
 > **Vai trò:** Test Architect & PBT Methodology Specialist  
 > **Báo cáo phụ trách chính:** Phần D (Cơ sở lý thuyết PBT) + Phần E (Thiết kế kịch bản kiểm thử)  
 > **Kịch bản Code PBT trực tiếp:** **Property 2 (Unit Conversion Round-trip)** trong `tests/unit_tests/test_pbt_unit_converter.py`

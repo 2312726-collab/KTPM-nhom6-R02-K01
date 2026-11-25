@@ -16,7 +16,7 @@ Nhóm 6 xây dựng 5 kịch bản kiểm thử PBT độc lập, phân bổ đ�
 | **P1** | **Tính lũy đẳng khi làm sạch chuỗi (String Idempotence)** | Idempotence: $f(f(x)) == f(x)$ | `mealie/services/parser_services/parser_utils/string_utils.py` | Trần Ngọc Bảo Phước | `tests/unit_tests/test_pbt_string_utils.py` |
 | **P2** | **Tính bảo toàn hai chiều khi đổi đơn vị (Unit Round-trip)** | Round-trip: $f^{-1}(f(x)) \approx x$ | `mealie/services/parser_services/parser_utils/unit_utils.py` | **Bùi Trung Hiếu** | `tests/unit_tests/test_pbt_unit_converter.py` |
 | **P3** | **Tính bền vững bất khả sập (Parser Crash-free Invariant)** | Robustness / Crash-free | `mealie/services/parser_services/ingredient_parser.py` | Võ Hùng Mạnh | `tests/unit_tests/test_pbt_ingredient_parser.py` |
-| **P4** | **Tính đơn điệu khi nhân tỉ lệ khẩu phần (Scaling Monotonicity)** | Monotonicity & Reversibility | `mealie/services/recipe/recipe_service.py` & Schema | Trần Quốc Quân | `tests/unit_tests/test_pbt_scaling.py` |
+| **P4** | **Tính đơn điệu khi nhân tỉ lệ khẩu phần (Scaling Monotonicity)** | Monotonicity & Reversibility | `mealie/services/household_services/shopping_lists.py` & `mealie/schema/recipe/recipe_ingredient.py` | Trần Quốc Quân | `tests/unit_tests/test_pbt_scaling.py` |
 | **P5** | **Tính bảo toàn giá trị phân số (Fraction Normalization)** | Numeric Preservation | `mealie/services/parser_services/parser_utils/string_utils.py` | Nguyễn Phạm Phú Nam | `tests/unit_tests/test_pbt_fraction.py` |
 
 ---
@@ -48,11 +48,11 @@ Lớp `UnitConverter` sử dụng thư viện `Pint` để thực hiện chuyể
 
 | Trường thông tin | Đặc tả chi tiết |
 | :--- | :--- |
-| **Lớp và phương thức** | `UnitConverter.convert(quantity: float, unit: str, to_unit: str) -> tuple[float, Unit]` |
-| **Công thức toán học** | Với hai đơn vị tương thích $U_1, U_2$ cùng thứ nguyên:<br/>$| \text{convert}(\text{convert}(Q, U_1, U_2)[0], U_2, U_1)[0] - Q | \le 10^{-4}$ |
-| **Chiến lược sinh mẫu (Strategies)** | - Khối lượng: $Q \in \text{st.floats}(\text{min\_value}=0.001, \text{max\_value}=100000, \text{allow\_nan}=\text{False}, \text{allow\_infinity}=\text{False})$<br/>- Cặp đơn vị khối lượng: `("gram", "kilogram")`, `("ounce", "gram")`, `("pound", "kilogram")`<br/>- Cặp đơn vị thể tích: `("milliliter", "liter")`, `("teaspoon", "tablespoon")`, `("fluid_ounce", "cup")` |
-| **Tiền điều kiện (`assume`)** | `assume(quantity > 0)` và `assume(converter.can_convert(u1, u2))` |
-| **Kiểm tra ngoại lệ (Controlled Exception)** | Khi đổi giữa 2 đơn vị không cùng thứ nguyên (ví dụ: `gram` sang `liter` mà không có tỷ trọng, hoặc đơn vị không tồn tại), hệ thống phải ném ra `pint.DimensionalityError` hoặc `UnitNotFound`, tuyệt đối không phát sinh lỗi bất ngờ. |
+| **Lớp và phương thức** | `UnitConverter.convert(quantity, unit, to_unit)`, `UnitConverter.merge(q1, u1, q2, u2)`, `merge_quantity_and_unit()`, `_resolve_ounce()` |
+| **Công thức toán học** | 1. Round-trip: $| \text{convert}(\text{convert}(Q, U_1, U_2)[0], U_2, U_1)[0] - Q | \le 10^{-4}$<br/>2. Giao hoán Merge: $\text{merge}(Q_1, U_1, Q_2, U_2) \equiv \text{merge}(Q_2, U_2, Q_1, U_1)$ |
+| **Chiến lược sinh mẫu (Strategies)** | - Khối lượng: $Q \in \text{st.floats}(\text{min\_value}=0.001, \text{max\_value}=100000, \text{allow\_nan}=\text{False}, \text{allow\_infinity}=\text{False})$<br/>- Cặp đơn vị khối lượng: `("gram", "kilogram")`, `("ounce", "gram")`, `("pound", "kilogram")`<br/>- Cặp đơn vị thể tích: `("milliliter", "liter")`, `("teaspoon", "tablespoon")`, `("fluid_ounce", "cup")`<br/>- Quy ước `_resolve_ounce`: `("ounce", "milliliter"/"cup"/"liter")` được quy đổi hợp lệ sang `fluid_ounce` |
+| **Tiền điều kiện (`assume`)** | `assume(quantity > 0)` |
+| **Kiểm tra ngoại lệ (Controlled Exception)** | Khi đổi giữa 2 đơn vị khác thứ nguyên (ví dụ: `gram` sang `liter`, `milliliter` sang `kilogram`), `can_convert()` phải trả về `False` và `convert()` phải ném `pint.DimensionalityError`. Với đơn vị không tồn tại, `parse(..., strict=True)` phải ném `UnitNotFound`. |
 | **Ca biên kỳ vọng kiểm tra Shrinking** | Số thực cực nhỏ tiệm cận $0.001$, số lượng cực lớn $100000.0$, các đơn vị có tỷ lệ chuyển đổi vô tỉ. |
 
 ---
@@ -83,7 +83,7 @@ Khi người dùng tăng số phần ăn (ví dụ làm bánh cho 8 người tha
 
 | Trường thông tin | Đặc tả chi tiết |
 | :--- | :--- |
-| **Hàm / Logic kiểm thử** | Thuật toán tỉ lệ số lượng nguyên liệu theo công thức: $Q_{\text{scaled}} = Q \times \text{factor}$ |
+| **Hàm / Logic kiểm thử** | `ShoppingListService.get_shopping_list_items_from_recipe(..., scale=k)` (`shopping_lists.py`) & `RecipeIngredientBase` / `_format_quantity_for_display()` (`recipe_ingredient.py`): $Q_{\text{scaled}} = Q \times \text{factor}$ |
 | **Công thức toán học** | 1. Đơn điệu: Nếu $\text{factor} > 1.0 \implies Q_{\text{scaled}} > Q$; nếu $\text{factor} < 1.0 \implies Q_{\text{scaled}} < Q$<br/>2. Nghịch đảo: $| (Q_{\text{scaled}} / \text{factor}) - Q | \le 10^{-4}$ |
 | **Chiến lược sinh mẫu (Strategies)** | $Q \in \text{st.floats}(\text{min\_value}=0.01, \text{max\_value}=1000.0)$<br/>$\text{factor} \in \text{st.floats}(\text{min\_value}=0.1, \text{max\_value}=10.0)$ |
 | **Tiền điều kiện (`assume`)** | `assume(factor > 0 and qty > 0)` |
