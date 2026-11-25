@@ -241,17 +241,17 @@
 **Deadline: 30/10**
 
 ### H2.1 — Nghiên cứu tài liệu chính thức Hypothesis
-- [ ] H2.1.1 Đọc Hypothesis Quickstart & Strategies Reference: `@given`, `strategies`, `assume()`, `@settings`.
-- [ ] H2.1.2 Đọc cơ chế Shrinking: Hiểu cách Hypothesis tự động thu nhỏ phản ví dụ gây lỗi về dạng ngắn nhất.
+- [x] H2.1.1 Đọc Hypothesis Quickstart & Strategies Reference: `@given`, `strategies`, `assume()`, `@settings`.
+- [x] H2.1.2 Đọc cơ chế Shrinking: Hiểu cách Hypothesis tự động thu nhỏ phản ví dụ gây lỗi về dạng ngắn nhất.
 
 ### H2.2 — Soạn thảo `Documents/bao_cao_phan_D.md`
-- [ ] H2.2.1 Viết Mục D.1: Bản chất của PBT và bảng so sánh chi tiết giữa Example-Based Testing và PBT.
-- [ ] H2.2.2 Viết Mục D.2: Sơ đồ hóa 4 bước vận hành của Hypothesis (Generate → Check Invariant → Shrink → Report).
-- [ ] H2.2.3 Viết Mục D.3 & D.4: Lý do chọn `parser_services` và ranh giới kiểm thử theo triết lý Ponytail.
-- [ ] H2.2.3b Xây dựng Tiêu chí Bắt đầu kiểm thử (Entry Criteria) và Tiêu chí Kết thúc kiểm thử (Exit Criteria).
-- [ ] H2.2.3c Xây dựng Ma trận Phân loại Mức độ Nghiêm trọng của Lỗi (Defect Severity Matrix S1 $\to$ S4) theo chuẩn IEEE 1044 / ISTQB.
-- [ ] H2.2.4 Viết Mục D.5, D.6 & D.7: Giả định kỹ thuật, tiêu chí Pass/Fail và quản lý rủi ro Flaky test.
-- [ ] H2.2.5 Commit: `docs: complete theoretical foundation and test methodology Phan D`.
+- [x] H2.2.1 Viết Mục D.1: Bản chất của PBT và bảng so sánh chi tiết giữa Example-Based Testing và PBT.
+- [x] H2.2.2 Viết Mục D.2: Sơ đồ hóa 4 bước vận hành của Hypothesis (Generate → Check Invariant → Shrink → Report).
+- [x] H2.2.3 Viết Mục D.3 & D.4: Lý do chọn `parser_services` và ranh giới kiểm thử theo triết lý Ponytail.
+- [x] H2.2.3b Xây dựng Tiêu chí Bắt đầu kiểm thử (Entry Criteria) và Tiêu chí Kết thúc kiểm thử (Exit Criteria).
+- [x] H2.2.3c Xây dựng Ma trận Phân loại Mức độ Nghiêm trọng của Lỗi (Defect Severity Matrix S1 $\to$ S4) theo chuẩn IEEE 1044 / ISTQB.
+- [x] H2.2.4 Viết Mục D.5, D.6 & D.7: Giả định kỹ thuật, tiêu chí Pass/Fail và quản lý rủi ro Flaky test.
+- [x] H2.2.5 Commit: `docs: complete theoretical foundation and test methodology Phan D`.
 
 ---
 
@@ -259,15 +259,15 @@
 **Deadline: 10/11**
 
 ### H3.1 — Soạn thảo `Documents/bao_cao_phan_E.md`
-- [ ] H3.1.0 Phân loại mức độ ưu tiên (Priority: High / Medium / Low) cho từng kịch bản kiểm thử trong 5 Properties.
-- [ ] H3.1.1 Thiết kế bảng đặc tả chuẩn hóa cho **Property 1 — Tính lũy đẳng (Idempotence)** (Phước code).
-- [ ] H3.1.2 Thiết kế bảng đặc tả chuẩn hóa cho **Property 2 — Tính bảo toàn hai chiều (Round-trip)** (Hiếu code).
-- [ ] H3.1.3 Thiết kế bảng đặc tả chuẩn hóa cho **Property 3 — Tính bền bỉ / Crash-free** (Mạnh code).
-- [ ] H3.1.4 Thiết kế bảng đặc tả chuẩn hóa cho **Property 4 — Tính đơn điệu khi Scaling** (Quân code).
-- [ ] H3.1.5 Thiết kế bảng đặc tả chuẩn hóa cho **Property 5 — Tính bảo toàn phân số** (Nam code).
+- [x] H3.1.0 Phân loại mức độ ưu tiên (Priority: High / Medium / Low) cho từng kịch bản kiểm thử trong 5 Properties.
+- [x] H3.1.1 Thiết kế bảng đặc tả chuẩn hóa cho **Property 1 — Tính lũy đẳng (Idempotence)** (Phước code).
+- [x] H3.1.2 Thiết kế bảng đặc tả chuẩn hóa cho **Property 2 — Tính bảo toàn hai chiều (Round-trip)** (Hiếu code).
+- [x] H3.1.3 Thiết kế bảng đặc tả chuẩn hóa cho **Property 3 — Tính bền bỉ / Crash-free** (Mạnh code).
+- [x] H3.1.4 Thiết kế bảng đặc tả chuẩn hóa cho **Property 4 — Tính đơn điệu khi Scaling** (Quân code).
+- [x] H3.1.5 Thiết kế bảng đặc tả chuẩn hóa cho **Property 5 — Tính bảo toàn phân số** (Nam code).
 - [ ] H3.1.5b Tổ chức họp Review chéo kịch bản kiểm thử (Peer Review Test Design) giữa 5 thành viên trước khi viết mã.
-- [ ] H3.1.6 Bàn giao tài liệu Phần E cho cả nhóm làm căn cứ viết code test.
-- [ ] H3.1.7 Commit: `docs: design standardized PBT test scenarios for all 5 properties Phan E`.
+- [x] H3.1.6 Bàn giao tài liệu Phần E cho cả nhóm làm căn cứ viết code test.
+- [x] H3.1.7 Commit: `docs: design standardized PBT test scenarios for all 5 properties Phan E`.
 
 ---
 
@@ -275,13 +275,13 @@
 **Deadline: 25/11** | File code: `tests/unit_tests/test_pbt_unit_converter.py`
 
 ### H4.1 — Nghiên cứu mã nguồn UnitConverter
-- [ ] H4.1.1 Đọc class `UnitConverter` trong `mealie/services/parser_services/parser_utils/unit_utils.py`.
-- [ ] H4.1.2 Xác định bảng danh mục các đơn vị đo lường (khối lượng: gram, kg; thể tích: ml, liter, tsp, tbsp).
+- [x] H4.1.1 Đọc class `UnitConverter` trong `mealie/services/parser_services/parser_utils/unit_utils.py`.
+- [x] H4.1.2 Xác định bảng danh mục các đơn vị đo lường (khối lượng: gram, kg; thể tích: ml, liter, tsp, tbsp).
 
 ### H4.2 — Viết mã kiểm thử tự động PBT Property 2
-- [ ] H4.2.1 Tạo nhánh `feat/hieu-property-2-converter` từ `develop`.
-- [ ] H4.2.2 Tạo file `tests/unit_tests/test_pbt_unit_converter.py`.
-- [ ] H4.2.3 Viết kiểm thử Round-trip khối lượng (`gram` $\leftrightarrow$ `kilogram`):
+- [x] H4.2.1 Tạo nhánh `feat/hieu-property-2-converter` từ `develop`. *(Thực hiện trên nhánh riêng `2312611-Hieu` thay cho `feat/hieu-property-2-converter`)*
+- [x] H4.2.2 Tạo file `tests/unit_tests/test_pbt_unit_converter.py`.
+- [x] H4.2.3 Viết kiểm thử Round-trip khối lượng (`gram` $\leftrightarrow$ `kilogram`):
   ```python
   from hypothesis import given, strategies as st, assume, settings
   from mealie.services.parser_services.parser_utils.unit_utils import UnitConverter
@@ -296,9 +296,9 @@
       back = converter.convert(kg, "kilogram", "gram")
       assert abs(back - value) < 1e-4, f"Lỗi Round-trip: {value} -> {kg} -> {back}"
   ```
-- [ ] H4.2.4 Viết kiểm thử Round-trip thể tích (`milliliter` $\leftrightarrow$ `liter`, `teaspoon` $\leftrightarrow$ `tablespoon`).
-- [ ] H4.2.5 Viết kiểm thử xác nhận Exception có kiểm soát khi đổi giữa hai đơn vị không tương thích.
-- [ ] H4.2.6 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_unit_converter.py -v`.
+- [x] H4.2.4 Viết kiểm thử Round-trip thể tích (`milliliter` $\leftrightarrow$ `liter`, `teaspoon` $\leftrightarrow$ `tablespoon`).
+- [x] H4.2.5 Viết kiểm thử xác nhận Exception có kiểm soát khi đổi giữa hai đơn vị không tương thích.
+- [x] H4.2.6 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_unit_converter.py -v`.
 - [ ] H4.2.7 Commit & tạo Pull Request vào `develop`: `feat(test): add PBT Property 2 unit conversion round-trip`.
 
 ---

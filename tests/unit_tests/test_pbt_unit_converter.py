@@ -7,31 +7,8 @@ Người thực hiện: Bùi Trung Hiếu (MSSV: 2312611).
 from __future__ import annotations
 
 from dataclasses import dataclass
-import sys
-import types
-from pathlib import Path
 import pytest
 from hypothesis import given, strategies as st, assume, settings
-
-# ==============================================================================
-# Cô lập tầng phụ thuộc Mealie theo triết lý Ponytail:
-# Tránh kích hoạt I/O cơ sở dữ liệu và FastAPI từ __init__.py cấp trên
-# ==============================================================================
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-MEALIE_SRC = PROJECT_ROOT / "mealie_src"
-
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
-
-if MEALIE_SRC.exists() and str(MEALIE_SRC) not in sys.path:
-    sys.path.insert(0, str(MEALIE_SRC))
-
-if "mealie.services.parser_services" not in sys.modules:
-    parser_pkg_path = MEALIE_SRC / "mealie" / "services" / "parser_services"
-    if parser_pkg_path.exists():
-        pkg = types.ModuleType("mealie.services.parser_services")
-        pkg.__path__ = [str(parser_pkg_path)]
-        sys.modules["mealie.services.parser_services"] = pkg
 
 from mealie.services.parser_services.parser_utils.unit_utils import (
     UnitConverter,
@@ -39,17 +16,18 @@ from mealie.services.parser_services.parser_utils.unit_utils import (
     merge_quantity_and_unit,
 )
 
+# Sử dụng CreateIngredientUnit thật của Mealie v3.28.0 (fallback stub chỉ khi chạy môi trường tối giản)
+try:
+    from mealie.schema.recipe.recipe_ingredient import CreateIngredientUnit as _IngredientUnitModel
+except Exception:
+    @dataclass
+    class _IngredientUnitModel:  # type: ignore[no-redef]
+        name: str
+        standard_quantity: float | None = None
+        standard_unit: str | None = None
+
 # Khởi tạo converter dùng chung để tối ưu hóa hiệu năng UnitRegistry (Pint)
 converter = UnitConverter()
-
-
-@dataclass
-class _IngredientUnitStub:
-    """Stub tối giản tương thích với thuộc tính runtime của CreateIngredientUnit."""
-
-    name: str
-    standard_quantity: float | None
-    standard_unit: str | None
 
 
 # ==============================================================================
@@ -303,8 +281,8 @@ def test_merge_quantity_and_unit_preserves_total(
     và chọn đơn vị lớn hơn nếu tổng >= 1 (ngược lại chọn đơn vị nhỏ hơn).
     """
     u1_name, u1_std_qty, u2_name, u2_std_qty = pair
-    unit_1 = _IngredientUnitStub(name=u1_name, standard_quantity=u1_std_qty, standard_unit=u1_name)
-    unit_2 = _IngredientUnitStub(name=u2_name, standard_quantity=u2_std_qty, standard_unit=u2_name)
+    unit_1 = _IngredientUnitModel(name=u1_name, standard_quantity=u1_std_qty, standard_unit=u1_name)
+    unit_2 = _IngredientUnitModel(name=u2_name, standard_quantity=u2_std_qty, standard_unit=u2_name)
 
     merged_q, merged_unit = merge_quantity_and_unit(q1, unit_1, q2, unit_2)
     assert merged_unit in (unit_1, unit_2)
@@ -328,8 +306,8 @@ def test_merge_quantity_and_unit_invalid_metadata_raises_value_error(missing_qty
     """
     Property 2.4c: merge_quantity_and_unit() phải ném ValueError khi thiếu standard_quantity/standard_unit.
     """
-    valid_unit = _IngredientUnitStub(name="gram", standard_quantity=1.0, standard_unit="gram")
-    invalid_unit = _IngredientUnitStub(name="broken", standard_quantity=missing_qty, standard_unit="gram")
+    valid_unit = _IngredientUnitModel(name="gram", standard_quantity=1.0, standard_unit="gram")
+    invalid_unit = _IngredientUnitModel(name="broken", standard_quantity=missing_qty, standard_unit="gram")
 
     with pytest.raises(ValueError):
         merge_quantity_and_unit(1.0, invalid_unit, 1.0, valid_unit)
