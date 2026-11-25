@@ -15,7 +15,9 @@ from fractions import Fraction
 from pathlib import Path
 from typing import Any
 from unittest.mock import MagicMock
+from uuid import uuid4
 import pytest
+from pydantic import BaseModel, UUID4
 from hypothesis import given, strategies as st, assume, settings
 
 # ==============================================================================
@@ -30,7 +32,14 @@ if str(PROJECT_ROOT) not in sys.path:
 if MEALIE_SRC.exists() and str(MEALIE_SRC) not in sys.path:
     sys.path.insert(0, str(MEALIE_SRC))
 
-# Đăng ký mock cô lập tầng CSDL và Config ngoài lề để nạp schema Mealie sạch sẽ
+class _MealieRecipeStub(BaseModel):
+    """Stub tối thiểu cho Recipe/RecipeSummary để hỗ trợ cả Pydantic và isinstance(..., Recipe)."""
+    id: UUID4
+    name: str = "Sub-recipe"
+    recipe_ingredient: list[Any] = []
+
+
+# Đăng ký mock cô lập tầng CSDL và Config ngoài lề để nạp schema & service Mealie sạch sẽ
 if "fastapi" not in sys.modules:
     f_mod = types.ModuleType("fastapi")
     f_mod.Header = MagicMock()
@@ -44,6 +53,25 @@ if "mealie.core.config" not in sys.modules:
 if "mealie.core.settings" not in sys.modules:
     sys.modules["mealie.core.settings"] = types.ModuleType("mealie.core.settings")
 
+if "mealie.core.exceptions" not in sys.modules:
+    ex_mod = types.ModuleType("mealie.core.exceptions")
+
+    class UnexpectedNone(Exception):
+        pass
+
+    ex_mod.UnexpectedNone = UnexpectedNone
+    sys.modules["mealie.core.exceptions"] = ex_mod
+
+if "mealie.repos.all_repositories" not in sys.modules:
+    ar_mod = types.ModuleType("mealie.repos.all_repositories")
+    ar_mod.get_repositories = MagicMock()
+    sys.modules["mealie.repos.all_repositories"] = ar_mod
+
+if "mealie.repos.repository_factory" not in sys.modules:
+    rf_mod = types.ModuleType("mealie.repos.repository_factory")
+    rf_mod.AllRepositories = Any
+    sys.modules["mealie.repos.repository_factory"] = rf_mod
+
 if "mealie.schema.recipe" not in sys.modules and MEALIE_SRC.exists():
     pkg = types.ModuleType("mealie.schema.recipe")
     pkg.__path__ = [str(MEALIE_SRC / "mealie" / "schema" / "recipe")]
@@ -51,46 +79,101 @@ if "mealie.schema.recipe" not in sys.modules and MEALIE_SRC.exists():
 
 if "mealie.schema.recipe.recipe" not in sys.modules:
     r_mod = types.ModuleType("mealie.schema.recipe.recipe")
-    r_mod.Recipe = Any
+    r_mod.Recipe = _MealieRecipeStub
+    r_mod.RecipeSummary = _MealieRecipeStub
     sys.modules["mealie.schema.recipe.recipe"] = r_mod
 
 if "mealie.db.models.recipe" not in sys.modules:
     db_mod = types.ModuleType("mealie.db.models.recipe")
     db_mod.IngredientFoodModel = MagicMock()
     db_mod.IngredientFoodSubstitutionModel = MagicMock()
+    db_mod.RecipeModel = MagicMock()
     sys.modules["mealie.db.models.recipe"] = db_mod
 
+if "mealie.db.models.household" not in sys.modules:
+    hh_db_mod = types.ModuleType("mealie.db.models.household")
+    hh_db_mod.ShoppingList = MagicMock()
+    hh_db_mod.ShoppingListItem = MagicMock()
+    hh_db_mod.ShoppingListMultiPurposeLabel = MagicMock()
+    hh_db_mod.ShoppingListRecipeReference = MagicMock()
+    sys.modules["mealie.db.models.household"] = hh_db_mod
+
+if "mealie.db.models.users.users" not in sys.modules:
+    u_db_mod = types.ModuleType("mealie.db.models.users.users")
+    u_db_mod.User = MagicMock()
+    sys.modules["mealie.db.models.users.users"] = u_db_mod
+
+if "mealie.services.parser_services" not in sys.modules and MEALIE_SRC.exists():
+    ps_pkg = types.ModuleType("mealie.services.parser_services")
+    ps_pkg.__path__ = [str(MEALIE_SRC / "mealie" / "services" / "parser_services")]
+    sys.modules["mealie.services.parser_services"] = ps_pkg
+
+if "mealie.services.parser_services._base" not in sys.modules:
+    ps_base = types.ModuleType("mealie.services.parser_services._base")
+
+    class _StubDataMatcher:
+        def __init__(self, repos, **kwargs):
+            self.repos = repos
+            self.units_by_id = {}
+
+    ps_base.DataMatcher = _StubDataMatcher
+    sys.modules["mealie.services.parser_services._base"] = ps_base
+
+if "mealie.schema.household" not in sys.modules and MEALIE_SRC.exists():
+    hh_pkg = types.ModuleType("mealie.schema.household")
+    hh_pkg.__path__ = [str(MEALIE_SRC / "mealie" / "schema" / "household")]
+    sys.modules["mealie.schema.household"] = hh_pkg
+
+if "mealie.services.household_services" not in sys.modules and MEALIE_SRC.exists():
+    hs_pkg = types.ModuleType("mealie.services.household_services")
+    hs_pkg.__path__ = [str(MEALIE_SRC / "mealie" / "services" / "household_services")]
+    sys.modules["mealie.services.household_services"] = hs_pkg
+
 # ==============================================================================
-# Cơ chế nạp linh hoạt tệp recipe_ingredient.py từ mã nguồn thật Mealie v3.28.0
-# (Tương tự _load_string_utils() của Phước để IDE không báo lỗi Pylance)
+# Cơ chế nạp linh hoạt các module thật từ mã nguồn Mealie v3.28.0
 # ==============================================================================
-def _load_recipe_ingredient_module():
+def _load_mealie_module(module_name: str, rel_parts: tuple[str, ...]):
     import importlib.util
 
     candidates = [
-        PROJECT_ROOT / "mealie_src" / "mealie" / "schema" / "recipe" / "recipe_ingredient.py",
-        Path("mealie_src/mealie/schema/recipe/recipe_ingredient.py"),
-        Path(__file__).resolve().parent.parent.parent / "mealie_src" / "mealie" / "schema" / "recipe" / "recipe_ingredient.py",
+        PROJECT_ROOT / "mealie_src" / Path(*rel_parts),
+        Path("mealie_src") / Path(*rel_parts),
+        Path(__file__).resolve().parent.parent.parent / "mealie_src" / Path(*rel_parts),
     ]
     for p in candidates:
         if p.exists():
-            spec = importlib.util.spec_from_file_location("mealie.schema.recipe.recipe_ingredient", str(p))
+            spec = importlib.util.spec_from_file_location(module_name, str(p))
             if spec and spec.loader:
                 mod = importlib.util.module_from_spec(spec)
-                sys.modules["mealie.schema.recipe.recipe_ingredient"] = mod
+                sys.modules[module_name] = mod
                 spec.loader.exec_module(mod)
                 return mod
 
-    raise ImportError("Không tìm thấy tệp recipe_ingredient.py trong mealie_src!")
+    raise ImportError(f"Không tìm thấy tệp {'/'.join(rel_parts)} trong mealie_src!")
 
-_ing_mod = _load_recipe_ingredient_module()
+_ing_mod = _load_mealie_module(
+    "mealie.schema.recipe.recipe_ingredient",
+    ("mealie", "schema", "recipe", "recipe_ingredient.py"),
+)
+_load_mealie_module(
+    "mealie.schema.household.group_shopping_list",
+    ("mealie", "schema", "household", "group_shopping_list.py"),
+)
+_sl_mod = _load_mealie_module(
+    "mealie.services.household_services.shopping_lists",
+    ("mealie", "services", "household_services", "shopping_lists.py"),
+)
 
 RecipeIngredientBase = _ing_mod.RecipeIngredientBase
+RecipeIngredient = _ing_mod.RecipeIngredient
+IngredientFood = _ing_mod.IngredientFood
+IngredientUnit = _ing_mod.IngredientUnit
 mealie_display_fraction = _ing_mod.display_fraction
 INGREDIENT_QTY_PRECISION = _ing_mod.INGREDIENT_QTY_PRECISION
 MAX_INGREDIENT_DENOMINATOR = _ing_mod.MAX_INGREDIENT_DENOMINATOR
 SUPERSCRIPT = _ing_mod.SUPERSCRIPT
 SUBSCRIPT = _ing_mod.SUBSCRIPT
+ShoppingListService = _sl_mod.ShoppingListService
 
 
 # ==============================================================================
@@ -303,11 +386,17 @@ def test_mealie_format_quantity_for_display_after_scaling(qty: float, factor: fl
 @pytest.mark.pbt
 @given(factor=st_scale)
 def test_mealie_ingredient_none_and_zero_quantity(factor: float):
-    """Property 4.6.1: Nguyên liệu Mealie có quantity=None (nêm nếm) scale vẫn là None."""
+    """Property 4.6.1: Nguyên liệu Mealie có quantity=None hoặc 0.0 khi scale bất kỳ factor nào vẫn giữ nguyên."""
+    target_servings = 4.0 * factor
     none_ing = RecipeIngredientBase(quantity=None, note="Muối tiêu vừa ăn")
-    scaled = scale_mealie_ingredient(none_ing, target_servings=8, base_servings=4)
-    assert scaled.quantity is None
-    assert scaled.note == "Muối tiêu vừa ăn"
+    scaled_none = scale_mealie_ingredient(none_ing, target_servings=target_servings, base_servings=4.0)
+    assert scaled_none.quantity is None
+    assert scaled_none.note == "Muối tiêu vừa ăn"
+
+    zero_ing = RecipeIngredientBase(quantity=0.0, note="Gia vị tùy thích")
+    scaled_zero = scale_mealie_ingredient(zero_ing, target_servings=target_servings, base_servings=4.0)
+    assert scaled_zero.quantity == 0.0
+    assert scaled_zero.note == "Gia vị tùy thích"
 
 
 @pytest.mark.pbt
@@ -332,3 +421,125 @@ def test_mealie_scaling_negative_target_servings(base: float, invalid_target: fl
     ing = RecipeIngredientBase(quantity=100.0)
     with pytest.raises(ValueError, match="target_servings"):
         scale_mealie_ingredient(ing, target_servings=invalid_target, base_servings=base)
+
+
+# ==============================================================================
+# 10. PROPERTY 4.7–4.9: KIỂM THỬ TRỰC TIẾP HÀM SCALING BACKEND THẬT CỦA MEALIE
+# Service mục tiêu: ShoppingListService.get_shopping_list_items_from_recipe()
+# ==============================================================================
+
+def _build_mock_shopping_service() -> ShoppingListService:
+    mock_repos = MagicMock()
+    return ShoppingListService(mock_repos)
+
+
+@pytest.mark.pbt
+@given(qty=st_qty, base_servings=st_servings, target_servings=st_servings)
+@settings(max_examples=200)
+def test_mealie_shopping_list_scaling_monotonicity_real_service(
+    qty: float, base_servings: int, target_servings: int
+):
+    """
+    Property 4.7: Gọi trực tiếp ShoppingListService.get_shopping_list_items_from_recipe()
+    của Mealie v3.28.0 để kiểm chứng tính đơn điệu và lưu vết scale khi co giãn khẩu phần.
+    """
+    service = _build_mock_shopping_service()
+    factor = target_servings / base_servings
+    food = IngredientFood(id=uuid4(), name="flour")
+    unit = IngredientUnit(id=uuid4(), name="cup")
+    ing = RecipeIngredient(quantity=qty, food=food, unit=unit)
+
+    items = service.get_shopping_list_items_from_recipe(
+        list_id=uuid4(),
+        recipe_id=uuid4(),
+        scale=factor,
+        recipe_ingredients=[ing],
+        skip_on_hand=False,
+    )
+
+    assert len(items) == 1
+    scaled_item = items[0]
+    expected_base = ing.quantity  # RecipeIngredient tự làm tròn 3 chữ số thập phân (INGREDIENT_QTY_PRECISION)
+
+    if target_servings > base_servings:
+        assert scaled_item.quantity >= expected_base
+    elif target_servings < base_servings:
+        assert scaled_item.quantity <= expected_base
+    else:
+        assert math.isclose(scaled_item.quantity, expected_base, rel_tol=1e-7)
+
+    assert scaled_item.recipe_references[0].recipe_scale == factor
+    assert scaled_item.recipe_references[0].recipe_quantity == expected_base
+
+
+@pytest.mark.pbt
+@given(
+    sub_qty=st.floats(min_value=0.5, max_value=10.0, allow_nan=False, allow_infinity=False),
+    ing_qty=st_qty,
+    parent_scale=st_scale,
+)
+@settings(max_examples=150)
+def test_mealie_shopping_list_subrecipe_recursive_scaling(
+    sub_qty: float, ing_qty: float, parent_scale: float
+):
+    """
+    Property 4.8: Kiểm chứng tính nhân dồn đệ quy (Recursive Sub-recipe Scaling)
+    tại ShoppingListService.get_shopping_list_items_from_recipe() (shopping_lists.py:348-360).
+    """
+    service = _build_mock_shopping_service()
+    food = IngredientFood(id=uuid4(), name="sugar")
+    unit = IngredientUnit(id=uuid4(), name="gram")
+    inner_ing = RecipeIngredient(quantity=ing_qty, food=food, unit=unit)
+    sub_recipe = _MealieRecipeStub(id=uuid4(), name="Sauce", recipe_ingredient=[inner_ing])
+    parent_ing = RecipeIngredient(quantity=sub_qty, referenced_recipe=sub_recipe)
+
+    items = service.get_shopping_list_items_from_recipe(
+        list_id=uuid4(),
+        recipe_id=uuid4(),
+        scale=parent_scale,
+        recipe_ingredients=[parent_ing],
+        skip_on_hand=False,
+    )
+
+    assert len(items) == 1
+    expected_qty = inner_ing.quantity * (parent_ing.quantity * parent_scale)
+    assert math.isclose(items[0].quantity, expected_qty, rel_tol=1e-6, abs_tol=1e-6)
+
+
+@pytest.mark.pbt
+@pytest.mark.xfail(
+    strict=True,
+    reason="Bug thật của Mealie v3.28.0 tại shopping_lists.py:403: gộp 2 nguyên liệu giống nhau quên nhân scale cho dòng thứ 2",
+)
+@given(
+    qty1=st.floats(min_value=1.0, max_value=100.0, allow_nan=False, allow_infinity=False),
+    qty2=st.floats(min_value=1.0, max_value=100.0, allow_nan=False, allow_infinity=False),
+    scale=st.floats(min_value=1.5, max_value=10.0, allow_nan=False, allow_infinity=False),
+)
+@settings(max_examples=50)
+def test_mealie_shopping_list_duplicate_ingredient_scaling_bug(qty1: float, qty2: float, scale: float):
+    """
+    Property 4.9 (Defect Characterization): Khi công thức có 2 dòng cùng food & unit,
+    tổng lượng sau khi scale phải bằng (qty1 + qty2) * scale.
+    Thực tế Mealie v3.28.0 ở shopping_lists.py:403 cộng `existing_item.quantity += ingredient.quantity`
+    (thiếu `* scale`).
+    """
+    service = _build_mock_shopping_service()
+    food = IngredientFood(id=uuid4(), name="sugar")
+    unit = IngredientUnit(id=uuid4(), name="cup")
+    ing1 = RecipeIngredient(quantity=qty1, food=food, unit=unit)
+    ing2 = RecipeIngredient(quantity=qty2, food=food, unit=unit)
+
+    items = service.get_shopping_list_items_from_recipe(
+        list_id=uuid4(),
+        recipe_id=uuid4(),
+        scale=scale,
+        recipe_ingredients=[ing1, ing2],
+        skip_on_hand=False,
+    )
+
+    assert len(items) == 1
+    expected_total = (ing1.quantity + ing2.quantity) * scale
+    assert math.isclose(items[0].quantity, expected_total, rel_tol=1e-4, abs_tol=1e-4), (
+        f"Lỗi Scaling Mealie tại shopping_lists.py:403: kỳ vọng {expected_total}, thực tế {items[0].quantity}"
+    )
