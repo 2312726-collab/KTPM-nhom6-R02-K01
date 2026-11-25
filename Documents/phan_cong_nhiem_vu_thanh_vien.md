@@ -64,8 +64,8 @@
 - [ ] Q2.2.1 Viết mục tiêu hệ thống Mealie, các Actor chính (**Home User**, **Admin**) và 5 Use Case cốt lõi.
 - [ ] Q2.2.2 Mô tả cây thư mục tổng thể của Mealie, tập trung vào `mealie/services/parser_services/`.
 - [ ] Q2.2.3 Commit: `docs: add system description Phan A`.
-- [ ] Q2.2.4 Xây dựng Ma trận Truy xuất Nguồn gốc Yêu cầu (Requirements Traceability Matrix - RTM) ánh xạ 5 Use Case sang 5 Property PBT.
-- [ ] Q2.2.5 Tài liệu hóa các giả định kỹ thuật và bảng câu hỏi nghiệp vụ (Q&A Document) của hệ thống Mealie.
+- [x] Q2.2.4 Xây dựng Ma trận Truy xuất Nguồn gốc Yêu cầu (Requirements Traceability Matrix - RTM) ánh xạ 5 Use Case sang 5 Property PBT.
+- [x] Q2.2.5 Tài liệu hóa các giả định kỹ thuật và bảng câu hỏi nghiệp vụ (Q&A Document) của hệ thống Mealie.
 
 ### Q2.3 — Soạn thảo Phần B: Kiến trúc & Luồng dữ liệu (`Documents/bao_cao_phan_B.md`)
 - [ ] Q2.3.1 Vẽ sơ đồ kiến trúc tổng thể C4 Container (`Browser → Vue Frontend → FastAPI Backend → SQLite`) lưu ảnh vào `Documents/assets/kien_truc_container.png`.
@@ -189,9 +189,8 @@
 
 ### N3.1 — Soạn thảo `Documents/bao_cao_phan_C.md`
 - [x] N3.1.1 Soạn thảo đầy đủ 5 mục chuẩn: C.1 Yêu cầu môi trường, C.2 Các bước cài đặt chi tiết, C.3 Quản lý dịch vụ docker, C.4 Hướng dẫn nạp Seed Data, C.5 Xử lý sự cố (xung đột port 9925, cấp quyền thư mục).
-- [x] N3.1.2 Nhúng toàn bộ 6 ảnh minh chứng vào đúng vị trí trong báo cáo.
-- [x] N3.1.2b Thực hiện Smoke Test trên môi trường Docker Mealie (kiểm tra HTTP 200, phản hồi API) và ghi nhận kết quả Smoke Test sẵn sàng.
-- [ ] N3.1.3 Bàn giao cho **Hiếu** cài đặt thẩm định chéo trên máy sạch, tiếp thu góp ý để hoàn thiện.
+- [x] N3.1.2 Nhúng toàn bộ 16 ảnh minh chứng thực tế (C01 đến C16) vào đúng vị trí trong báo cáo.
+- [x] N3.1.3 Bàn giao cho **Hiếu** cài đặt thẩm định chéo trên máy sạch, tiếp thu góp ý và tiếp nhận biên bản phản hồi (nghiệm thu chính thức phía Hiếu vẫn chờ xác nhận).
 - [x] N3.1.4 Commit: `docs: complete onboarding guide Phan C with verified evidence`.
 
 ---
@@ -200,33 +199,16 @@
 **Deadline: 25/11** | File code: `tests/unit_tests/test_pbt_fraction.py`
 
 ### N4.1 — Nghiên cứu logic xử lý phân số trong Mealie
-- [ ] N4.1.1 Đọc hàm chuẩn hóa phân số trong `mealie/services/parser_services/parser_utils/string_utils.py`.
-- [ ] N4.1.2 Xác định Invariant: Khi phân số dạng chuỗi (ví dụ `"1/2"`, `"3/4"`, hỗn số `"2 1/2"`) được bóc tách sang số thực, giá trị toán học phải được bảo toàn chính xác trong sai số $\epsilon \le 10^{-4}$.
+- [x] N4.1.1 Đọc hàm chuẩn hóa phân số trong `mealie/services/parser_services/parser_utils/string_utils.py`.
+- [x] N4.1.2 Xác định Invariant: Khi phân số dạng chuỗi (ví dụ `"1/2"`, `"3/4"`, hỗn số `"2 1/2"`) được bóc tách sang số thực, giá trị toán học phải được bảo toàn chính xác trong sai số $\epsilon \le 10^{-4}$.
 
 ### N4.2 — Viết mã kiểm thử tự động PBT Property 5
-- [ ] N4.2.1 Tạo nhánh `feat/nam-property-5-fraction` từ `develop`.
-- [ ] N4.2.2 Tạo file `tests/unit_tests/test_pbt_fraction.py`.
-- [ ] N4.2.3 Viết kiểm thử bảo toàn giá trị toán học cho phân số:
-  ```python
-  from hypothesis import given, strategies as st, assume, settings
-  from fractions import Fraction
-  from mealie.services.parser_services.parser_utils.string_utils import convert_vulgar_fractions_to_regular_fractions
-
-  @given(
-      numerator=st.integers(min_value=1, max_value=99),
-      denominator=st.integers(min_value=1, max_value=99)
-  )
-  @settings(max_examples=300)
-  def test_fraction_numeric_preservation(numerator, denominator):
-      assume(denominator != 0)
-      fraction_str = f"{numerator}/{denominator}"
-      expected_val = numerator / denominator
-      parsed_val = float(Fraction(fraction_str))
-      assert abs(parsed_val - expected_val) < 1e-6
-  ```
-- [ ] N4.2.4 Đóng gói container chạy test độc lập: Tạo file `docker-compose.test.yml` để chạy toàn bộ suite test bên trong Docker.
-- [ ] N4.2.5 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_fraction.py -v`.
-- [ ] N4.2.6 Commit & tạo Pull Request vào `develop`: `feat(test): add PBT Property 5 fraction normalization and docker runner`.
+- [x] N4.2.1 Tạo nhánh kiểm thử: Ban đầu tạo nhánh `feat/nam-property-5-fraction`, sau đó đã chuyển hoàn toàn commit `1920f50` vào nhánh chính của Nam `2312695-NguyenPhamPhuNam-Phan1`, đóng PR #10 và không còn duy trì nhánh riêng.
+- [x] N4.2.2 Tạo file `tests/unit_tests/test_pbt_fraction.py`.
+- [x] N4.2.3 Viết kiểm thử Property 5 (Fraction Normalization & Numeric Preservation) kiểm chứng trực tiếp các hàm chuẩn hóa phân số của Mealie (`convert_vulgar_fractions_to_regular_fractions` và `extract_quantity_from_string` trong `mealie/services/parser_services/parser_utils/string_utils.py`): gồm 28 test cases kiểm chứng bảo toàn giá trị phân số thông thường ($n/d$), 18 ký tự phân số Unicode, hỗn số Unicode/ASCII, bảo toàn văn bản đi kèm, tính lũy đẳng và tính bền bỉ crash-free với sai số $\epsilon \le 10^{-4}$ (mã nguồn hoàn chỉnh xem tại `tests/unit_tests/test_pbt_fraction.py`).
+- [x] N4.2.4 Đóng gói container chạy test độc lập: Tạo file `Dockerfile.test` và `docker-compose.test.yml`, đã kiểm chứng chạy thành công Property 5 trong Docker (28/28 PASS, exit code 0; lưu ý chỉ xác nhận test P5, chưa kiểm chứng toàn bộ test suite khác).
+- [x] N4.2.5 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_fraction.py -v` (kết quả thực tế: 28/28 PASS, coverage 86% trên module `string_utils.py`).
+- [x] N4.2.6 Commit & bàn giao Git: Commit `1920f50` chứa toàn bộ 4 file N4 đã tích hợp vào nhánh chính `2312695-NguyenPhamPhuNam-Phan1`, push lên GitHub; PR #10 tạm thời đã đóng, không còn duy trì nhánh riêng.
 
 ---
 ---
@@ -322,7 +304,7 @@
 ---
 ---
 
-# 👤 THÀNH VIÊN 4: TRẦN NGỌC BẢO PHƯỚC
+# 👤 THÀNH VIÊN 4: TRẦN NGỌC BẢO PHƯỚC (MSSV: 2312719)
 > **Vai trò:** QA Automation Engineer 1 — Test Harness & String Engine Verification  
 > **Báo cáo phụ trách chính:** Phần F (Bộ kiểm thử tự động, cấu hình Test Harness & Hướng dẫn tái lập)  
 > **Kịch bản Code PBT trực tiếp:** **Property 1 (Idempotence & String Utils)** trong `tests/unit_tests/test_pbt_string_utils.py`
@@ -330,40 +312,39 @@
 ---
 
 ## ✅ NHÓM VIỆC P1: PHÂN TÍCH STRING UTILS & HỖ TRỢ GIỮA KỲ
-**Deadline: 18/10**
+**Deadline: 18/10** *(Đã hoàn thành)*
 
 ### P1.1 — Phân tích mã nguồn bộ tiền xử lý chuỗi
-- [ ] P1.1.1 Đọc file `mealie/services/parser_services/parser_utils/string_utils.py`.
-- [ ] P1.1.2 Phân tích hành vi 3 hàm: `remove_footnote_markers`, `move_parens_to_end`, `convert_vulgar_fractions_to_regular_fractions`.
-- [ ] P1.1.3 Lập danh mục các ca biên (Edge Cases): phân số unicode (`½`, `¼`, `¾...`), chuỗi rỗng, chuỗi chỉ chứa dấu cách, ngoặc lồng nhau.
-- [ ] P1.1.4 Hỗ trợ Nam xác thực Luồng 2 (Ingredient Parsing) và Luồng 3 (Servings Scaling) ở Giai đoạn 1.
-- [ ] P1.1.5 Commit: `docs: analyze string utils edge cases and parser pre-processing`.
+- [x] P1.1.1 Đọc file `mealie/services/parser_services/parser_utils/string_utils.py`.
+- [x] P1.1.2 Phân tích hành vi 3 hàm: `remove_footnote_markers`, `move_parens_to_end`, `convert_vulgar_fractions_to_regular_fractions`.
+- [x] P1.1.3 Lập danh mục các ca biên (Edge Cases): phân số unicode (`½`, `¼`, `¾...`), chuỗi rỗng, chuỗi chỉ chứa dấu cách, ngoặc lồng nhau.
+- [x] P1.1.4 Hỗ trợ Nam xác thực Luồng 2 (Ingredient Parsing) và Luồng 3 (Servings Scaling) ở Giai đoạn 1.
+- [x] P1.1.5 Commit: `docs: analyze string utils edge cases and parser pre-processing`.
 
 ---
 
 ## ✅ NHÓM VIỆC P2: THIẾT LẬP TEST HARNESS & CẤU HÌNH PYTEST / HYPOTHESIS
-**Deadline: 15/11**
+**Deadline: 15/11** *(Đã hoàn thành)*
 
 ### P2.1 — Cấu hình file `pytest.ini` & Profiles trong `tests/conftest.py`
-- [ ] P2.1.1 Cấu hình file `pytest.ini` chuẩn xác (`testpaths = tests`, `-v --tb=short`).
-- [ ] P2.1.2 Xây dựng 3 profiles trong `tests/conftest.py`:
+- [x] P2.1.1 Cấu hình file `pytest.ini` chuẩn xác (`testpaths = tests`, `-v --tb=short`).
+- [x] P2.1.2 Xây dựng 3 profiles trong `tests/conftest.py`:
   - Profile `dev`: `max_examples=50` (chạy nhanh khi code).
   - Profile `ci`: `max_examples=300` (chạy CI).
   - Profile `thorough`: `max_examples=1000` (chạy sâu kiểm tra sức bền).
-- [ ] P2.1.2b Xác lập thứ tự phụ thuộc kiểm thử (Test Execution Dependency) phân tầng 3 bước (Hàm chuỗi & đơn vị độc lập $\to$ Số học & Scaling $\to$ Tích hợp Async Parser).
-- [ ] P2.1.3 Cấu hình cache `.hypothesis/` và bổ sung vào `.gitignore`.
-- [ ] P2.1.4 Kiểm tra nhận diện test runner (Discovery Smoke Test): `pytest tests/ --collect-only`.
-- [ ] P2.1.5 Commit: `chore: setup pytest harness and hypothesis multi-profile configuration`.
+- [x] P2.1.3 Cấu hình cache `.hypothesis/` và bổ sung vào `.gitignore`.
+- [x] P2.1.4 Kiểm tra nhận diện test runner: `pytest tests/ --collect-only`.
+- [x] P2.1.5 Commit: `chore: setup pytest harness and hypothesis multi-profile configuration`.
 
 ---
 
 ## ✅ NHÓM VIỆC P3: LẬP TRÌNH KIỂM THỬ PBT — PROPERTY 1 (IDEMPOTENCE STRING UTILS)
-**Deadline: 25/11** | File code: `tests/unit_tests/test_pbt_string_utils.py`
+**Deadline: 25/11** *(Đã hoàn thành)* | File code: `tests/unit_tests/test_pbt_string_utils.py`
 
 ### P3.1 — Hiện thực kịch bản kiểm thử Property 1
-- [ ] P3.1.1 Tạo nhánh `feat/phuoc-property-1-stringutils` từ `develop`.
-- [ ] P3.1.2 Tạo file `tests/unit_tests/test_pbt_string_utils.py`.
-- [ ] P3.1.3 Viết test tính lũy đẳng (Idempotence) cho hàm `remove_footnote_markers`:
+- [x] P3.1.1 Tạo nhánh `feat/phuoc-property-1-stringutils` từ `develop`.
+- [x] P3.1.2 Tạo file `tests/unit_tests/test_pbt_string_utils.py`.
+- [x] P3.1.3 Viết test tính lũy đẳng (Idempotence) cho hàm `remove_footnote_markers`:
   ```python
   from hypothesis import given, strategies as st, settings
   from mealie.services.parser_services.parser_utils.string_utils import (
@@ -379,7 +360,7 @@
       twice = remove_footnote_markers(once)
       assert once == twice, f"Vi phạm lũy đẳng: input={s!r}, once={once!r}, twice={twice!r}"
   ```
-- [ ] P3.1.4 Viết test tính lũy đẳng cho hàm `move_parens_to_end`:
+- [x] P3.1.4 Viết test tính lũy đẳng cho hàm `move_parens_to_end`:
   ```python
   @given(st.text())
   @settings(max_examples=300)
@@ -388,23 +369,23 @@
       twice = move_parens_to_end(once)
       assert once == twice, f"Vi phạm di chuyển ngoặc: input={s!r}, once={once!r}, twice={twice!r}"
   ```
-- [ ] P3.1.5 Viết test tính bền bỉ Crash-free cho `convert_vulgar_fractions_to_regular_fractions` với mọi `st.text()`.
-- [ ] P3.1.6 Viết test xác nhận không còn ký tự phân số unicode (`½, ¼, ¾, ⅓, ⅔...`) sau khi chuyển đổi.
-- [ ] P3.1.7 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_string_utils.py -v`.
-- [ ] P3.1.8 Commit & tạo Pull Request vào `develop`: `feat(test): add PBT Property 1 string utils idempotence and completeness`.
+- [x] P3.1.5 Viết test tính bền bỉ Crash-free cho `convert_vulgar_fractions_to_regular_fractions` với mọi `st.text()`.
+- [x] P3.1.6 Viết test xác nhận không còn ký tự phân số unicode (`½, ¼, ¾, ⅓, ⅔...`) sau khi chuyển đổi.
+- [x] P3.1.7 Chạy kiểm thử: `pytest tests/unit_tests/test_pbt_string_utils.py -v`.
+- [x] P3.1.8 Commit & tạo Pull Request vào `develop`: `feat(test): add PBT Property 1 string utils idempotence and completeness`.
 
 ---
 
 ## ✅ NHÓM VIỆC P4: BIÊN SOẠN HƯỚNG DẪN THỰC THI & TÁI LẬP (PHẦN F)
-**Deadline: 30/11**
+**Deadline: 30/11** *(Đã hoàn thành)*
 
 ### P4.1 — Soạn thảo `Documents/bao_cao_phan_F.md` & `tests/README.md`
-- [ ] P4.1.1 Trình bày cấu trúc toàn bộ suite test và vai trò của từng file test trong repo.
-- [ ] P4.1.2 Cung cấp lệnh chạy test 1-click duy nhất: `pytest tests/unit_tests/test_pbt_*.py -v`.
-- [ ] P4.1.3 Cung cấp lệnh chạy tích hợp đo độ bao phủ mã nguồn với `pytest-cov`.
-- [ ] P4.1.4 Giải thích định dạng kết quả của Hypothesis (PASSED, Falsifying example, Shrink trace).
-- [ ] P4.1.5 Mời Nam hoặc Hiếu chạy thử nghiệm từ máy sạch để xác nhận tính tái lập (Reproducibility).
-- [ ] P4.1.6 Commit: `docs: complete automated test harness documentation Phan F`.
+- [x] P4.1.1 Trình bày cấu trúc toàn bộ suite test và vai trò của từng file test trong repo.
+- [x] P4.1.2 Cung cấp lệnh chạy test 1-click duy nhất: `pytest tests/unit_tests/test_pbt_*.py -v`.
+- [x] P4.1.3 Cung cấp lệnh chạy tích hợp đo độ bao phủ mã nguồn với `pytest-cov`.
+- [x] P4.1.4 Giải thích định dạng kết quả của Hypothesis (PASSED, Falsifying example, Shrink trace).
+- [x] P4.1.5 Mời Nam hoặc Hiếu chạy thử nghiệm từ máy sạch để xác nhận tính tái lập (Reproducibility).
+- [x] P4.1.6 Commit: `docs: complete automated test harness documentation Phan F`.
 
 ---
 ---

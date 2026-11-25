@@ -1,0 +1,42 @@
+﻿# ==============================================================================
+# DOCKERIZED TEST RUNNER — PROPERTY 5 (FRACTION NORMALIZATION PBT)
+# Đồ án Kiểm thử Phần mềm — Nhóm 6
+# Thành viên: Nguyễn Phạm Phú Nam (2312695-netizen)
+#
+# Mục đích: Chạy test PBT Property 5 trong môi trường Docker độc lập,
+#           không phụ thuộc .venv của host.
+#
+# Build image:
+#   docker compose -f docker-compose.test.yml build test-runner
+#
+# Chạy P5 riêng (truyền exit code thật):
+#   docker compose -f docker-compose.test.yml run --rm test-runner
+#
+# Chạy toàn bộ suite:
+#   docker compose -f docker-compose.test.yml run --rm test-runner pytest tests/ -v --tb=long
+#
+# Xem kết quả lần chạy cuối (nếu không dùng --rm):
+#   docker compose -f docker-compose.test.yml logs test-runner
+# ==============================================================================
+
+services:
+  test-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: ktpm_nhom6_test_runner
+    volumes:
+      # Mount source code để không cần build lại khi sửa test
+      - ./tests:/app/tests:ro
+      - ./mealie_src:/app/mealie_src:ro
+      - ./pytest.ini:/app/pytest.ini:ro
+    working_dir: /app
+    # Lệnh mặc định: chạy P5 riêng, truyền exit code thật
+    command: >
+      pytest tests/unit_tests/test_pbt_fraction.py
+        -v
+        --tb=long
+        -m pbt
+        --hypothesis-seed=0
+    # Không restart — lấy exit code thật từ pytest
+    restart: "no"
