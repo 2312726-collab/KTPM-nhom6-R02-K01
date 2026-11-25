@@ -24,17 +24,22 @@ LABEL description="KTPM Nhom6 - PBT Test Runner for Mealie v3.28.0"
 LABEL mealie.version="v3.28.0"
 LABEL mealie.sha="0552eaa4a80031b8572849cca0ed95d07f1be001"
 
-# Không tạo .pyc để container sạch hơn
+# Không tạo .pyc và dùng cấu hình môi trường test sạch cho Mealie
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV TESTING=true
+ENV PRODUCTION=false
+ENV DATA_DIR=/tmp/mealie-test-data
 
 WORKDIR /app
+
+# Tạo thư mục DATA_DIR tạm có quyền ghi cho logger/app_dirs khi mealie_src mount :ro
+RUN mkdir -p /tmp/mealie-test-data
 
 # Sao chép requirements trước để tận dụng Docker layer cache
 COPY requirements-test.txt .
 
-# Cài dependencies kiểm thử (không cần SQLAlchemy hay toàn bộ deps Mealie server)
-# string_utils.py chỉ dùng fractions và re — stdlib Python
+# Cài đầy đủ dependencies kiểm thử + Mealie runtime tối thiểu cho cả 5 Properties
 RUN pip install --no-cache-dir -r requirements-test.txt
 
 # Sao chép cấu hình pytest
@@ -43,18 +48,10 @@ COPY pytest.ini .
 # Sao chép toàn bộ tests/
 COPY tests/ tests/
 
-# Sao chép phần source Mealie cần thiết cho P5
-# (mealie_src/ bị .gitignore — phải có sẵn trên host trước khi build)
-# Chỉ cần parser_utils, không cần toàn bộ mealie source
-COPY mealie_src/mealie/services/parser_services/parser_utils/ \
-     mealie_src/mealie/services/parser_services/parser_utils/
-
-# Tạo __init__.py cần thiết để Python nhận diện package path
-RUN mkdir -p mealie_src/mealie/services/parser_services && \
-    touch mealie_src/__init__.py && \
-    touch mealie_src/mealie/__init__.py && \
-    touch mealie_src/mealie/services/__init__.py && \
-    touch mealie_src/mealie/services/parser_services/__init__.py
+# Sao chép đầy đủ mã nguồn backend Mealie thật cần thiết cho cả 5 Properties
+# (bao gồm schema/, services/, lang/, db/, pkgs/, core/, repos/, assets/ cùng các __init__.py thật)
+# (mealie_src/ bị .gitignore — phải có sẵn trên host ở SHA 0552eaa4a80031b8572849cca0ed95d07f1be001 trước khi build)
+COPY mealie_src/mealie/ mealie_src/mealie/
 
 # Thêm mealie_src vào PYTHONPATH (tương tự pytest.ini pythonpath = . mealie_src)
 ENV PYTHONPATH="/app:/app/mealie_src"
