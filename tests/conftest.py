@@ -24,10 +24,10 @@ if MEALIE_SRC.exists() and str(MEALIE_SRC) not in sys.path:
 # CẤU HÌNH CÁC PROFILE HYPOTHESIS DÙNG CHUNG CHO CẢ 5 THÀNH VIÊN
 # ==============================================================================
 
-# Profile 'dev': Chạy nhanh khi phát triển cục bộ trên máy (100 ví dụ)
+# Profile 'dev': Chạy nhanh khi phát triển cục bộ trên máy (50 ví dụ)
 settings.register_profile(
     "dev",
-    max_examples=100,
+    max_examples=50,
     deadline=None,
     verbosity=Verbosity.normal,
 )
