@@ -1,7 +1,7 @@
 # BẢNG THEO DÕI TIẾN ĐỘ CÁ NHÂN — THÀNH VIÊN 3: BÙI TRUNG HIẾU
 ## ĐỒ ÁN MÔN HỌC: KIỂM THỬ PHẦN MỀM — NHÓM 6
 * **Họ và tên:** Bùi Trung Hiếu
-* **MSSV:** `2110037` *(GitHub username: `2312611-Hieu`)*
+* **MSSV:** `2312611` *(GitHub username: `2312611-Hieu`)*
 * **Vai trò trong nhóm:** Test Architect & PBT Methodology Specialist
 * **Nhánh Git làm việc riêng:** `2312611-Hieu`
 * **Giai đoạn trọng tâm:** **PHẦN 1 — Phân tích hệ thống và thiết lập môi trường (Mốc Giữa kỳ 20/10)**
