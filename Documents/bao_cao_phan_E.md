@@ -100,7 +100,7 @@ Người dùng công thức thường ghi số lượng dưới dạng phân s�
 | Trường thông tin | Đặc tả chi tiết |
 | :--- | :--- |
 | **Hàm kiểm thử** | `convert_vulgar_fractions_to_regular_fractions(text: str)` và `extract_quantity_from_string(source_str: str)` trong `string_utils.py` |
-| **Công thức toán học** | Với tử số $N \ge 1$, mẫu số $D \ge 1$:<br/>$| \text{parse}(f"{N}/{D}") - (N / D) | \le 10^{-6}$ |
+| **Công thức toán học** | Với tử số $N \ge 1$, mẫu số $D \ge 1$:<br/>$| \text{parse}(f"{N}/{D}") - (N / D) | \le \text{EPSILON} = 10^{-6}$ |
 | **Chiến lược sinh mẫu (Strategies)** | $N \in \text{st.integers}(1, 99)$, $D \in \text{st.integers}(1, 99)$<br/>Kèm cặp bảng phân số Unicode ánh xạ: `{"½": 0.5, "¼": 0.25, "¾": 0.75, "⅓": 0.3333...}` |
 | **Tiền điều kiện (`assume`)** | `assume(denominator != 0)` |
 

@@ -20,39 +20,19 @@ BẤT BIẾN TOÁN HỌC (INVARIANTS):
 
 from __future__ import annotations
 
-import importlib.util
 from fractions import Fraction
-from pathlib import Path
 
 import pytest
 from hypothesis import assume, given
 from hypothesis import strategies as st
 
+from tests.conftest import load_mealie_string_utils
+
 # ==============================================================================
-# 1. Cơ chế nạp linh hoạt module string_utils từ mã nguồn Mealie v3.28.0
+# 1. Nạp module string_utils thật từ Mealie v3.28.0 theo đúng canonical name
 # ==============================================================================
 
-def _load_string_utils():
-    """
-    Nạp trực tiếp string_utils.py qua importlib để cô lập hoàn toàn khỏi
-    chuỗi import SQLAlchemy/Database trong parser_services/__init__.py.
-    """
-    candidates = [
-        Path(__file__).resolve().parent.parent.parent / "mealie_src" / "mealie" / "services" / "parser_services" / "parser_utils" / "string_utils.py",
-        Path("mealie_src/mealie/services/parser_services/parser_utils/string_utils.py"),
-        Path(__file__).resolve().parent.parent.parent / "mealie" / "services" / "parser_services" / "parser_utils" / "string_utils.py",
-        Path("mealie/services/parser_services/parser_utils/string_utils.py"),
-    ]
-    for p in candidates:
-        if p.exists():
-            spec = importlib.util.spec_from_file_location("mealie_string_utils", str(p))
-            mod = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(mod)
-            return mod
-    raise ImportError("Không tìm thấy file string_utils.py của Mealie!")
-
-
-_su = _load_string_utils()
+_su = load_mealie_string_utils()
 extract_quantity_from_string = _su.extract_quantity_from_string
 convert_vulgar_fractions_to_regular_fractions = _su.convert_vulgar_fractions_to_regular_fractions
 
@@ -78,7 +58,7 @@ VULGAR_FRACTION_CASES = [
     ("\u215e", Fraction(7, 8)),   # ⅞
 ]
 
-EPSILON = 1e-4  # Sai số cho phép đối với biểu diễn số thực dấu phẩy động
+EPSILON = 1e-6  # Sai số cho phép thống nhất với docstring và Documents/bao_cao_phan_E.md
 
 
 # ==============================================================================
@@ -251,7 +231,7 @@ def test_p5f_vulgar_fraction_normalization_idempotent(text: str) -> None:
 # EDGE CASES: TÍNH BỀN BỈ & XỬ LÝ BIÊN KHÔNG CRASH (CRASH-FREE & BOUNDARIES)
 # ==============================================================================
 
-@pytest.mark.pbt
+@pytest.mark.unit
 def test_p5g_zero_numerator_edge_case() -> None:
     """Ca biên: Tử số bằng 0 ('0/4 cup') phải trả về quantity = 0.0 an toàn."""
     qty, remaining = extract_quantity_from_string("0/4 cup")
@@ -259,22 +239,22 @@ def test_p5g_zero_numerator_edge_case() -> None:
     assert "cup" in remaining
 
 
-@pytest.mark.pbt
+@pytest.mark.unit
 def test_p5g_zero_denominator_safe_handling() -> None:
     """Ca biên: Mẫu số bằng 0 ('1/0 cup') phải bắt ZeroDivisionError và trả về 0 an toàn."""
     qty, remaining = extract_quantity_from_string("1/0 cup")
     assert qty == 0
-    assert "1/0" in remaining or "cup" in remaining
+    assert "1/0" in remaining and "cup" in remaining
 
 
-@pytest.mark.pbt
+@pytest.mark.unit
 def test_p5g_empty_and_whitespace_input() -> None:
     """Ca biên: Chuỗi rỗng hoặc chỉ có khoảng trắng không gây ngoại lệ."""
     assert extract_quantity_from_string("") == (0, "")
     assert extract_quantity_from_string("   ") == (0, "")
 
 
-@pytest.mark.pbt
+@pytest.mark.unit
 def test_p5g_text_without_numbers() -> None:
     """Ca biên: Chuỗi không có số liệu ('salt to taste') trả về 0 và giữ nguyên chuỗi."""
     qty, remaining = extract_quantity_from_string("salt to taste")
