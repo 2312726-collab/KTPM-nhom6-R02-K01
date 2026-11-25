@@ -20,14 +20,13 @@
    - 2.1. Phân tích chi tiết tệp cấu hình `pytest.ini`
    - 2.2. Chiến lược phân tầng đa cấu hình (Multi-profile) trong `tests/conftest.py`
    - 2.3. Cơ chế kiểm soát bộ nhớ đệm `.hypothesis/` chống Flaky Test
-   - 2.4. Hệ thống Mock Fixtures & Hỗ trợ Async Runner (Nhiệm vụ M1)
 3. [F.3. ĐẶC TẢ KỸ THUẬT & MÃ NGUỒN BỘ KIỂM THỬ PROPERTY 1](#f3-đặc-tả-kỹ-thuật--mã-nguồn-bộ-kiểm-thử-property-1)
-   - 3.1. Cơ chế nạp module linh hoạt (`_load_string_utils`)
+   - 3.1. Import module Mealie theo tên package chuẩn
    - 3.2. Property 1.1: Tính lũy đẳng (Idempotence) khi xóa dấu chú thích
    - 3.3. Property 1.2: Tính lũy đẳng (Idempotence) khi di chuyển ngoặc bổ nghĩa
    - 3.4. Property 1.3: Tính bền bỉ (Crash-free) & Hoàn chỉnh (Completeness) với phân số Unicode
-   - 3.5. Property 1.4: Tính không âm & Bảo toàn giá trị toán học khi bóc tách hỗn số
-   - 3.6. Toàn văn mã nguồn bộ kiểm thử `test_pbt_string_utils.py`
+   - 3.5. Danh mục Edge Cases cho Property 1
+   - 3.6. Các kịch bản trong `test_pbt_string_utils.py`
 4. [F.4. HƯỚNG DẪN THỰC THI & TÁI LẬP 1-CLICK (REPRODUCIBILITY GUIDE)](#f4-hướng-dẫn-thực-thi--tái-lập-1-click-reproducibility-guide)
    - 4.1. Thiết lập môi trường sạch và cài đặt Dependencies
    - 4.2. Danh mục lệnh thực thi kiểm thử 1-click
@@ -52,16 +51,14 @@ Trong các hệ thống mã nguồn mở quy mô công nghiệp như **Mealie**,
 Do đó, bộ khung kiểm thử (**Test Harness**) của Nhóm 6 được kiến trúc chặt chẽ theo **Triết lý Ponytail**:
 1. **Thu hẹp phạm vi vào Ranh giới Tin cậy (Trust Boundary):** Tập trung tuyệt đối vào module tiếp nhận và xử lý dữ liệu thô từ thế giới bên ngoài là `mealie/services/parser_services/`.
 2. **Kiểm thử các Hàm Thuần túy (Pure Functions):** Ưu tiên các thuật toán biến đổi chuỗi và tính toán số học độc lập trong `string_utils.py` và `unit_utils.py`. Các hàm này không có tác dụng phụ (No Side-effects), nhận dữ liệu đầu vào và trả về kết quả trong thời gian microsecond ($\mu s$), cho phép test runner sinh và thực thi hàng chục ngàn ca kiểm thử trong vài giây.
-3. **Cô lập hóa triệt để (Complete Test Isolation):** Với các module async có phụ thuộc cơ sở dữ liệu (`ingredient_parser.py`), Test Harness cung cấp sẵn hệ thống Mock Fixtures hoàn chỉnh, cho phép kiểm thử tính bền bỉ mà không cần dựng SQLite hay PostgreSQL thật.
+3. **Cô lập theo đúng phạm vi:** Các test PBT cho hàm thuần như String Utils không cần khởi tạo database; cấu hình dùng chung không khai báo fixture mock cho các thành viên khác.
 
 ```mermaid
 flowchart TD
     subgraph TestHarness["🏛️ TEST HARNESS KIẾM THỬ TỰ ĐỘNG (NHÓM 6)"]
-        Config["pytest.ini<br>• pythonpath<br>• markers: pbt, unit<br>• asyncio: auto"]
-        Profiles["tests/conftest.py<br>• Profile dev: 100 ex<br>• Profile ci: 300 ex<br>• Profile thorough: 1000 ex"]
-        Fixtures["Mock Fixtures<br>• mock_session<br>• mock_translator<br>• mock_data_matcher"]
+        Config["pytest.ini<br>• pythonpath<br>• markers: pbt, unit<br>• asyncio: strict (pytest-asyncio default)"]
+        Profiles["tests/conftest.py<br>• Profile dev: 50 ex<br>• Profile ci: 300 ex<br>• Profile thorough: 1000 ex"]
         Config --> Profiles
-        Profiles --> Fixtures
     end
 
     subgraph TestSuites["🧪 5 SUITES KIỂM THỬ PBT (HYPOTHESIS)"]
@@ -72,11 +69,11 @@ flowchart TD
         P5["Property 5: Fraction Handling<br>(Nguyễn Phạm Phú Nam)"]
     end
 
-    Fixtures --> P1 & P2 & P3 & P4 & P5
+    Profiles --> P1 & P2 & P3 & P4 & P5
     P1 --> S1["string_utils.py<br>(Pure Functions)"]
     P2 --> S2["unit_utils.py<br>(Math Conversion)"]
     P3 --> S3["ingredient_parser.py<br>(Async NLP Parsing)"]
-    P4 --> S4["recipe_service.py<br>(Scaling Logic)"]
+    P4 --> S4["household_services/shopping_lists.py<br>(Scaling Logic)"]
     P5 --> S5["Fraction Math Engine<br>(Accuracy)"]
 ```
 
@@ -88,12 +85,12 @@ Toàn bộ hạ tầng và mã nguồn kiểm thử được bố trí chuẩn m
 
 ```text
 mealie/
-├── pytest.ini                            # [GỐC] Cấu hình runner, PYTHONPATH, asyncio mode & markers
+├── pytest.ini                            # [GỐC] Cấu hình runner, PYTHONPATH & markers
 ├── requirements-test.txt                # [GỐC] Khai báo danh mục thư viện kiểm thử cần cài đặt
 ├── .hypothesis/                          # [GỐC] Bộ nhớ đệm lưu trữ các phản ví dụ đã phát hiện
 ├── tests/
 │   ├── __init__.py                      # Đánh dấu package Python cho bộ test
-│   ├── conftest.py                      # Cấu hình 3 Profiles Hypothesis & Mock Fixtures dùng chung
+│   ├── conftest.py                      # Cấu hình 3 Profiles Hypothesis dùng chung
 │   ├── README.md                        # Hướng dẫn thực thi 1-click cho người chấm thi độc lập
 │   └── unit_tests/
 │       ├── __init__.py                  # Đánh dấu package cho unit tests
@@ -110,11 +107,10 @@ mealie/
 #### Bảng vai trò kỹ thuật của từng tệp tin:
 | Tệp tin | Người khởi tạo / Phụ trách | Vai trò kỹ thuật trong Test Harness |
 | :--- | :--- | :--- |
-| `pytest.ini` | **Trần Ngọc Bảo Phước** | Thiết lập quy chuẩn nhận diện test runner, tự động nạp `mealie_src` vào `PYTHONPATH`, kích hoạt chế độ `asyncio_mode = auto`, đăng ký marker `@pytest.mark.pbt`. |
-| `tests/conftest.py` | **Trần Ngọc Bảo Phước** *(phối hợp M. Mạnh)* | Khởi tạo 3 Profiles `dev`, `ci`, `thorough` của Hypothesis; thiết lập hệ thống Mock Fixtures (`mock_session`, `mock_translator`, `mock_data_matcher`) để cách ly DB. |
+| `pytest.ini` | **Trần Ngọc Bảo Phước** | Thiết lập quy chuẩn nhận diện test runner, tự động nạp `mealie_src` vào `PYTHONPATH` và đăng ký marker `@pytest.mark.pbt`. Pytest-asyncio giữ chế độ mặc định `strict`; file không cấu hình `asyncio_mode = auto`. |
+| `tests/conftest.py` | **Trần Ngọc Bảo Phước** | Khởi tạo 3 Profiles `dev`, `ci`, `thorough` của Hypothesis; không khai báo mock fixtures. |
 | `tests/README.md` | **Trần Ngọc Bảo Phước** | Hướng dẫn cô đọng dành cho giảng viên/người chấm thi có thể copy lệnh chạy ngay lập tức mà không cần cấu hình phức tạp. |
-| `tests/unit_tests/test_pbt_string_utils.py` | **Trần Ngọc Bảo Phước** | Chứa 07 hàm kiểm thử tự động PBT bao phủ các tính chất toán học của module `string_utils.py`. |
-| `requirements-test.txt` | **Trần Ngọc Bảo Phước** | Danh mục dependencies tối giản độc lập (`pytest`, `hypothesis`, `pytest-cov`, `pytest-asyncio`, `pytest-mock`). |
+| `tests/unit_tests/test_pbt_string_utils.py` | **Trần Ngọc Bảo Phước** | Chứa 4 kịch bản PBT cho `string_utils.py`, gồm test characterization `XFAIL` cho lỗi đã biết của `move_parens_to_end`. |
 
 ---
 
@@ -162,10 +158,6 @@ pythonpath = . mealie_src
 # --strict-markers: báo lỗi nếu lập trình viên dùng marker chưa khai báo
 addopts = -v --tb=short --strict-markers -ra
 
-# Cấu hình kiểm thử bất đồng bộ (Asyncio) phục vụ BruteForceParser
-asyncio_mode = auto
-asyncio_default_fixture_loop_scope = function
-
 # Định nghĩa các marker phân loại test case chuẩn mực
 markers =
     pbt: Kịch bản kiểm thử Property-Based Testing sử dụng Hypothesis
@@ -176,7 +168,7 @@ markers =
 
 #### Phân tích các thông số then chốt:
 1. `pythonpath = . mealie_src`: Giải quyết dứt điểm vấn đề `ModuleNotFoundError` khi các module con của Mealie gọi chéo nhau mà không cần người dùng phải tự gõ lệnh `$env:PYTHONPATH` trên terminal.
-2. `asyncio_mode = auto`: Cho phép `pytest` tự động nhận diện các hàm `async def test_*` mà không cần phải gắn thủ công decorator `@pytest.mark.asyncio` trên từng test case.
+2. `pytest-asyncio` ở chế độ mặc định `strict`: các test bất đồng bộ cần được đánh dấu theo cấu hình plugin; `pytest.ini` không bật chế độ `auto`.
 3. `--strict-markers`: Buộc các thành viên trong nhóm phải tuân thủ chuẩn marker đã đăng ký (`pbt`, `unit`), ngăn chặn lỗi gõ sai chính tả marker.
 
 ---
@@ -197,7 +189,7 @@ from hypothesis import Verbosity, settings
 # 1. Profile 'dev': Chạy nhanh khi lập trình viên đang code và debug cục bộ
 settings.register_profile(
     "dev",
-    max_examples=100,  # Sinh 100 ví dụ kiểm thử cho mỗi test function
+    max_examples=50,  # Sinh 50 ví dụ kiểm thử cho mỗi test function
     deadline=None,  # Tắt deadline để tránh lỗi timeout do tải máy biến động
     verbosity=Verbosity.normal,
 )
@@ -223,11 +215,11 @@ settings.load_profile("dev")
 ```
 
 #### Bảng so sánh 3 chế độ kiểm thử:
-| Tên Profile | Số lượng ví dụ (`max_examples`) | Thời gian chạy (Suite 7 tests) | Mục đích sử dụng |
-| :--- | :---: | :---: | :--- |
-| **`dev`** *(Mặc định)* | **100** | **~ 4 - 5 giây** | Lập trình viên chạy liên tục khi sửa code để nhận phản hồi ngay lập tức. |
-| **`ci`** | **300** | **~ 12 - 15 giây** | Chạy kiểm tra trên môi trường CI (GitHub Actions) hoặc trước khi merge nhánh. |
-| **`thorough`** | **1.000** | **~ 40 - 50 giây** | Chạy trước buổi bảo vệ nghiệm thu để chứng minh độ bền bỉ tuyệt đối. |
+| Tên Profile | Số lượng ví dụ (`max_examples`) | Mục đích sử dụng |
+| :--- | :---: | :--- |
+| **`dev`** *(Mặc định)* | **50** | Lập trình viên chạy nhanh khi sửa code. |
+| **`ci`** | **300** | Chạy kiểm tra trên môi trường CI hoặc trước khi merge nhánh. |
+| **`thorough`** | **1.000** | Tăng số ví dụ để tìm kiếm ca biên. |
 
 ---
 
@@ -242,109 +234,19 @@ Thư viện Hypothesis và Test Harness của Nhóm 6 giải quyết triệt đ�
 
 ---
 
-### 2.4. Hệ thống Mock Fixtures & Hỗ trợ Async Runner (Nhiệm vụ M1)
-
-Để hỗ trợ thành viên Võ Hùng Mạnh thực hiện kịch bản Property 3 (kiểm thử lớp `BruteForceParser` trong `mealie/services/parser_services/ingredient_parser.py` mà không phụ thuộc cơ sở dữ liệu thật), Phước đã hiện thực hệ sinh thái Mock Fixtures trực tiếp tại [`tests/conftest.py`](file:///f:/THUC_HANH/KTPM/mealie/tests/conftest.py#L58-L96):
-
-```python
-from unittest.mock import MagicMock
-import pytest
-
-
-@pytest.fixture
-def mock_session():
-  """Fixture giả lập SQLAlchemy Session để cô lập hoàn toàn database."""
-  session = MagicMock()
-  return session
-
-
-@pytest.fixture
-def mock_translator():
-  """Fixture giả lập Translator của Mealie."""
-  translator = MagicMock()
-  translator.t = lambda x: x  # Trả về nguyên bản văn bản không dịch
-  return translator
-
-
-@pytest.fixture
-def mock_data_matcher():
-  """Fixture giả lập DataMatcher để tránh truy vấn DB khi khớp food/unit."""
-  matcher = MagicMock()
-  matcher.find_food_match.return_value = None
-  matcher.find_unit_match.return_value = None
-  return matcher
-
-
-@pytest.fixture
-def mock_brute_force_parser(mock_session, mock_translator, mock_data_matcher):
-  """Fixture khởi tạo BruteForceParser đã được cô lập hoàn toàn khỏi database.
-
-  Sẵn sàng phục vụ các ca kiểm thử Async/PBT Property 3.
-  """
-  from mealie.services.parser_services.ingredient_parser import BruteForceParser
-
-  parser = BruteForceParser(
-      group_id=None, session=mock_session, translator=mock_translator
-  )
-  parser.data_matcher = mock_data_matcher
-  return parser
-```
-
-> **Ý nghĩa kỹ thuật:** Nhờ hệ thống Fixture này, các kịch bản kiểm thử Async NLP của Mealie có thể chạy hoàn toàn độc lập với tốc độ thực thi tăng gấp 20 lần so với việc khởi tạo Database Session thật.
-
----
-
 ## 🧪 F.3. ĐẶC TẢ KỸ THUẬT & MÃ NGUỒN BỘ KIỂM THỬ PROPERTY 1
 
-### 3.1. Cơ chế nạp module linh hoạt (`_load_string_utils`)
-Nhằm đảm bảo bộ kiểm thử có thể chạy mượt mà trên mọi môi trường độc lập (máy chấm thi của Giảng viên, máy của các thành viên khác trong nhóm, hoặc bên trong Docker Container) mà không bị phụ thuộc vào cách đặt tên thư mục gốc, Phước đã lập trình hàm nạp module thích ứng động:
+### 3.1. Import module Mealie và đo coverage
 
 ```python
-import importlib.util
-from pathlib import Path
-
-
-def _load_string_utils():
-  """Cơ chế nạp Module linh hoạt, tìm kiếm theo nhiều đường dẫn tương đối và tuyệt đối."""
-  try:
-    from mealie.services.parser_services.parser_utils import string_utils as su
-
-    return su
-  except Exception:
-    candidates = [
-        (
-            Path(__file__).resolve().parent.parent.parent
-            / "mealie_src"
-            / "mealie"
-            / "services"
-            / "parser_services"
-            / "parser_utils"
-            / "string_utils.py"
-        ),
-        (
-            Path(__file__).resolve().parent.parent.parent
-            / "mealie"
-            / "services"
-            / "parser_services"
-            / "parser_utils"
-            / "string_utils.py"
-        ),
-        Path(
-            "mealie_src/mealie/services/parser_services/parser_utils/string_utils.py"
-        ),
-        Path("mealie/services/parser_services/parser_utils/string_utils.py"),
-    ]
-    for p in candidates:
-      if p.exists():
-        spec = importlib.util.spec_from_file_location("string_utils", str(p))
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        return mod
-    raise ImportError("Không tìm thấy file string_utils.py của Mealie!")
-
-
-su = _load_string_utils()
+from mealie.services.parser_services.parser_utils.string_utils import (
+    convert_vulgar_fractions_to_regular_fractions,
+    move_parens_to_end,
+    remove_footnote_markers,
+)
 ```
+
+Import bằng tên package chuẩn giúp pytest-cov nhận diện cùng một module khi tính coverage; test không dò đường dẫn máy cá nhân hay nuốt lỗi import.
 
 ---
 
@@ -360,15 +262,16 @@ Khi người dùng copy công thức từ các website ẩm thực, chuỗi nguy
 #### Mã nguồn kiểm thử:
 ```python
 @pytest.mark.pbt
+@settings(max_examples=300)
 @given(s=st.text())
-def test_remove_footnote_markers_idempotent(s: str):
+def test_remove_footnote_idempotent(s: str):
   """Kiểm tra tính lũy đẳng (Idempotence):
 
   Hàm xóa dấu sao chú thích ở cuối chuỗi (*) nếu áp dụng một lần hay nhiều lần
   đều phải mang lại kết quả đồng nhất: f(f(s)) == f(s).
   """
-  once = su.remove_footnote_markers(s)
-  twice = su.remove_footnote_markers(once)
+  once = remove_footnote_markers(s)
+  twice = remove_footnote_markers(once)
   assert once == twice, (
       f"Vi phạm tính lũy đẳng: input={s!r}, once={once!r}, twice={twice!r}"
   )
@@ -384,21 +287,40 @@ Hàm `move_parens_to_end(s)` phải đảm bảo tính lũy đẳng: sau khi ngo
 
 #### Mã nguồn kiểm thử:
 ```python
-@pytest.mark.pbt
-@given(s=st.text())
-def test_move_parens_to_end_idempotent(s: str):
-  """Kiểm tra tính lũy đẳng khi di chuyển thông tin trong ngoặc về cuối chuỗi:
+from hypothesis import example, given, settings, strategies as st
 
-  Sau khi ngoặc đã được chuyển về cuối, lần gọi thứ hai không được làm xáo trộn
-  hoặc nhân đôi thông tin: f(f(s)) == f(s).
-  """
-  once = su.move_parens_to_end(s)
-  twice = su.move_parens_to_end(once)
-  assert once == twice, (
-      "Vi phạm tính lũy đẳng khi di chuyển ngoặc: input={s!r}, once={once!r},"
-      " twice={twice!r}"
-  )
+@pytest.mark.pbt
+@pytest.mark.xfail(strict=True, reason="Lỗi lũy đẳng đã biết trong Mealie v3.28.0")
+@settings(max_examples=300)
+@given(
+    s=st.one_of(
+        st.text(),
+        st.tuples(
+            st.text(
+                alphabet="abcdefghijklmnopqrstuvwxyz0123456789",
+                min_size=1,
+                max_size=6,
+            ),
+            st.text(
+                alphabet="abcdefghijklmnopqrstuvwxyz",
+                min_size=2,
+                max_size=8,
+            ),
+            st.text(
+                alphabet="abcdefghijklmnopqrstuvwxyz",
+                min_size=2,
+                max_size=8,
+            ),
+        ).map(lambda parts: f"{parts[0]} ({parts[1]}) ({parts[2]}) "),
+    )
+)
+@example(s="1 (aa) (bb) ")
+def test_move_parens_idempotent(s):
+  once = move_parens_to_end(s)
+  assert move_parens_to_end(once) == once
 ```
+
+Strategy tạo chuỗi có cấu trúc để thường xuyên đi qua nhánh xử lý ngoặc; `@example` giữ lại phản ví dụ đã biết. `XFAIL` ghi nhận defect hiện hữu, còn `strict=True` biến việc sửa defect mà quên gỡ đánh dấu thành lỗi test.
 
 ---
 
@@ -407,10 +329,9 @@ def test_move_parens_to_end_idempotent(s: str):
 #### Ý nghĩa kỹ thuật & Nghiệp vụ:
 Công thức nấu ăn quốc tế sử dụng rất nhiều ký tự phân số Unicode dạng Vulgar Fractions (`¼, ½, ¾, ⅓, ⅔, ⅕, ⅙, ⅛...`). Máy tính không thể tính toán số học trực tiếp trên các ký tự này. Mealie chuyển đổi chúng thành dạng phân số thông thường (`1/4, 1/2, 3/4...`).
 
-Phước đã thiết kế **03 bài kiểm tra liên hoàn** cho tính năng này:
+Phước kiểm tra hai thuộc tính cho tính năng này:
 1. **Crash-free Robustness:** Hàm không được sập với bất kỳ chuỗi rác nào sinh ra từ `st.text()`.
 2. **Completeness (Hậu điều kiện):** Sau khi chuyển đổi, trong chuỗi kết quả **tuyệt đối không còn sót lại** bất kỳ ký tự nào trong từ điển 18 phân số Unicode.
-3. **Idempotence:** Việc chuẩn hóa chuỗi đã chuẩn hóa không sinh thêm ký tự lạ.
 
 #### Danh mục 18 ký tự phân số Unicode được kiểm soát:
 $$\mathcal{V} = \{ \text{¼}, \text{½}, \text{¾}, \text{⅐}, \text{⅑}, \text{⅒}, \text{⅓}, \text{⅔}, \text{⅕}, \text{⅖}, \text{⅗}, \text{⅘}, \text{⅙}, \text{⅚}, \text{⅛}, \text{⅜}, \text{⅝}, \text{⅞} \}$$
@@ -440,18 +361,21 @@ VULGAR_FRACTION_CHARS = [
 
 
 @pytest.mark.pbt
+@settings(max_examples=300)
 @given(s=st.text())
-def test_convert_vulgar_fractions_crash_free_and_robust(s: str):
+def test_convert_vulgar_fractions_crash_free(s: str):
   """Kiểm tra tính bền bỉ Crash-free với mọi chuỗi Unicode ngẫu nhiên."""
-  result = su.convert_vulgar_fractions_to_regular_fractions(s)
+  result = convert_vulgar_fractions_to_regular_fractions(s)
   assert isinstance(result, str)
 
 
 @pytest.mark.pbt
-@given(s=st.text())
-def test_convert_vulgar_fractions_completeness(s: str):
+@settings(max_examples=300)
+@given(s=st.one_of(st.text(), st.text(alphabet=VULGAR_FRACTION_CHARS)))
+@example(s="½ ¼ ¾ ⅓ ⅔")
+def test_convert_vulgar_fractions_no_remaining_unicode(s: str):
   """Kiểm tra tính hoàn chỉnh: Đảm bảo sạch bóng toàn bộ 18 ký tự phân số Unicode."""
-  result = su.convert_vulgar_fractions_to_regular_fractions(s)
+  result = convert_vulgar_fractions_to_regular_fractions(s)
   for vulgar_char in VULGAR_FRACTION_CHARS:
     assert vulgar_char not in result, (
         f"Ký tự phân số unicode {vulgar_char!r} vẫn tồn tại trong chuỗi:"
@@ -459,81 +383,25 @@ def test_convert_vulgar_fractions_completeness(s: str):
     )
 
 
-@pytest.mark.pbt
-@given(s=st.text())
-def test_convert_vulgar_fractions_idempotent(s: str):
-  """Kiểm tra tính lũy đẳng: f(f(s)) == f(s)."""
-  once = su.convert_vulgar_fractions_to_regular_fractions(s)
-  twice = su.convert_vulgar_fractions_to_regular_fractions(once)
-  assert once == twice, (
-      f"Vi phạm lũy đẳng chuẩn hóa phân số: once={once!r}, twice={twice!r}"
-  )
 ```
 
 ---
 
-### 3.5. Property 1.4: Tính không âm & Bảo toàn giá trị toán học khi bóc tách hỗn số
+### 3.5. Danh mục Edge Cases cho Property 1
 
-#### Ý nghĩa kỹ thuật & Nghiệp vụ:
-Hàm `extract_quantity_from_string(s)` bóc tách số lượng đầu vào từ chuỗi nguyên liệu.
-* **Bất biến 1 (Non-negative Invariant):** Trong thế giới thực của công thức nấu ăn, định lượng nguyên liệu không bao giờ có giá trị âm: $\text{Quantity} \ge 0$.
-* **Bất biến 2 (Mathematical Accuracy):** Với một hỗn số ngẫu nhiên sinh ra dạng $W + \frac{N}{D}$ kèm tên thực phẩm (ví dụ `"2 1/2 muỗng muối"`), giá trị thực tế bóc tách được phải xấp xỉ chính xác giá trị toán học lý thuyết với sai số dấu phẩy động $\epsilon \le 10^{-4}$.
+| Hàm | Đầu vào biên cần xét | Mục đích |
+|---|---|---|
+| `remove_footnote_markers` | `""`, `"   "`, `"500g flour*"` | Chuỗi rỗng, chỉ khoảng trắng và dấu chú thích cuối chuỗi. |
+| `move_parens_to_end` | `""`, `"   "`, `"(a (b))"`, `"1 (aa) (bb) "` | Chuỗi rỗng/trắng, ngoặc lồng nhau và nhiều cụm ngoặc; trường hợp cuối là phản ví dụ lũy đẳng được ghim. |
+| `convert_vulgar_fractions_to_regular_fractions` | `""`, `"   "`, `"½ ¼ ¾ ⅓ ⅔"` và các ký tự trong $\mathcal{V}$ | Đầu vào rỗng/trắng và kiểm tra toàn bộ bộ phân số Unicode. |
 
-#### Mã nguồn kiểm thử:
-```python
-from fractions import Fraction
-
-
-@pytest.mark.pbt
-@given(s=st.text())
-def test_extract_quantity_crash_free_and_non_negative(s: str):
-  """Kiểm tra tính bền bỉ và Invariant định lượng:
-
-  - Không crash với bất kỳ chuỗi đầu vào nào (kể cả chứa mẫu số 0 -
-  ZeroDivisionError).
-  - Định lượng trả về luôn luôn là số không âm (quantity >= 0).
-  - Chuỗi còn lại luôn là một chuỗi ký tự hợp lệ.
-  """
-  qty, remaining = su.extract_quantity_from_string(s)
-  assert isinstance(qty, (int, float))
-  assert qty >= 0, f"Định lượng trả về bị âm: {qty}"
-  assert isinstance(remaining, str)
-
-
-@pytest.mark.pbt
-@given(
-    whole=st.integers(min_value=1, max_value=100),
-    num=st.integers(min_value=1, max_value=9),
-    denom=st.integers(min_value=2, max_value=10),
-    food_name=st.text(
-        alphabet=st.characters(whitelist_categories=("Lu", "Ll")),
-        min_size=3,
-        max_size=15,
-    ),
-)
-def test_extract_quantity_mixed_fraction_accuracy(
-    whole: int, num: int, denom: int, food_name: str
-):
-  """Kiểm tra độ chính xác khi phân tích hỗn số sinh ngẫu nhiên: 'W N/D food_name'
-
-  Giá trị trích xuất phải đúng bằng: whole + (num / denom).
-  """
-  assume(denom > 0 and num < denom)
-  input_str = f"{whole} {num}/{denom} {food_name}"
-  expected_qty = float(whole + Fraction(num, denom))
-
-  qty, remaining = su.extract_quantity_from_string(input_str)
-  assert abs(qty - expected_qty) < 1e-4, (
-      f"Sai lệch định lượng: kỳ vọng {expected_qty}, thực tế {qty}"
-  )
-  assert food_name in remaining
-```
+Hai test về `extract_quantity_from_string` đã được loại khỏi suite này vì không thuộc phạm vi Property 1 được giao.
 
 ---
 
-### 3.6. Toàn văn mã nguồn bộ kiểm thử `test_pbt_string_utils.py`
+### 3.6. Các kịch bản trong `test_pbt_string_utils.py`
 
-Toàn bộ 07 hàm kiểm thử tự động trên được đóng gói hoàn chỉnh trong tệp [`tests/unit_tests/test_pbt_string_utils.py`](file:///f:/THUC_HANH/KTPM/mealie/tests/unit_tests/test_pbt_string_utils.py), có độ dài 155 dòng mã nguồn, sẵn sàng thực thi tự động.
+Bốn kịch bản tự động được đóng gói trong [`tests/unit_tests/test_pbt_string_utils.py`](file:///f:/THUC_HANH/KTPM/mealie/tests/unit_tests/test_pbt_string_utils.py). Mỗi test dùng `@settings(max_examples=300)`; test `move_parens_to_end` là characterization `XFAIL` cho defect đã biết.
 
 ---
 
@@ -543,51 +411,39 @@ Nhằm tuân thủ tuyệt đối tiêu chuẩn nghiệm thu của học phần,
 
 ### 4.1. Thiết lập môi trường sạch và cài đặt Dependencies
 
-Người chấm thi chỉ cần mở terminal tại thư mục gốc của dự án (`mealie/`) và thực hiện 2 lệnh:
+Người chấm thi mở terminal tại thư mục gốc của dự án (`mealie/`) và thực hiện:
 
 ```bash
-# 1. Khởi tạo môi trường ảo Python (khuyến nghị Python >= 3.10)
+# 1. Khởi tạo môi trường ảo tương thích với Mealie v3.28.0 (Python >= 3.14,<3.15)
 python -m venv .venv
 # Trên Windows PowerShell:
 .venv\Scripts\Activate.ps1
 # Trên Linux/macOS:
 source .venv/bin/activate
 
-# 2. Cài đặt các thư viện kiểm thử cần thiết (chưa đầy 10 giây)
-pip install -r requirements-test.txt
-```
-
-*Tệp `requirements-test.txt` bao gồm:*
-```text
-pytest>=8.0.0
-hypothesis>=6.100.0
-pytest-cov>=5.0.0
-pytest-asyncio>=0.23.0
-pytest-mock>=3.12.0
+# 2. Cài đặt dependencies đã khai báo cho môi trường test
+python -m pip install -r requirements-test.txt
 ```
 
 ---
 
 ### 4.2. Danh mục lệnh thực thi kiểm thử 1-click
 
-#### Lệnh 1: Thực thi kiểm thử Property 1 (Mặc định profile `dev` - 100 examples/test)
+#### Lệnh 1: Thực thi kiểm thử Property 1 (300 examples/test)
 ```powershell
 python -m pytest tests/unit_tests/test_pbt_string_utils.py -v
 ```
 
-#### Lệnh 2: Thực thi kiểm thử với Profile `ci` (300 examples/test)
+#### Lệnh 2: Thực thi kiểm thử với Profile `ci`
 ```powershell
 $env:HYPOTHESIS_PROFILE="ci"; python -m pytest tests/unit_tests/test_pbt_string_utils.py -v
 ```
 
-#### Lệnh 3: Thực thi kiểm thử với Profile `thorough` (Vét cạn 1000 examples/test)
-```powershell
-$env:HYPOTHESIS_PROFILE="thorough"; python -m pytest tests/unit_tests/test_pbt_string_utils.py -v
-```
+Các test trong file này đặt tường minh `max_examples=300`; do đó thay đổi profile không làm thay đổi số examples của chúng. Các profiles `dev`/`ci`/`thorough` vẫn áp dụng cho test không có cấu hình `@settings` riêng.
 
-#### Lệnh 4: Thực thi toàn bộ các file test PBT trong repo (Nhóm 6)
+#### Lệnh 3: Thực thi toàn bộ các file test PBT trong repo (Nhóm 6)
 ```powershell
-python -m pytest tests/unit_tests/test_pbt_*.py -v
+pytest tests/unit_tests/test_pbt_*.py -v
 ```
 
 ---
@@ -597,12 +453,18 @@ python -m pytest tests/unit_tests/test_pbt_*.py -v
 Để đo lường độ bao phủ dòng lệnh (Line Coverage) của bộ kiểm thử PBT đối với mã nguồn:
 
 ```powershell
-python -m pytest tests/unit_tests/test_pbt_string_utils.py --cov=tests -v
+python -m pytest tests/unit_tests/test_pbt_string_utils.py --cov=mealie.services.parser_services.parser_utils.string_utils -v
 ```
 
 Hoặc xuất báo cáo HTML trực quan:
 ```powershell
-python -m pytest tests/unit_tests/test_pbt_string_utils.py --cov=tests --cov-report=html:logs/coverage_html -v
+python -m pytest tests/unit_tests/test_pbt_string_utils.py --cov=mealie.services.parser_services.parser_utils.string_utils --cov-report=html:logs/coverage_html -v
+```
+
+Đo coverage tổng hợp của parser và ingredient schema khi các suite tương ứng sẵn sàng:
+
+```powershell
+python -m pytest tests/unit_tests/test_pbt_*.py --cov=mealie_src/mealie/services/parser_services --cov=mealie_src/mealie/schema/recipe/recipe_ingredient -v
 ```
 
 ---
@@ -611,13 +473,13 @@ python -m pytest tests/unit_tests/test_pbt_string_utils.py --cov=tests --cov-rep
 
 Khi thực thi, người chấm thi có thể bắt gặp các định dạng kết quả đặc trưng của Hypothesis:
 
-#### Trường hợp 1: Tất cả Properties đều thỏa mãn (PASSED)
+#### Trường hợp 1: Property thỏa mãn (PASSED)
 ```text
-tests/unit_tests/test_pbt_string_utils.py::test_remove_footnote_markers_idempotent PASSED [ 14%]
+tests/unit_tests/test_pbt_string_utils.py::test_remove_footnote_idempotent PASSED
 ...
-============================== 7 passed in 4.06s ==============================
+============================== 3 passed, 1 xfailed ==============================
 ```
-> **Ý nghĩa:** Hypothesis đã sinh ra tổng cộng $7 \times 100 = 700$ ca kiểm thử ngẫu nhiên phức tạp nhưng không tìm thấy bất kỳ trường hợp nào vi phạm tính chất toán học.
+> **Ý nghĩa:** Ba tính chất không liên quan defect đã biết đạt trong lần chạy đó; `XFAIL` ghi nhận phản ví dụ lũy đẳng của `move_parens_to_end` trên Mealie v3.28.0. Mỗi test được cấu hình tối đa 300 examples.
 
 #### Trường hợp 2: Khi phát hiện lỗi vi phạm (Falsifying Example & Shrinking)
 Nếu phát hiện lỗi, Hypothesis sẽ tự động kích hoạt thuật toán **Shrinking** để thu nhỏ chuỗi lỗi và xuất báo cáo có cấu trúc:
@@ -637,46 +499,21 @@ E       Explanation:
 E           Shrunk from initial random 500-character string to 17 characters.
 ```
 
+**Shrink trace** là các bước Hypothesis thử đơn giản hóa đầu vào đang làm test lỗi. Nó giúp tìm phản ví dụ nhỏ, dễ đọc; chi tiết trace phụ thuộc verbosity và không nhất thiết xuất hiện trong mọi log.
+
 ---
 
 ## 📊 F.5. KẾT QUẢ THỰC NGHIỆM & BẰNG CHỨNG XÁC NHẬN TÁI LẬP
 
-### 5.1. Log thực thi trực tiếp trên hệ thống (Pass 100%)
+### 5.1. Trạng thái kiểm chứng phiên bản hiện tại
 
-Dưới đây là nhật ký thực thi thực tế của lệnh `python -m pytest tests/unit_tests/test_pbt_string_utils.py -v` trên môi trường máy cá nhân của Phước:
-
-```text
-============================= test session starts =============================
-platform win32 -- Python 3.13.12, pytest-9.1.1, pluggy-1.6.0 -- E:\python\python.exe
-cachedir: .pytest_cache
-hypothesis profile 'dev' -> deadline=None
-rootdir: F:\THUC_HANH\KTPM\mealie
-configfile: pytest.ini
-plugins: anyio-4.15.1, hypothesis-6.168.5, asyncio-1.4.0, cov-7.1.0, mock-3.17.0
-asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
-collecting ... collected 7 items
-
-tests/unit_tests/test_pbt_string_utils.py::test_remove_footnote_markers_idempotent PASSED [ 14%]
-tests/unit_tests/test_pbt_string_utils.py::test_move_parens_to_end_idempotent PASSED [ 28%]
-tests/unit_tests/test_pbt_string_utils.py::test_convert_vulgar_fractions_crash_free_and_robust PASSED [ 42%]
-tests/unit_tests/test_pbt_string_utils.py::test_convert_vulgar_fractions_completeness PASSED [ 57%]
-tests/unit_tests/test_pbt_string_utils.py::test_convert_vulgar_fractions_idempotent PASSED [ 71%]
-tests/unit_tests/test_pbt_string_utils.py::test_extract_quantity_crash_free_and_non_negative PASSED [ 85%]
-tests/unit_tests/test_pbt_string_utils.py::test_extract_quantity_mixed_fraction_accuracy PASSED [100%]
-
-============================== 7 passed in 5.10s ==============================
-```
-
-> **Nhận xét kết quả:**
-> * Toàn bộ **7/7 hàm kiểm thử tự động đều đạt trạng thái PASSED (100%)**.
-> * Thời gian thực thi cực nhanh: **chỉ mất 5.10 giây** để hoàn thành việc kiểm chứng 700 ca test sinh ngẫu nhiên.
-> * Module `string_utils.py` của Mealie v3.28.0 thỏa mãn hoàn hảo các tính chất toán học Lũy đẳng, Hoàn chỉnh và Bền bỉ.
+Log cũ thuộc suite 7 test và không còn là bằng chứng cho suite đã chuẩn hóa. Cần chạy lại lệnh tại F.4 trên môi trường có Python 3.14 và checkout mã nguồn Mealie v3.28.0 (`mealie_src/`) trước khi ghi nhận kết quả. Test `move_parens_to_end` dự kiến được báo `XFAIL` cho defect đã biết; chưa ghi nhận kết quả mới tại thời điểm cập nhật tài liệu.
 
 ---
 
-### 5.2. Kết quả đo lường độ bao phủ (Code Coverage Report)
+### 5.2. Coverage
 
-Thực hiện lệnh `python -m pytest tests/unit_tests/test_pbt_string_utils.py --cov=tests -v` cho kết quả đo lường trực tiếp:
+Coverage cũ đo trên thư mục `tests/`, không phản ánh độ bao phủ mã nguồn Mealie. Bảng dưới đây chỉ là số liệu lịch sử của suite cũ, không dùng làm kết quả hiện tại. Chạy lại lệnh `--cov=mealie.services.parser_services.parser_utils.string_utils` trong F.4 để lấy số liệu đúng; chưa công bố phần trăm cho suite mới.
 
 ```text
 =============================== tests coverage ================================
@@ -693,24 +530,23 @@ TOTAL                                         101     24    76%
 ============================== 7 passed in 5.10s ==============================
 ```
 
-> **Đánh giá Coverage:**
-> * File kiểm thử chính `test_pbt_string_utils.py` đạt độ bao phủ thực thi **86%**.
-> * Toàn bộ package kiểm thử đạt độ bao phủ tổng thể **76%** ngay trong đợt nghiệm thu Mốc 1.
+> **Số liệu lịch sử (không áp dụng cho suite hiện tại):**
+> * Coverage 86% trên file test và 76% trên package là số đo của suite cũ, không phải coverage module Mealie.
 
 ---
 
-### 5.3. Biên bản thẩm định chéo (Cross-validation) từ môi trường sạch
+### 5.3. Thẩm định chéo
 
-Để đảm bảo tính khách quan và khả năng tái lập 100%, bộ Test Harness và tệp hướng dẫn `tests/README.md` đã được chuyển giao cho 02 thành viên khác trong nhóm thẩm định độc lập:
+Các kết quả thẩm định dưới đây thuộc phiên bản test cũ; cần chạy lại trên suite hiện tại trước khi khẳng định tính tái lập.
 
 1. **Biên bản thẩm định 1 — Người thực hiện:** **Nguyễn Phạm Phú Nam (DevOps)**
    * *Môi trường:* Máy Windows 11 sạch, Python 3.11, chưa có sẵn mã nguồn Mealie.
    * *Hành động:* Clone repo nhóm, chạy `pip install -r requirements-test.txt` và gõ lệnh `pytest tests/unit_tests/test_pbt_string_utils.py`.
-   * *Kết quả:* 7/7 tests passed trong 4.2 giây. Không phát sinh lỗi đường dẫn.
+   * *Kết quả lịch sử:* 7/7 tests passed trong 4.2 giây; không đại diện cho suite hiện tại.
 2. **Biên bản thẩm định 2 — Người thực hiện:** **Bùi Trung Hiếu (PBT Specialist)**
    * *Môi trường:* Linux Ubuntu 22.04 LTS qua WSL2.
    * *Hành động:* Thực thi profile CI (`HYPOTHESIS_PROFILE=ci pytest tests/unit_tests/test_pbt_string_utils.py`).
-   * *Kết quả:* 7/7 tests passed với 2.100 ví dụ được sinh trong 13.8 giây. Đạt chuẩn tái lập.
+   * *Kết quả lịch sử:* 7/7 tests passed với 2.100 ví dụ; cần thẩm định lại suite hiện tại.
 
 ---
 
@@ -718,7 +554,7 @@ TOTAL                                         101     24    76%
 
 Tập tài liệu và mã nguồn kiểm thử **Phần F** đóng vai trò là "xương sống kỹ thuật" cho toàn bộ đồ án kiểm thử của Nhóm 6:
 * **Hoàn thành xuất sắc nhiệm vụ nguyên tử P2, P3, P4:** Khởi tạo Test Harness đa tầng, lập trình hoàn thiện Property 1 vượt tiến độ và tài liệu hóa hướng dẫn tái lập 1-click.
-* **Hỗ trợ đắc lực nhiệm vụ M1:** Cung cấp hạ tầng Async & Mock Fixtures sẵn sàng cho thành viên Võ Hùng Mạnh tích hợp kiểm thử lớp `BruteForceParser` ở Property 3.
+* **Phạm vi P1:** Cấu hình harness, test Property 1 cho String Utils và tài liệu tái lập; mock fixtures/kiểm thử async thuộc phạm vi của thành viên phụ trách Property 3.
 * **Liên kết trực tiếp với Phần G và Phần H:**
   * Dữ liệu log và bảng tỷ lệ coverage của Phần F là đầu vào số liệu trực tiếp cho **Phần G** (Phân tích kết quả và Defect Analysis).
   * Quy trình thực thi 1-click của Phần F là nền tảng để Trưởng nhóm Trần Quốc Quân đóng gói vào **Phần H** (Ghim Commit SHA và hướng dẫn nghiệm thu sản phẩm).
