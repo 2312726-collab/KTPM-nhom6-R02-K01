@@ -1,51 +1,59 @@
-# HƯỚNG DẪN THỰC THI & TÁI LẬP BỘ KIỂM THỬ PBT (TEST HARNESS)
+# HƯỚNG DẪN THỰC THI & TÁI LẬP BỘ KIỂM THỬ PBT
 
-> **Người phụ trách:** Trần Ngọc Bảo Phước (MSSV: 2312719) — QA Automation Engineer 1  
-> **Mục tiêu:** Cung cấp hướng dẫn 1-click để thiết lập môi trường, thực thi và tái lập toàn bộ bộ kiểm thử tự động Property-Based Testing (Hypothesis + Pytest) trên mọi máy tính độc lập.
+> **Người phụ trách:** Trần Ngọc Bảo Phước (MSSV: 2312719) — QA Automation Engineer 1
 
----
+## 1. Phạm vi
 
-## 1. VỊ TRÍ FILE KIỂM THỬ PROPERTY 1
-- **File kiểm thử:** `tests/unit_tests/test_pbt_string_utils.py`
-- **Module được kiểm thử:** `mealie/services/parser_services/parser_utils/string_utils.py`
+- **Test:** `tests/unit_tests/test_pbt_string_utils.py`
+- **Module:** `mealie.services.parser_services.parser_utils.string_utils`
+- Test import module bằng tên package chuẩn để pytest-cov gộp coverage chính xác.
 
----
+## 2. Cài đặt
 
-## 2. CÀI ĐẶT THƯ VIỆN CẦN THIẾT
-```bash
-pip install pytest hypothesis pytest-cov
+Dùng Python 3.14 và đảm bảo mã nguồn Mealie v3.28.0 đã được checkout tại `mealie_src/`, sau đó chạy tại thư mục gốc repo:
+
+```powershell
+python -m pip install -r requirements-test.txt
 ```
 
----
+## 3. Lệnh chạy
 
-## 3. CÁC LỆNH CHẠY KIỂM THỬ 1-CLICK
+Chạy Property 1:
 
-### 3.1. Chạy riêng kịch bản Property 1 (String Utils Idempotence)
 ```powershell
 python -m pytest tests/unit_tests/test_pbt_string_utils.py -v
 ```
 
-### 3.2. Chạy với profile CI (300 test cases sinh ngẫu nhiên)
+Chạy với profile `ci`:
+
 ```powershell
 $env:HYPOTHESIS_PROFILE="ci"; python -m pytest tests/unit_tests/test_pbt_string_utils.py -v
 ```
 
-### 3.3. Chạy đo độ bao phủ mã nguồn (Code Coverage)
+Các test trong file này đặt tường minh `max_examples=300`; vì vậy đổi profile không làm thay đổi số examples của chúng.
+
+Chạy toàn bộ các suite PBT:
+
 ```powershell
-python -m pytest tests/unit_tests/test_pbt_string_utils.py --cov=tests -v
+pytest tests/unit_tests/test_pbt_*.py -v
 ```
 
----
+Đo coverage trực tiếp trên module Mealie được kiểm thử:
 
-## 4. KẾT QUẢ THỰC THI THỰC TẾ
-```text
-tests/unit_tests/test_pbt_string_utils.py::test_remove_footnote_markers_idempotent PASSED [ 14%]
-tests/unit_tests/test_pbt_string_utils.py::test_move_parens_to_end_idempotent PASSED [ 28%]
-tests/unit_tests/test_pbt_string_utils.py::test_convert_vulgar_fractions_crash_free_and_robust PASSED [ 42%]
-tests/unit_tests/test_pbt_string_utils.py::test_convert_vulgar_fractions_completeness PASSED [ 57%]
-tests/unit_tests/test_pbt_string_utils.py::test_convert_vulgar_fractions_idempotent PASSED [ 71%]
-tests/unit_tests/test_pbt_string_utils.py::test_extract_quantity_crash_free_and_non_negative PASSED [ 85%]
-tests/unit_tests/test_pbt_string_utils.py::test_extract_quantity_mixed_fraction_accuracy PASSED [100%]
-
-============================== 7 passed in 1.44s ==============================
+```powershell
+python -m pytest tests/unit_tests/test_pbt_string_utils.py --cov=mealie.services.parser_services.parser_utils.string_utils -v
 ```
+
+Coverage tổng hợp cho parser và ingredient schema:
+
+```powershell
+python -m pytest tests/unit_tests/test_pbt_*.py --cov=mealie_src/mealie/services/parser_services --cov=mealie_src/mealie/schema/recipe/recipe_ingredient -v
+```
+
+## 4. Đọc kết quả Hypothesis
+
+- `PASSED`: test không tìm thấy đầu vào vi phạm tính chất trong lần chạy đó.
+- `Falsifying example`: đầu vào cụ thể làm assertion thất bại; Hypothesis thường thu nhỏ đầu vào này.
+- `Shrinking` / shrink trace: các bước Hypothesis thử rút gọn phản ví dụ. Chi tiết có thể hiện khi bật verbosity phù hợp, không nhất thiết xuất hiện trong log mặc định.
+
+`test_move_parens_idempotent` được đánh dấu `XFAIL` có chủ đích để ghi nhận lỗi đã biết trong Mealie v3.28.0. `strict=True` sẽ làm test thất bại nếu lỗi được sửa mà dấu `xfail` chưa được gỡ.
