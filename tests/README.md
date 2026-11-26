@@ -32,11 +32,13 @@ $env:HYPOTHESIS_PROFILE="ci"; python -m pytest tests/unit_tests/test_pbt_string_
 
 Các test trong file này đặt tường minh `max_examples=300`; vì vậy đổi profile không làm thay đổi số examples của chúng.
 
-Chạy toàn bộ các suite PBT:
+Chạy toàn bộ các suite kiểm thử:
 
 ```powershell
-pytest tests/unit_tests/test_pbt_*.py -v
+python -m pytest tests/unit_tests/ -v
 ```
+
+*(Lưu ý: Trên Windows PowerShell, dấu `*` trong `test_pbt_*.py` không tự bung tham số như Linux bash, nên dùng trực tiếp `tests/unit_tests/` hoặc lọc marker `-m pbt`).*
 
 Đo coverage trực tiếp trên module Mealie được kiểm thử:
 

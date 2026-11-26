@@ -79,6 +79,99 @@ def load_mealie_string_utils():
         raise ImportError(f"Không tìm thấy {STRING_UTILS_MODULE} trong {MEALIE_SRC}")
 
 
+def ensure_mealie_parser_isolated():
+    """
+    Chỉ kích hoạt cô lập nhẹ khi chạy trên Python < 3.14 (do Mealie v3.28.0 dùng PEP 649
+    ở settings.py/ai_providers.py) hoặc môi trường host thiếu dependencies nặng (fastapi, sqlalchemy...).
+    Trên môi trường chuẩn Python >= 3.14 cài đủ requirements-test.txt, hàm giữ nguyên module thật 100%.
+    """
+    needs_isolation = sys.version_info < (3, 14) or any(
+        importlib.util.find_spec(dep) is None
+        for dep in ("fastapi", "sqlalchemy", "pydantic_settings", "text_unidecode")
+    )
+    if not needs_isolation:
+        return
+
+    import string
+    from typing import Any
+    from unittest.mock import MagicMock
+    from pydantic import BaseModel, ConfigDict, UUID4
+
+    class _MealieRecipeStub(BaseModel):
+        model_config = ConfigDict(from_attributes=True)
+        id: UUID4
+        name: str = "Sub-recipe"
+        recipe_ingredient: list[Any] = []
+
+    norm_punct = string.punctuation.replace("'", "").replace('"', "")
+    norm_table = str.maketrans(norm_punct, " " * len(norm_punct))
+
+    class _NormalizedModelStub:
+        @classmethod
+        def normalize(cls, val: str) -> str:
+            try:
+                from text_unidecode import unidecode
+                cleaned = unidecode(val)
+            except Exception:
+                cleaned = val
+            return cleaned.translate(norm_table).lower().strip()[:255]
+
+    if "fastapi" not in sys.modules:
+        f_mod = types.ModuleType("fastapi")
+        f_mod.Header = MagicMock()
+        sys.modules["fastapi"] = f_mod
+
+    if "mealie.core.root_logger" not in sys.modules:
+        l_mod = types.ModuleType("mealie.core.root_logger")
+        l_mod.get_logger = MagicMock(return_value=MagicMock())
+        sys.modules["mealie.core.root_logger"] = l_mod
+
+    if "mealie.db.models.recipe" not in sys.modules:
+        db_rec = types.ModuleType("mealie.db.models.recipe")
+        db_rec.__path__ = []
+        db_rec.IngredientFoodModel = _NormalizedModelStub
+        db_rec.IngredientFoodSubstitutionModel = MagicMock()
+        db_rec.RecipeModel = MagicMock()
+        sys.modules["mealie.db.models.recipe"] = db_rec
+
+    if "mealie.db.models.recipe.ingredient" not in sys.modules:
+        db_ing = types.ModuleType("mealie.db.models.recipe.ingredient")
+        db_ing.IngredientFoodModel = _NormalizedModelStub
+        db_ing.IngredientUnitModel = _NormalizedModelStub
+        sys.modules["mealie.db.models.recipe.ingredient"] = db_ing
+
+    if "mealie.repos" not in sys.modules:
+        repos_pkg = types.ModuleType("mealie.repos")
+        repos_pkg.__path__ = []
+        sys.modules["mealie.repos"] = repos_pkg
+
+    if "mealie.repos.all_repositories" not in sys.modules:
+        all_repos = types.ModuleType("mealie.repos.all_repositories")
+        all_repos.get_repositories = MagicMock()
+        all_repos.AllRepositories = MagicMock()
+        sys.modules["mealie.repos.all_repositories"] = all_repos
+
+    if "mealie.repos.repository_factory" not in sys.modules:
+        repo_fac = types.ModuleType("mealie.repos.repository_factory")
+        repo_fac.AllRepositories = Any
+        sys.modules["mealie.repos.repository_factory"] = repo_fac
+
+    if "mealie.schema.recipe" not in sys.modules and MEALIE_SRC.exists():
+        rec_pkg = types.ModuleType("mealie.schema.recipe")
+        rec_pkg.__path__ = [str(MEALIE_SRC / "mealie" / "schema" / "recipe")]
+        sys.modules["mealie.schema.recipe"] = rec_pkg
+
+    if "mealie.schema.recipe.recipe" not in sys.modules:
+        rec_mod = types.ModuleType("mealie.schema.recipe.recipe")
+        rec_mod.Recipe = _MealieRecipeStub
+        rec_mod.RecipeSummary = _MealieRecipeStub
+        sys.modules["mealie.schema.recipe.recipe"] = rec_mod
+
+    from mealie.schema.recipe.recipe_ingredient import RecipeIngredient
+    if "mealie.schema.recipe" in sys.modules and not hasattr(sys.modules["mealie.schema.recipe"], "RecipeIngredient"):
+        sys.modules["mealie.schema.recipe"].RecipeIngredient = RecipeIngredient
+
+
 # ==============================================================================
 # CẤU HÌNH CÁC PROFILE HYPOTHESIS DÙNG CHUNG CHO CẢ 5 THÀNH VIÊN
 # ==============================================================================
