@@ -8,30 +8,31 @@
 
 ## 1. Kết quả thực thi bộ kiểm thử tự động
 
-Chuẩn chính thức của dự án là **Python 3.14 (`>=3.14,<3.15`)** (`pyproject.toml`, `Dockerfile.test`). Kết quả thực thi hợp nhất 1 lệnh duy nhất dưới đây được ghi nhận trực tiếp trên máy trạm Windows `.venv` (Python 3.13.2 kèm `ensure_mealie_parser_isolated()` trong `tests/conftest.py`; trên Python `>= 3.14` toàn bộ suite nạp thẳng module Mealie thật):
+Bộ kiểm thử hợp nhất đầy đủ 6 tệp (`M1` + `P1` → `P5`) đã được xác thực thành công bằng **1 lệnh duy nhất** trên cả hai môi trường: **Docker Test Runner chuẩn Python 3.14.10** (nạp 100% mã nguồn Mealie thật, không dùng fallback stub) và **Windows Host Python 3.13.2** (`.venv` qua `ensure_mealie_parser_isolated()` tại `tests/conftest.py`):
 
-* **Chạy toàn bộ `tests/unit_tests/` (6 tệp: `M1` + `P1` → `P5`):**
-  * Lệnh: `pytest tests/unit_tests/ -v`
-  * Kết quả: **65 passed, 6 xfailed in 76.81s** (0 errors, 0 failed).
-* **Chạy lọc riêng các ca PBT (`-m pbt`):**
-  * Lệnh: `pytest -m pbt -v`
-  * Kết quả: **49 passed, 3 xfailed in 34.61s** (52 selected, 19 unit tests deselected; 0 errors, 0 failed).
+* **Trên Docker Test Runner (`python:3.14-slim`, Python 3.14.10):**
+  * Toàn bộ `tests/` (`docker compose -f docker-compose.test.yml run --rm test-runner pytest tests/ -v --tb=long --cov=...`): **65 passed, 6 xfailed in 53.42s** (0 collection errors, 0 failed).
+  * Lọc riêng marker PBT (`pytest -m pbt -v`): **49 passed, 3 xfailed in 50.39s** (52 selected, 19 unit tests deselected; 0 errors, 0 failed).
+  * Tái hiện trực tiếp các lỗi đã ghim (`--runxfail`): **6 failed, 1 passed** (xác nhận toàn bộ 6 ca `xfail` đều tái hiện đúng lỗi thật trên `v3.28.0`).
+* **Trên Windows Host (`.venv`, Python 3.13.2):**
+  * Toàn bộ `tests/unit_tests/` (`pytest tests/unit_tests/ -v`): **65 passed, 6 xfailed in 76.81s** (0 errors, 0 failed).
+  * Lọc riêng marker PBT (`pytest -m pbt -v`): **49 passed, 3 xfailed in 34.61s** (0 errors, 0 failed).
 
 ---
 
 ## 2. Kết quả đo lường độ bao phủ mã nguồn (Code Coverage)
 
-Đo trực tiếp trên mã nguồn thật `mealie_src/mealie/` trong phiên chạy gộp `pytest tests/unit_tests/ -v`:
+Đo trực tiếp trên mã nguồn thật `mealie_src/mealie/` trong container Docker **Python 3.14.10** bằng `pytest-cov`:
 
 | Module mã nguồn Mealie `v3.28.0` | Tổng Statements | Miss | Độ phủ (Coverage) | Ghi chú |
 | :--- | :---: | :---: | :---: | :--- |
 | `mealie/services/parser_services/parser_utils/string_utils.py` | 56 | 0 | **100%** | Bao phủ toàn diện bởi `P1` + `P5` |
-| `mealie/services/parser_services/parser_utils/unit_utils.py` | 81 | 1 | **99%** | Bao phủ bởi `P2` (sót dòng 20) |
+| `mealie/services/parser_services/parser_utils/unit_utils.py` | 81 | 1 | **99%** | Bao phủ bởi `P2` (chỉ sót dòng 20) |
 | `mealie/services/parser_services/_base.py` | 117 | 9 | **92%** | Bao phủ bởi `P3` & `M1` |
-| `mealie/schema/recipe/recipe_ingredient.py` | 322 | 53 | **84%** | Bao phủ bởi `P4` & `P3` |
-| `mealie/services/parser_services/brute/process.py` | 136 | 39 | **71%** | Bao phủ bởi `P3` (`BruteForceParser`) |
+| `mealie/schema/recipe/recipe_ingredient.py` | 322 | 51 | **84%** | Bao phủ bởi `P4` & `P3` |
+| `mealie/services/parser_services/brute/process.py` | 136 | 36 | **74%** | Bao phủ bởi `P3` (`BruteForceParser`) |
 | `mealie/services/parser_services/ingredient_parser.py` | 168 | 111 | **34%** | Bao phủ luồng `BruteForceParser` (phần còn lại là `OpenAIParser`, `NLPParser`) |
-| `mealie/services/household_services/shopping_lists.py` | 294 | 230 | **22%** | Tập trung đúng vào logic scaling (`dòng 323–418`) |
+| `mealie/services/household_services/shopping_lists.py` | 294 | 227 | **23%** | Tập trung đúng vào logic scaling (`dòng 323–418`) |
 
 ---
 

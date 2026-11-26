@@ -23,6 +23,7 @@
 
 ## Mục lục
 
+- [Danh mục từ viết tắt và thuật ngữ](#danh-mục-từ-viết-tắt-và-thuật-ngữ)
 - [Chương 1. Tổng quan hệ thống mục tiêu (Mealie v3.28.0)](#chương-1-tổng-quan-hệ-thống-mục-tiêu-mealie-v3280)
 - [Chương 2. Kiến trúc hệ thống và các luồng dữ liệu trọng tâm](#chương-2-kiến-trúc-hệ-thống-và-các-luồng-dữ-liệu-trọng-tâm)
 - [Chương 3. Thiết lập môi trường, triển khai và dữ liệu mẫu](#chương-3-thiết-lập-môi-trường-triển-khai-và-dữ-liệu-mẫu)
@@ -30,6 +31,19 @@
 - [Chương 5. Thiết kế kịch bản kiểm thử và triển khai mã nguồn tự động](#chương-5-thiết-kế-kịch-bản-kiểm-thử-và-triển-khai-mã-nguồn-tự-động)
 - [Chương 6. Kết quả thực thi, độ bao phủ và phân tích lỗi (Defect Analysis)](#chương-6-kết-quả-thực-thi-độ-bao-phủ-và-phân-tích-lỗi-defect-analysis)
 - [Chương 7. Quản trị cấu hình, tái lập hệ thống và tổng kết nghiệm thu](#chương-7-quản-trị-cấu-hình-tái-lập-hệ-thống-và-tổng-kết-nghiệm-thu)
+
+### Danh mục từ viết tắt và thuật ngữ
+
+| Thuật ngữ / Viết tắt | Diễn giải đầy đủ | Ngữ cảnh áp dụng trong đồ án |
+| :--- | :--- | :--- |
+| **SUT** | System Under Test | Hệ thống mục tiêu Mealie `v3.28.0` trong `mealie_src/` |
+| **PBT** | Property-Based Testing | Kỹ thuật kiểm thử dựa trên tính chất bất biến bằng Hypothesis |
+| **EBT** | Example-Based Testing | Kiểm thử đơn vị truyền thống theo cặp input/output cố định |
+| **Shrinking** | Counterexample Shrinking | Cơ chế tự thu nhỏ chuỗi lỗi của Hypothesis về dạng tối giản nhất |
+| **RCA** | Root Cause Analysis | Phân tích nguyên nhân gốc rễ lỗi phần mềm |
+| **RTM** | Requirements Traceability Matrix | Ma trận truy xuất nguồn gốc từ Use Case đến kịch bản kiểm thử |
+| **STLC** | Software Testing Life Cycle | Vòng đời kiểm thử phần mềm (Entry/Exit Criteria) |
+| **SPA / DTO** | Single-Page App / Data Transfer Object | Giao diện Vue/Nuxt và schema Pydantic trao đổi dữ liệu API |
 
 ---
 
@@ -106,6 +120,8 @@ Hệ thống phân quyền thông qua 2 nhóm tác nhân chính:
 ### 1.4. Cấu trúc mã nguồn thực tế
 
 Qua khảo sát trực tiếp `mealie_src/` tại SHA `0552eaa4a80031b8572849cca0ed95d07f1be001`, mã nguồn Backend (`mealie_src/mealie/`) được phân tầng như sau:
+
+![Cấu trúc cây thư mục mã nguồn Mealie v3.28.0](assets/cay_thu_muc_mealie.png)
 
 ```text
 mealie_src/
@@ -192,6 +208,18 @@ Việc tách riêng tầng nghiệp vụ xử lý chuỗi và tính toán (`pars
 4. Bộ bóc tách (`BruteForceParser.parse_one()` gọi `brute/process.py`) tách token và chuyển sang `unit_utils.py` (`UnitConverter`) cùng `DataMatcher` dùng `RapidFuzz` đối chiếu đơn vị và thực phẩm trong kho dữ liệu nhóm (ngưỡng tương đồng ≥ 70% cho đơn vị và ≥ 85% cho thực phẩm).
 5. Hệ thống tính điểm tin cậy (`IngredientConfidence`) cho từng thành phần (`quantity`, `unit`, `food`, `comment`), lấy trung bình cộng và trả về đối tượng `ParsedIngredient` dưới dạng JSON.
 
+| Bước | Thành phần Nguồn | Thành phần Đích | Dữ liệu Luân chuyển | Thao tác Xử lý Kỹ thuật & Thuật toán |
+| :---: | :--- | :--- | :--- | :--- |
+| **1** | Trình duyệt người dùng | Vue SPA | Chuỗi văn bản tự do | Bắt sự kiện nhập liệu / form submit từ Web UI. |
+| **2** | Vue SPA | `IngredientParserController` | `POST /api/parser/ingredient` | Gửi HTTP Request mang JSON Payload kèm JWT Bearer Token. |
+| **3** | Controller | `IngredientParserService` | Tham số `parse([str])` | Kiểm thực Pydantic; Factory `get_parser()` nạp parser tương ứng. |
+| **4** | Service | `string_utils.py` | Chuỗi nguyên liệu thô | Ánh xạ phân số Unicode (`"1½"` → `" 1 1/2"`), xóa footnote `*`, dời ngoặc về cuối chuỗi. |
+| **5** | Service | `unit_utils.py` | Chuỗi đơn vị nhận diện | Khởi tạo `UnitConverter` (`Pint`); phân giải `ounce` sang `fluid_ounce` khi đi kèm thể tích. |
+| **6** | Service | `DataMatcher` (`_base.py`) | Cặp chuỗi `(unit, food)` | Chuẩn hóa alias qua `normalize()` và đối chiếu mờ `RapidFuzz` (≥ 70% unit, ≥ 85% food). |
+| **7** | `DataMatcher` | `IngredientParserService` | Thực thể CSDL | Gán khóa ngoại ID; tính trung bình cộng `IngredientConfidence`. |
+| **8** | Controller | Vue SPA | HTTP 200 OK | Trả về JSON schema `ParsedIngredient`. |
+| **9** | Vue SPA | Người dùng | DOM Rendering | Hiển thị các thẻ định lượng, đơn vị, thực phẩm, ghi chú lên giao diện. |
+
 #### Luồng 2: Nghiệp vụ co giãn khẩu phần và tổng hợp danh sách mua sắm (Servings Scaling)
 *(Minh họa tại `Documents/assets/data_flow_2_scaling.png`)*
 
@@ -200,14 +228,36 @@ Việc tách riêng tầng nghiệp vụ xử lý chuỗi và tính toán (`pars
 1. **Co giãn phía Client:** Khi người dùng thay đổi số khẩu phần đích ($S_{\text{đích}}$) trên trang chi tiết món ăn, composable `use-scaled-amount.ts` trên trình duyệt tính $k = S_{\text{đích}} / S_{\text{gốc}}$ và nhân trực tiếp vào các dòng nguyên liệu để cập nhật DOM mà không tải lại trang.
 2. **Co giãn và gộp nguyên liệu phía Backend:** Khi người dùng bấm thêm công thức đã co giãn vào danh sách mua sắm (`POST /api/households/recipe-actions`), Controller gọi vào `ShoppingListService.get_shopping_list_items_from_recipe(list_id, recipe_id, scale=k)` trong `shopping_lists.py`.
 3. Nếu một nguyên liệu là công thức phụ lồng nhau (`referenced_recipe`), hàm tính dồn $\text{sub\_scale} = (Q_{\text{gốc}} \text{ hoặc } 1) \times k$ và gọi đệ quy.
-4. Các nguyên liệu trùng khớp (`food_id`, `unit_id`) trong danh sách đi chợ sẽ được cộng dồn số lượng và lưu lại đối tượng tham chiếu `ShoppingListItemRecipeRefCreate(recipe_scale=k)`. *(Ghi chú: Nhánh cộng dồn tại `shopping_lists.py:403` chính là vị trí phát sinh lỗi thực tế đã được nhóm phát hiện ở Chương 6).*
+4. Các nguyên liệu trùng khớp (`food_id`, `unit_id`) trong danh sách đi chợ sẽ được cộng dồn số lượng và lưu lại đối tượng tham chiếu `ShoppingListItemRecipeRefCreate(recipe_scale=k)`. *(Ghi chú: Nhánh cộng dồn tại `shopping_lists.py:403` chính là vị trí phát sinh lỗi thực tế `DEF-01` ở Chương 6).*
+
+| Bước | Thành phần Nguồn | Thành phần Đích | Dữ liệu Luân chuyển | Thao tác Xử lý Kỹ thuật & Thuật toán |
+| :---: | :--- | :--- | :--- | :--- |
+| **1** | Người dùng | Vue SPA | Input `target_servings` | Chọn số khẩu phần đích ($S_{\text{đích}}$) trên giao diện công thức. |
+| **2** | Vue Store (Pinia) | DOM UI | Mảng nguyên liệu | Tính $k = S_{\text{đích}} / S_{\text{gốc}}$, nhân $Q_{\text{mới}} = Q_{\text{gốc}} \times k$, format phân số hiển thị. |
+| **3** | Vue SPA | `HouseholdRecipeActionsController` | `POST /api/households/recipe-actions` | Gửi payload JSON chứa `recipe_slug` và `recipe_scale: k`. |
+| **4** | Controller | `ShoppingListService` | Lời gọi hàm nội bộ | Xác thực `household_id` và gọi `get_shopping_list_items_from_recipe()`. |
+| **5** | Service | Sub-recipe Handler | `(sub_recipe, sub_scale)` | Kiểm tra `isinstance(referenced_recipe, Recipe)`, tính dồn `sub_scale` và đệ quy. |
+| **6** | Service | Bộ nhớ RAM (DTO) | `ShoppingListItemCreate` | Tính `ingredient.quantity * scale` và gắn `ShoppingListItemRecipeRefCreate`. |
+| **7** | Service | Database | SQL Insert / Update | Cập nhật bảng `shopping_list_items` và bảng tham chiếu `shopping_list_item_recipe_reference`. |
+| **8** | Database | Vue SPA | HTTP 200 OK | Trả về danh sách mua sắm hợp nhất dạng JSON DTO. |
+| **9** | Vue SPA | Người dùng | UI Notification | Hiển thị cập nhật giỏ hàng và số lượng mới. |
 
 #### Luồng 3: Nghiệp vụ lập kế hoạch thực đơn (Meal Planning)
 *(Minh họa tại `Documents/assets/data_flow_3_mealplan.png`)*
 
 ![Sơ đồ tuần tự nghiệp vụ lên lịch thực đơn](assets/data_flow_3_mealplan.png)
 
-Người dùng truy cập trang Meal Planner, gán công thức vào từng ngày/bữa ăn (lưu trong bảng `mealplans` kèm trường `entry_date`). Khi kích hoạt đồng bộ từ thực đơn sang danh sách mua sắm, Backend trích xuất các công thức theo khung ngày, kích hoạt lại Luồng 2 với `scale=1` (hoặc tỷ lệ đã chọn) và hợp nhất đơn vị cùng thứ nguyên thông qua `UnitConverter.merge()` trong `unit_utils.py`.
+Người dùng truy cập trang Meal Planner, gán công thức vào từng ngày/bữa ăn (lưu trong bảng `meal_plan_entries` kèm trường `entry_date`). Khi kích hoạt đồng bộ từ thực đơn sang danh sách mua sắm, Backend trích xuất các công thức theo khung ngày, kích hoạt lại Luồng 2 với `scale=1` (hoặc tỷ lệ đã chọn) và hợp nhất đơn vị cùng thứ nguyên thông qua `UnitConverter.merge()` trong `unit_utils.py`.
+
+| Bước | Thành phần Nguồn | Thành phần Đích | Dữ liệu Luân chuyển | Thao tác Xử lý Kỹ thuật & Thuật toán |
+| :---: | :--- | :--- | :--- | :--- |
+| **1** | Người dùng | Vue SPA (Calendar) | Thao tác chọn lịch | Chọn ngày trên lịch, loại bữa ăn (`entry_type`) và gán công thức. |
+| **2** | Vue SPA | `GroupMealplanController` | `POST /api/households/mealplans` | Gửi payload `CreatePlanEntry` kèm ngày, loại bữa và `recipe_id`. |
+| **3** | Controller | `RepositoryMeals` | DTO nghiệp vụ | Kiểm thực Pydantic V2, gắn `group_id` và `user_id`. |
+| **4** | Repository | Database | SQL Insert | Chèn bản ghi vào `meal_plan_entries` ràng buộc khóa ngoại `recipes`, `groups`, `users`. |
+| **5** | Database | Repository | Transaction Commit | Sinh UUID duy nhất và xác nhận giao dịch bền vững. |
+| **6** | Controller | Vue SPA | HTTP 201 Created | Trả về đối tượng `ReadPlanEntry` DTO đầy đủ. |
+| **7** | Vue SPA | Người dùng | DOM Calendar Re-render | Hiển thị món ăn cùng ảnh minh họa trên ô lịch tương ứng. |
 
 ### 2.3. Phân tích chi tiết các module mục tiêu phục vụ kiểm thử
 
@@ -272,14 +322,25 @@ Danh mục tài khoản kiểm thử được cấu hình cố định trên b�
 | `NAM-09` | Salad Thập Cẩm Tổng Hợp | 4 servings | Tổ hợp số nguyên, số thập phân và phân số |
 | `NAM-10` | Bò Sốt Tiêu Khẩu Phần Chuẩn | 4 servings | Công thức chuẩn phục vụ thực nghiệm co giãn khẩu phần (`4 -> 8 -> 2`) |
 
-### 3.3. Kiểm chứng thực nghiệm trên giao diện Web UI thật
+### 3.3. Kiểm chứng thực nghiệm trên giao diện Web UI thật và xử lý sự cố cài đặt
 
 Nhóm đã khởi chạy Mealie trên cổng `9925`, nạp toàn bộ 10 công thức `NAM` và thực hiện kiểm tra trực tiếp trên trình duyệt Chrome:
 1. Kiểm chứng **Luồng co giãn khẩu phần (`NAM-10`)**: Điều chỉnh khẩu phần từ `4` lên `8` rồi giảm xuống `2`, định lượng nguyên liệu cập nhật tức thời theo đúng tỷ lệ $2.0$ và $0.5$.
-2. Kiểm chứng **Tái hiện lỗi thực tế tại Shopping List trên Web UI**: Tạo một công thức thử nghiệm chứa 2 dòng nguyên liệu cùng loại `sugar` (`1 cup sugar` và `2 cup sugar`), nhấn nút thêm vào Shopping List với hệ số scale bằng `2`. Theo toán học, kết quả phải là `(1 * 2) + (2 * 2) = 6 cup sugar`. Thực tế giao diện Mealie trả về `4 cup sugar`, xác nhận lỗi bỏ sót phép nhân `* scale` ở nhánh gộp nguyên liệu tại `shopping_lists.py:403` xảy ra giống hệt trên hệ thống thực tế (video ghi hình lưu tại thư mục artifact đối soát).
+2. Kiểm chứng **Tái hiện lỗi thực tế tại Shopping List trên Web UI**: Tạo một công thức thử nghiệm chứa 2 dòng nguyên liệu cùng loại `sugar` (`1 cup sugar` và `2 cup sugar`), nhấn nút thêm vào Shopping List với hệ số scale bằng `2`. Theo toán học, kết quả phải là `(1 * 2) + (2 * 2) = 6 cup sugar`. Thực tế giao diện Mealie trả về `4 cup sugar`, xác nhận lỗi bỏ sót phép nhân `* scale` ở nhánh gộp nguyên liệu tại `shopping_lists.py:403` xảy ra giống hệt trên hệ thống thực tế.
 
-> **Khoảng trống tài liệu / Nội dung chưa hoàn tất (Thẩm định chéo On-boarding H1.2.2):**  
-> Trong tệp [tien_do_Bui_Trung_Hieu.md](tien_do_Bui_Trung_Hieu.md) và [phan_cong_sua_loi_thanh_vien.md](phan_cong_sua_loi_thanh_vien.md) (mục `H-FIX-5`), hạng mục **thẩm định chéo lần cuối trên máy sạch theo hướng dẫn Phần C** giữa **Bùi Trung Hiếu (`2312611`)** và **Nguyễn Phạm Phú Nam (`2312695`)** sau bản cập nhật Docker Runner mới vẫn đang để trạng thái chờ xác nhận chéo chính thức trong nhóm.
+**Bảng tổng hợp xử lý sự cố thường gặp khi dựng môi trường (Troubleshooting Guide):**
+
+| Hiện tượng lỗi | Nguyên nhân phổ biến | Cách xử lý nhanh |
+| :--- | :--- | :--- |
+| **Trùng cổng 9925** (`address already in use`) | Có ứng dụng khác đang chiếm cổng 9925 | Mở `mealie_docker/.env`, đổi `MEALIE_PORT=9930` và `BASE_URL=http://localhost:9930`, chạy lại `docker compose up -d` |
+| **Lỗi Docker daemon** (`cannot connect to pipe`) | Docker Desktop chưa bật hoặc đang khởi động | Khởi động Docker Desktop và chờ biểu tượng chuyển trạng thái Running (màu xanh) |
+| **Lỗi GitHub** (`Repository not found`) | Tài khoản chưa có quyền truy cập repo | Yêu cầu quản trị nhóm cấp quyền Collaborator trên GitHub |
+| **Lỗi sai thư mục** (`no configuration file provided`) | Chạy `docker compose` ở thư mục gốc thay vì `mealie_docker/` | Chuyển vào `cd mealie_docker` trước khi chạy lệnh compose |
+| **Không vào được web** (`localhost:9925`) | Container Mealie chưa khởi động xong hoặc crash | Chạy `docker compose ps` và `docker compose logs --tail=30 mealie` để kiểm tra log |
+| **Lỗi tạo User** (`409 Conflict`) | Đặt Username trùng `admin` | Đổi sang Username khác (ví dụ `admin_nhom6`) và điền đủ `Full Name` |
+| **Seed báo lỗi `401 Unauthorized`** | Sai email/mật khẩu tài khoản quản trị | Nhập đúng thông tin tài khoản đã đăng ký khi khởi tạo Mealie lần đầu |
+| **Chỉ thấy 12 bữa ăn trên Meal Planner** | 2 bữa Thứ Hai thuộc tuần kế tiếp | Nhấn nút mũi tên chuyển tuần (`>`) trên giao diện Mealie |
+| **Import URL bị báo lỗi kết nối** | Container không gọi được localhost của Host | Chạy Mock Server trên cổng `9926` và dùng bí danh `http://host.docker.internal:9926/...` |
 
 ---
 
@@ -326,20 +387,29 @@ Cấu hình chuẩn hóa trong `pytest.ini` và `tests/conftest.py`:
   - `thorough`: `max_examples = 1000`, `deadline = None` (kiểm thử sức bền).
 * **Helper nạp module chuẩn hóa:** Hàm `load_mealie_string_utils()` trong `tests/conftest.py` cô lập namespace `mealie.services.parser_services` để P1 và P5 cùng nạp đúng tên module `mealie.services.parser_services.parser_utils.string_utils`, giúp `pytest-cov` cộng gộp chính xác độ phủ mà không sinh cảnh báo `CoverageWarning`.
 
-### 4.5. Tiêu chí Pass/Fail và Ma trận mức độ nghiêm trọng lỗi (Severity Matrix)
+### 4.5. Tiêu chí STLC (Entry / Exit Criteria) và Ma trận mức độ nghiêm trọng lỗi
 
-**Tiêu chí đánh giá:**
-* **PASS:** Toàn bộ các ví dụ ngẫu nhiên sinh ra thỏa mãn Invariant hoặc thuộc các ca lỗi đã được xác minh và ghim bằng `@pytest.mark.xfail(strict=True)`.
-* **FAIL:** Phát hiện phản ví dụ vi phạm bất biến chưa được xử lý hoặc gây unhandled exception; lập tức trích xuất Falsifying Example và tiến hành Root Cause Analysis (RCA).
+**1. Tiêu chí Bắt đầu kiểm thử (Entry Criteria — chuẩn STLC):**
+1. Mã nguồn Mealie trong `mealie_src/` được cố định tại release tag **`v3.28.0`** (SHA `0552eaa4a80031b8572849cca0ed95d07f1be001`).
+2. Môi trường Python chuẩn `>=3.14,<3.15` (qua `Dockerfile.test`) cài đặt đầy đủ `requirements-test.txt`.
+3. Bộ Test Harness (`pytest.ini`, `tests/conftest.py` với 3 profiles `dev`, `ci`, `thorough`) thu thập sạch (`0 errors`).
+4. Hoàn tất đặc tả 5 Properties PBT cùng cơ chế cô lập DB/Repo (`MagicMock`).
 
-**Ma trận phân loại mức độ nghiêm trọng lỗi (theo chuẩn IEEE 1044 / ISTQB):**
+**2. Tiêu chí Kết thúc kiểm thử (Exit Criteria):**
+1. Toàn bộ 6 tệp kiểm thử (`M1` + `P1` → `P5`) chạy thông suốt bằng **1 lệnh duy nhất**, không phát sinh `Collection Error` hay `FAILED` ngoài dự kiến.
+2. Mọi ca kiểm thử đạt `PASSED` hoặc được gắn `@pytest.mark.xfail(strict=True)` gắn liền với Defect ID thật đã xác minh RCA.
+3. Độ phủ trực tiếp trên các module mục tiêu đạt **≥ 80%** hoặc có hồ sơ RCA + bản vá đề xuất cho lỗi thật; đạt **Zero Open S1 Defects** chưa truy vết.
 
-| Mức độ | Phân loại | Tiêu chí kỹ thuật áp dụng trên Mealie | Ví dụ minh họa |
-| :---: | :--- | :--- | :--- |
-| **S1** | Critical / Blocker | Gây sập máy chủ, HTTP 500, crash tiến trình hoặc hỏng dữ liệu không phục hồi được | Unhandled `IndexError` khi parse chuỗi rỗng hoặc đơn vị đứng cuối chuỗi |
-| **S2** | Major | Sai lệch nghiêm trọng logic nghiệp vụ, sai số lượng nguyên liệu mà không có cảnh báo | Quên nhân `* scale` khi gộp 2 dòng nguyên liệu trùng trong `shopping_lists.py:403` |
-| **S3** | Minor | Sai lệch chuẩn hóa, hiển thị hoặc làm chậm hiệu năng ở dữ liệu biên nhưng không crash | Mất tính lũy đẳng khi di chuyển nhiều ngoặc đơn trong `string_utils.py`; vòng lặp $O(N)$ ở `_format_quantity_for_display()` |
-| **S4** | Trivial | Sai lệch giao diện nhỏ, chính tả hoặc cảnh báo tương thích không ảnh hưởng luồng chính | Lỗi đánh máy thuật ngữ, thông báo log cảnh báo |
+**3. Ma trận phân loại mức độ nghiêm trọng lỗi (Severity S1 → S4 — IEEE 1044 / ISTQB):**
+
+| Mức độ | Phân loại | Tiêu chí kỹ thuật (IEEE 1044 / ISTQB) | Ví dụ minh họa trên Mealie `v3.28.0` | Yêu cầu xử lý & Nghiệm thu |
+| :---: | :--- | :--- | :--- | :--- |
+| **S1** | **Critical** (Blocker) | Gây sập hệ thống (`Unhandled Exception`, HTTP 500), crash tiến trình hoặc hỏng/mất dữ liệu cốt lõi | `BruteForceParser.parse_one()` ném `IndexError` khi chuỗi rỗng `""` hoặc `"a cup"` (`brute/process.py:152, 110`) | **Ưu tiên cao nhất:** Bắt buộc lập Defect Log + RCA + bản vá diff; đạt **Zero Open S1 Defects** |
+| **S2** | **Major** | Chức năng chạy không sập nhưng sai lệch nghiêm trọng kết quả nghiệp vụ hoặc bất biến tính toán | `ShoppingListService` quên nhân `* scale` khi gộp 2 nguyên liệu trùng (`shopping_lists.py:403`) | Lập Defect Log + RCA, gắn `@pytest.mark.xfail(strict=True)` nếu là bug nền `v3.28.0` |
+| **S3** | **Minor** | Sai lệch chuẩn hóa, hiển thị biên ít gặp hoặc thuật toán chưa tối ưu nhưng không sai luồng chính | Mất tính lũy đẳng `move_parens_to_end()`; vòng lặp `O(N)` tại `_format_quantity_for_display()`; lỗi PEP 649 trên Python ≤ 3.13 | Ghi nhận RCA, đề xuất cải tiến thuật toán hoặc cô lập môi trường |
+| **S4** | **Trivial** | Lỗi thẩm mỹ, chính tả trong thông điệp/tài liệu, khoảng trắng phụ không ảnh hưởng logic | Sai khác nhỏ về nhãn hiển thị phụ hoặc chính tả trong log nội bộ | Ghi nhận cải thiện khi thuận tiện, không chặn nghiệm thu |
+
+*(Lưu ý phân biệt giữa **Severity** do QA đánh giá mức độ tác động kỹ thuật và **Priority** `High`/`Medium`/`Low` dùng để sắp thứ tự ưu tiên thực thi kiểm thử).*
 
 ---
 
@@ -405,27 +475,28 @@ Cấu hình chuẩn hóa trong `pytest.ini` và `tests/conftest.py`:
 
 ### 6.1. Kết quả thực thi kiểm thử hiện hành
 
-Chuẩn chính thức của hệ thống Mealie `v3.28.0` và hạ tầng Docker của nhóm là **Python 3.14 (`>=3.14,<3.15`)**. Phiên chạy xác thực tổng hợp toàn bộ 6 tệp kiểm thử dưới đây được thực thi hợp nhất bằng 1 lệnh duy nhất trên môi trường Windows `.venv` (Python 3.13.2 thông qua cơ chế cô lập tương thích `ensure_mealie_parser_isolated()` tại `tests/conftest.py` dành riêng cho Python `< 3.14`; trên Python `>= 3.14` toàn bộ suite nạp thẳng module Mealie thật):
+Bộ kiểm thử hợp nhất 6 tệp (`M1` + `P1` → `P5`, tổng cộng 71 ca kiểm thử) đã được thực thi toàn phần bằng **1 lệnh duy nhất** trên cả hai môi trường: **Docker Test Runner chuẩn Python 3.14.10** (nạp 100% mã nguồn Mealie thật, không dùng stub fallback) và **Windows Host Python 3.13.2** (kích hoạt tự động `ensure_mealie_parser_isolated()` trong `tests/conftest.py`):
 
 | Môi trường chạy | Lệnh thực thi | Phạm vi thu thập | Kết quả thực tế | Ghi chú trạng thái |
 | :--- | :--- | :--- | :--- | :--- |
-| Windows Host (Python 3.13.2) | `pytest tests/unit_tests/ -v` | Toàn bộ 6 file (`M1` + `P1`..`P5`, 71 ca) | **65 passed, 6 xfailed** (76.81s) | 0 collection errors, 0 failed; `6 xfailed` ghim 3 lỗi thật (`DEF-01`, `DEF-02`, `DEF-03` cả `""` lẫn `"a cup"`) |
-| Windows Host (Python 3.13.2) | `pytest -m pbt -v` | Lọc riêng marker `pbt` (52/71 ca) | **49 passed, 3 xfailed** (34.61s) | 0 errors, 0 failed (19 ca `@pytest.mark.unit` deselected) |
-| Docker Runner (Python 3.14.10) | `docker compose -f docker-compose.test.yml run --rm test-runner pytest tests/ -v --tb=long` | Suite lúc PR #15 | **61 passed, 1 xfailed** (15.35s) | *(Ghi chú trung thực: Docker Desktop đang tắt tại thời điểm nghiệm thu cuối, nên chưa chạy lại container `python:3.14-slim` trên bản chỉnh sửa sau PR #19)* |
+| **Docker Runner (Python 3.14.10)** *(Chuẩn chính thức)* | `docker compose -f docker-compose.test.yml run --rm test-runner pytest tests/ -v --tb=long --cov=...` | Toàn bộ 6 file (`M1` + `P1`..`P5`, 71 ca) | **65 passed, 6 xfailed** (trong 53.42s) | **0 collection errors, 0 failed**; nạp 100% module thật của Mealie `v3.28.0` |
+| **Docker Runner (Python 3.14.10)** | `docker compose -f docker-compose.test.yml run --rm test-runner pytest -m pbt -v` | Lọc riêng marker `pbt` (52/71 ca) | **49 passed, 3 xfailed** (trong 50.39s) | 19 ca `@pytest.mark.unit` deselected; **0 errors, 0 failed** |
+| **Docker Runner (Tái hiện lỗi thật)** | `pytest tests/unit_tests/ -k "..." --runxfail -v` | 7 ca chọn lọc (`6 xfailed` + 1 ca đối chứng) | **6 failed, 1 passed** (trong 16.71s) | Tái hiện trọn vẹn 6 ca lỗi thật `DEF-01`, `DEF-02`, `DEF-03` |
+| **Windows Host (Python 3.13.2)** | `pytest tests/unit_tests/ -v` và `pytest -m pbt -v` | Toàn bộ 6 file (71 ca) / `pbt` (52 ca) | **65 passed, 6 xfailed** / **49 passed, 3 xfailed** | Kết quả đồng nhất 100% với Docker Python 3.14 |
 
 ### 6.2. Kết quả đo lường độ bao phủ mã nguồn (Code Coverage)
 
-Bảng đo lường trực tiếp trên mã nguồn thật `mealie_src/mealie/` trong phiên chạy gộp `pytest tests/unit_tests/ -v` bằng `pytest-cov`:
+Bảng đo lường trực tiếp trên mã nguồn thật `mealie_src/mealie/` trong container **Docker Python 3.14.10** bằng `pytest-cov`:
 
 | Module mã nguồn Mealie v3.28.0 | Tổng Statements | Chưa thực thi (Miss) | Độ phủ (Coverage) | Ghi chú |
 | :--- | :---: | :---: | :---: | :--- |
 | `mealie/services/parser_services/parser_utils/string_utils.py` | 56 | 0 | **100%** | Bao phủ toàn diện bởi `P1` + `P5` |
 | `mealie/services/parser_services/parser_utils/unit_utils.py` | 81 | 1 | **99%** | Bao phủ trọn vẹn bởi `P2` (chỉ sót dòng 20) |
 | `mealie/services/parser_services/_base.py` | 117 | 9 | **92%** | Bao phủ bởi `P3` & `M1` |
-| `mealie/schema/recipe/recipe_ingredient.py` | 322 | 53 | **84%** | Bao phủ bởi `P4` & `P3` |
-| `mealie/services/parser_services/brute/process.py` | 136 | 39 | **71%** | Bao phủ bởi `P3` (`BruteForceParser`) |
+| `mealie/schema/recipe/recipe_ingredient.py` | 322 | 51 | **84%** | Bao phủ bởi `P4` & `P3` |
+| `mealie/services/parser_services/brute/process.py` | 136 | 36 | **74%** | Bao phủ bởi `P3` (`BruteForceParser`) |
 | `mealie/services/parser_services/ingredient_parser.py` | 168 | 111 | **34%** | Bao phủ luồng `BruteForceParser` (các nhánh còn lại thuộc `OpenAIParser`, `NLPParser`) |
-| `mealie/services/household_services/shopping_lists.py` | 294 | 230 | **22%** | Tập trung đúng vào hàm `get_shopping_list_items_from_recipe` (dòng 323–418) |
+| `mealie/services/household_services/shopping_lists.py` | 294 | 227 | **23%** | Tập trung đúng vào hàm `get_shopping_list_items_from_recipe` (dòng 323–418) |
 
 ### 6.3. Hồ sơ lỗi thật phát hiện trên Mealie v3.28.0 (Defect Log & RCA)
 
@@ -446,7 +517,7 @@ Từ quá trình chạy kiểm thử tự động và đối soát mã nguồn g
 ### 7.1. Quản trị phiên bản và quy trình Git nhóm
 
 * **Ghim phiên bản SUT:** Toàn bộ mã nguồn Mealie trong `mealie_src/` được cố định tại tag `v3.28.0` (SHA `0552eaa4a80031b8572849cca0ed95d07f1be001`). Kiểm tra `git -C mealie_src status` sạch hoàn toàn, không chỉnh sửa bất kỳ dòng code nào của hệ thống mục tiêu.
-* **Quy trình Git Flow:** Sử dụng mô hình nhánh `main` ← `develop` ← nhánh tính năng cá nhân thông qua Pull Request. Tính đến ngày 26/11/2026, kho lưu trữ đã hợp nhất **20 Pull Requests** vào nhánh `develop` (hoàn tất toàn bộ phần việc của 5 thành viên).
+* **Quy trình Git Flow:** Sử dụng mô hình nhánh `main` ← `develop` ← nhánh tính năng cá nhân thông qua Pull Request. Kho lưu trữ đã hợp nhất **20 Pull Requests** vào nhánh `develop`, đồng bộ hoàn toàn sang nhánh `main` và đóng gói tại release tag **`v1.1-final`**.
 
 ### 7.2. Hướng dẫn 1-click tái lập bộ kiểm thử trên máy mới
 
@@ -476,11 +547,11 @@ Từ quá trình chạy kiểm thử tự động và đối soát mã nguồn g
 
 | Tiêu chí nghiệm thu | Ngưỡng mục tiêu | Kết quả thực tế | Trạng thái |
 | :--- | :--- | :--- | :---: |
-| Chạy toàn bộ test suite không lỗi collection / fail | 0 errors, 0 failed khi chạy 1 lệnh `pytest tests/unit_tests/ -v` | **65 passed, 6 xfailed** (và **49 passed, 3 xfailed** với `-m pbt`) trên Python 3.13.2; riêng Docker 3.14 cần bật Docker Desktop để chạy xác nhận bản cuối | **ĐẠT (Host)** / Chờ chạy lại Docker 3.14 |
+| Chạy toàn bộ test suite bằng 1 lệnh duy nhất | 0 errors, 0 failed trên cả Docker 3.14 & Host | **65 passed, 6 xfailed** (full) và **49 passed, 3 xfailed** (`-m pbt`) trên cả **Docker Python 3.14.10** và Host 3.13.2 | **ĐẠT** |
 | Triển khai đủ 5 Properties PBT độc lập bằng Hypothesis | ≥ 5 tệp `test_pbt_*.py` gắn `@pytest.mark.pbt`, không assertion giả | Đủ 5/5 tệp (`P1`, `P2`, `P3`, `P4`, `P5`), không assertion giả | **ĐẠT** |
 | Độ phủ mã nguồn trực tiếp trên các module mục tiêu | ≥ 80% trên `parser_utils` và `recipe_ingredient` | `string_utils` **100%**, `unit_utils` **99%**, `_base.py` **92%**, `recipe_ingredient` **84%** | **ĐẠT** |
 | Phát hiện lỗi thật hoặc chứng minh độ bao phủ + RCA | Có Defect Log và nguyên nhân gốc (RCA) | 5 defects đã xác minh (`DEF-01` → `DEF-05`), ghim `xfail(strict=True)` | **ĐẠT** |
-| Đồng bộ tài liệu quản lý, giờ công và đóng gói Release | Đầy đủ `bao_cao_phan_A..H.md` + báo cáo cuối kỳ | Đầy đủ `A..H`, bảng 191 giờ công & báo cáo tổng kết hoàn chỉnh | **ĐẠT** |
+| Đồng bộ tài liệu quản lý, giờ công và đóng gói Release | Đầy đủ `bao_cao_phan_A..H.md` + báo cáo cuối kỳ + tag release | Đầy đủ `A..H`, báo cáo hợp nhất, tag `v1.1-final` và đồng bộ nhánh `main` | **ĐẠT** |
 
 #### Bảng thống kê giờ công và đánh giá đóng góp cá nhân (Peer Evaluation)
 
@@ -491,4 +562,16 @@ Từ quá trình chạy kiểm thử tự động và đối soát mã nguồn g
 | 3 | `2312695` | Nguyễn Phạm Phú Nam | DevOps & Automation QA (`P5`) | 39 | 20.4% | Hoàn thành 100% |
 | 4 | `2312719` | Trần Ngọc Bảo Phước | QA Automation Engineer 1 (`P1`) | 38 | 19.9% | Hoàn thành 100% |
 | 5 | `2312687` | Võ Hùng Mạnh | QA Automation Engineer 2 (`P3` & Phần G) | 35 | 18.4% | Hoàn thành 100% |
-| **Tổng** | — | **Nhóm 6** | — | **191 giờ** | **100%** | **Hoàn tất nghiệm thu** |
+| **Tổng** | — | **Nhóm 6** | — | **191 giờ** | **100%** | **Hoàn tất nghiệm thu (`v1.1-final`)** |
+
+### 7.4. Giới hạn kỹ thuật, Bài học kinh nghiệm và Hướng phát triển
+
+1. **Giới hạn phạm vi (Scope Limitations):**
+   * Bộ kiểm thử tập trung vào tầng xử lý thuần túy và dịch vụ cốt lõi (`BruteForceParser`, `string_utils`, `unit_utils`, `recipe_ingredient`, `shopping_lists`), chưa kiểm thử tự động các nhánh gọi LLM bên ngoài (`OpenAIParser` — 0%) hoặc mô hình NLP nặng ngoài phạm vi unit test cô lập (`NLPParser`).
+   * Việc cô lập qua `ensure_mealie_parser_isolated()` chỉ áp dụng khi chạy trên máy trạm thiếu phụ thuộc hoặc Python `< 3.14`; trên Docker Python 3.14 chuẩn, toàn bộ hệ thống chạy với module gốc của Mealie.
+2. **Bài học kinh nghiệm thực tế:**
+   * Kiểm thử hợp nhất trong cùng một tiến trình giúp phơi bày xung đột mock toàn cục (`sys.modules`) và bẫy "pass giả" khi hàm `normalize()` bị stub đơn giản hóa. Việc chuẩn hóa lại `_NormalizedModelStub` đã giúp tái hiện thành công ca lỗi thật `"a cup"` (`DEF-03`).
+   * Với các dự án mã nguồn mở quy mô lớn yêu cầu runtime Python 3.14 mới (`PEP 649`), đóng gói Docker Test Runner là giải pháp bắt buộc để bảo đảm tính tái lập đồng nhất giữa tất cả thành viên.
+3. **Hướng phát triển:**
+   * Tích hợp tự động hóa GitHub Actions chạy `pytest -m pbt` với profile `ci` (`max_examples=300`) trên mỗi Pull Request.
+   * Mở rộng **Stateful Property-Based Testing** (Rule-based State Machine của Hypothesis) để kiểm định chuỗi thao tác liên tiếp thêm/sửa/xóa món ăn trên `MealPlanService` và `ShoppingListService`.

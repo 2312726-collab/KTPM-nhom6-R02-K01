@@ -48,8 +48,8 @@ python -m pytest -m pbt -v
 
 | Tiêu chí nghiệm thu | Ngưỡng mục tiêu | Kết quả thực tế | Trạng thái |
 | :--- | :--- | :--- | :---: |
-| Chạy toàn bộ test suite bằng 1 lệnh không lỗi | 0 errors, 0 failed (`pytest tests/unit_tests/ -v`) | **65 passed, 6 xfailed** và **49 passed, 3 xfailed** (`-m pbt`) trên Python 3.13.2; riêng container Docker 3.14 cần bật Docker Desktop để chạy xác nhận bản cuối | **ĐẠT (Host)** / Chờ chạy lại Docker 3.14 |
+| Chạy toàn bộ test suite bằng 1 lệnh không lỗi | 0 errors, 0 failed trên cả Docker 3.14 & Host | **65 passed, 6 xfailed** (full) và **49 passed, 3 xfailed** (`-m pbt`) trên cả Docker Python 3.14.10 & Host 3.13.2 | **ĐẠT** |
 | Triển khai đủ 5 Properties PBT độc lập | ≥ 5 tệp `test_pbt_*.py` gắn `@pytest.mark.pbt` | Đủ 5/5 tệp (`P1`, `P2`, `P3`, `P4`, `P5`), không assertion giả | **ĐẠT** |
 | Độ phủ mã nguồn trực tiếp trên module mục tiêu | ≥ 80% trên `parser_utils` & `recipe_ingredient` | `string_utils` **100%**, `unit_utils` **99%**, `_base.py` **92%**, `recipe_ingredient` **84%** | **ĐẠT** |
 | Phát hiện lỗi thật + Phân tích nguyên nhân gốc (RCA) | Có Defect Log & bản vá đề xuất | 5 defects đã xác minh (`DEF-01` → `DEF-05`), ghim `xfail(strict=True)` | **ĐẠT** |
-| Đồng bộ tài liệu & Đóng gói Release | Đủ `bao_cao_phan_A..H.md` + báo cáo cuối kỳ | Đầy đủ `A..H` + báo cáo tổng kết hoàn chỉnh | **ĐẠT** |
+| Đồng bộ tài liệu & Đóng gói Release | Đủ `bao_cao_phan_A..H.md` + báo cáo cuối kỳ + tag release | Đầy đủ `A..H`, [BaoCaoCuoiKy_Nhom6.md](BaoCaoCuoiKy_Nhom6.md), đóng gói tag `v1.1-final` và merge `main` | **ĐẠT** |
