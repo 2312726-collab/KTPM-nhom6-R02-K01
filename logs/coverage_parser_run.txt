@@ -1,0 +1,103 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.8, pytest-8.4.2, pluggy-1.7.0 -- <python>
+cachedir: .pytest_cache
+hypothesis profile 'thorough' -> deadline=None, max_examples=1000, verbosity=Verbosity.verbose
+rootdir: <repo>
+configfile: pytest.ini
+plugins: anyio-4.15.1, hypothesis-6.170.0, platformdirs-4.13.3, asyncio-0.26.0, cov-5.0.0, mock-3.16.0
+asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 63 items
+
+tests/unit_tests/test_pbt_fraction.py::test_p5a_regular_fraction_numeric_preservation PASSED [  1%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\xbc-expected_fraction0] PASSED [  3%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\xbd-expected_fraction1] PASSED [  4%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\xbe-expected_fraction2] PASSED [  6%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2150-expected_fraction3] PASSED [  7%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2151-expected_fraction4] PASSED [  9%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2152-expected_fraction5] PASSED [ 11%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2153-expected_fraction6] PASSED [ 12%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2154-expected_fraction7] PASSED [ 14%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2155-expected_fraction8] PASSED [ 15%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2156-expected_fraction9] PASSED [ 17%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2157-expected_fraction10] PASSED [ 19%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2158-expected_fraction11] PASSED [ 20%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2159-expected_fraction12] PASSED [ 22%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u215a-expected_fraction13] PASSED [ 23%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u215b-expected_fraction14] PASSED [ 25%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u215c-expected_fraction15] PASSED [ 26%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u215d-expected_fraction16] PASSED [ 28%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u215e-expected_fraction17] PASSED [ 30%]
+tests/unit_tests/test_pbt_fraction.py::test_p5c_mixed_vulgar_fraction_numeric_preservation PASSED [ 31%]
+tests/unit_tests/test_pbt_fraction.py::test_p5d_mixed_ascii_fraction_numeric_preservation PASSED [ 33%]
+tests/unit_tests/test_pbt_fraction.py::test_p5e_remaining_ingredient_text_preserved PASSED [ 34%]
+tests/unit_tests/test_pbt_fraction.py::test_p5f_vulgar_fraction_normalization_idempotent PASSED [ 36%]
+tests/unit_tests/test_pbt_fraction.py::test_p5g_zero_numerator_edge_case PASSED [ 38%]
+tests/unit_tests/test_pbt_fraction.py::test_p5g_zero_denominator_safe_handling PASSED [ 39%]
+tests/unit_tests/test_pbt_fraction.py::test_p5g_empty_and_whitespace_input PASSED [ 41%]
+tests/unit_tests/test_pbt_fraction.py::test_p5g_text_without_numbers PASSED [ 42%]
+tests/unit_tests/test_pbt_fraction.py::test_p5g_decimal_numbers_preservation PASSED [ 44%]
+tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_never_crashes XFAIL [ 46%]
+tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_edge_cases[empty] XFAIL [ 47%]
+tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_edge_cases[whitespace-only] XFAIL [ 49%]
+tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_edge_cases[math-symbols] PASSED [ 50%]
+tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_edge_cases[long-unbroken-token] PASSED [ 52%]
+tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_edge_cases[null-byte] PASSED [ 53%]
+tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_unit_at_end_bug XFAIL [ 55%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_recipe_ingredient_monotonicity PASSED [ 57%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_recipe_ingredient_reversibility_roundtrip PASSED [ 58%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_recipe_ingredient_transitivity PASSED [ 60%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_display_fraction_real_code PASSED [ 61%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_format_quantity_for_display_after_scaling PASSED [ 63%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_ingredient_none_and_zero_quantity PASSED [ 65%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_scaling_invalid_base_servings PASSED [ 66%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_scaling_negative_target_servings PASSED [ 68%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_shopping_list_scaling_monotonicity_real_service PASSED [ 69%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_shopping_list_subrecipe_recursive_scaling PASSED [ 71%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_shopping_list_duplicate_ingredient_scaling_bug XFAIL [ 73%]
+tests/unit_tests/test_pbt_string_utils.py::test_remove_footnote_idempotent PASSED [ 74%]
+tests/unit_tests/test_pbt_string_utils.py::test_move_parens_idempotent XFAIL [ 76%]
+tests/unit_tests/test_pbt_string_utils.py::test_convert_vulgar_fractions_crash_free PASSED [ 77%]
+tests/unit_tests/test_pbt_string_utils.py::test_convert_vulgar_fractions_no_remaining_unicode PASSED [ 79%]
+tests/unit_tests/test_pbt_unit_converter.py::test_gram_kilogram_roundtrip PASSED [ 80%]
+tests/unit_tests/test_pbt_unit_converter.py::test_ounce_gram_roundtrip PASSED [ 82%]
+tests/unit_tests/test_pbt_unit_converter.py::test_arbitrary_mass_roundtrip PASSED [ 84%]
+tests/unit_tests/test_pbt_unit_converter.py::test_milliliter_liter_roundtrip PASSED [ 85%]
+tests/unit_tests/test_pbt_unit_converter.py::test_teaspoon_tablespoon_roundtrip PASSED [ 87%]
+tests/unit_tests/test_pbt_unit_converter.py::test_arbitrary_volume_roundtrip PASSED [ 88%]
+tests/unit_tests/test_pbt_unit_converter.py::test_ounce_resolves_to_fluid_ounce_with_volume PASSED [ 90%]
+tests/unit_tests/test_pbt_unit_converter.py::test_incompatible_units_handling PASSED [ 92%]
+tests/unit_tests/test_pbt_unit_converter.py::test_unknown_unit_raises_unit_not_found PASSED [ 93%]
+tests/unit_tests/test_pbt_unit_converter.py::test_merge_commutativity_and_conservation PASSED [ 95%]
+tests/unit_tests/test_pbt_unit_converter.py::test_merge_quantity_and_unit_preserves_total PASSED [ 96%]
+tests/unit_tests/test_pbt_unit_converter.py::test_merge_quantity_and_unit_invalid_metadata_raises_value_error PASSED [ 98%]
+tests/unit_tests/test_pbt_unit_converter.py::test_private_registry_and_parsed_unit_idempotence PASSED [100%]
+
+============================== warnings summary ===============================
+mealie_src\mealie\db\models\household\webhooks.py:31
+mealie_src\mealie\db\models\household\webhooks.py:31
+  <repo>\mealie_src\mealie\db\models\household\webhooks.py:31: SADeprecationWarning: Type object <class 'sqlalchemy.sql.sqltypes.String'> does not include operator 'or_' in its operator classes.  Using built-in operators (not including custom or overridden operators) outside of a type's stated operator classes is deprecated and will raise InvalidRequestError in a future release
+    scheduled_time: Mapped[time | None] = mapped_column(Time, default=lambda: datetime.now(UTC).time())
+
+tests/unit_tests/test_pbt_fraction.py::test_p5a_regular_fraction_numeric_preservation
+  B:\KTPM-nhom6-R02-K01\.venv314\Lib\site-packages\pytest_asyncio\plugin.py:1216: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    return asyncio.get_event_loop_policy()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+
+---------- coverage: platform win32, python 3.14.8-final-0 -----------
+Name                                                              Stmts   Miss Branch BrPart  Cover   Missing
+-------------------------------------------------------------------------------------------------------------
+mealie_src\mealie\services\parser_services\brute\process.py         136     69     56     11    45%   19-20, 25-28, 40, 43, 46, 58, 61-64, 67-86, 100-103, 112-127, 156-191, 200, 201->208, 205-206, 209
+mealie_src\mealie\services\parser_services\ingredient_parser.py     168    112     60      0    25%   79, 94-95, 105-116, 120-131, 135-137, 143-170, 187-197, 200-281, 284-297, 300, 316-320
+-------------------------------------------------------------------------------------------------------------
+TOTAL                                                               304    181    116     11    34%
+Coverage HTML written to dir logs/coverage_html
+
+=========================== short test summary info ===========================
+XFAIL tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_never_crashes - Mealie v3.28.0 DEF-03: BruteForceParser.parse_one() nĂ©m IndexError khi chuá»—i rá»—ng hoáº·c chá»‰ cĂ³ khoáº£ng tráº¯ng (brute/process.py:152).
+XFAIL tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_edge_cases[empty] - Mealie v3.28.0 DEF-03: IndexError táº¡i brute/process.py:152 vá»›i chuá»—i rá»—ng.
+XFAIL tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_edge_cases[whitespace-only] - Mealie v3.28.0 DEF-03: IndexError táº¡i brute/process.py:152 vá»›i chuá»—i toĂ n khoáº£ng tráº¯ng.
+XFAIL tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_unit_at_end_bug - Mealie v3.28.0 DEF-03: IndexError táº¡i brute/process.py:199 -> 110 khi DB cĂ³ Ä‘Æ¡n vá»‹ vĂ  chuá»—i káº¿t thĂºc báº±ng Ä‘Æ¡n vá»‹ ('a cup').
+XFAIL tests/unit_tests/test_pbt_scaling.py::test_mealie_shopping_list_duplicate_ingredient_scaling_bug - Bug tháº­t cá»§a Mealie v3.28.0 táº¡i shopping_lists.py:403: gá»™p 2 nguyĂªn liá»‡u giá»‘ng nhau quĂªn nhĂ¢n scale cho dĂ²ng thá»© 2
+XFAIL tests/unit_tests/test_pbt_string_utils.py::test_move_parens_idempotent - Mealie v3.28.0 move_parens_to_end is not idempotent for repeated parenthetical notes.
+================= 57 passed, 6 xfailed, 3 warnings in 46.59s ==================
