@@ -19,11 +19,13 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from uuid import uuid4
 
 import pytest
+from tests.conftest import isolate_mealie_recipe_parser
 
 # Đảm bảo Mealie AppSettings khởi tạo môi trường thử nghiệm không lỗi validation
 os.environ.setdefault("PRODUCTION", "false")
 
-from mealie.schema.recipe import RecipeIngredient
+isolate_mealie_recipe_parser()
+
 from mealie.schema.recipe.recipe_ingredient import (
     CreateIngredientFood,
     CreateIngredientUnit,
@@ -31,6 +33,7 @@ from mealie.schema.recipe.recipe_ingredient import (
     IngredientFood,
     IngredientUnit,
     ParsedIngredient,
+    RecipeIngredient,
 )
 from mealie.services.parser_services.ingredient_parser import BruteForceParser
 
