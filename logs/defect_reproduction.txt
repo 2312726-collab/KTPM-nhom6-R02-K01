@@ -1,0 +1,212 @@
+Command exited with code 1.
+
+Command output:
+ Container doancuoiky_nhom6-test-runner-run-dc4b48cb488e Creating 
+ Container doancuoiky_nhom6-test-runner-run-dc4b48cb488e Created 
+============================= test session starts ==============================
+platform linux -- Python 3.14.10, pytest-8.4.2, pluggy-1.7.0 -- /usr/local/bin/python3.14
+cachedir: .pytest_cache
+hypothesis profile 'dev' -> deadline=None, max_examples=50
+rootdir: /app
+configfile: pytest.ini
+plugins: hypothesis-6.170.17, cov-5.0.0, anyio-4.16.0, asyncio-0.26.0, mock-3.17.0, platformdirs-4.14.8
+asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 71 items / 64 deselected / 7 selected
+
+tests/unit_tests/test_pbt_fraction.py::test_p5g_empty_and_whitespace_input PASSED [ 14%]
+tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_never_crashes FAILED [ 28%]
+tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_edge_cases[empty] FAILED [ 42%]
+tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_edge_cases[whitespace-only] FAILED [ 57%]
+tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_unit_at_end_bug FAILED [ 71%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_shopping_list_duplicate_ingredient_scaling_bug FAILED [ 85%]
+tests/unit_tests/test_pbt_string_utils.py::test_move_parens_idempotent FAILED [100%]
+
+=================================== FAILURES ===================================
+_____________________ test_ingredient_parser_never_crashes _____________________
+tests/unit_tests/test_pbt_ingredient_parser.py:41: in test_ingredient_parser_never_crashes
+    @pytest.mark.xfail(
+                   ^^^
+tests/unit_tests/test_pbt_ingredient_parser.py:48: in test_ingredient_parser_never_crashes
+    assert isinstance(asyncio.run(parse_with_mock_database(text)), ParsedIngredient)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.14/asyncio/runners.py:205: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.14/asyncio/runners.py:128: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.14/asyncio/base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/unit_tests/test_pbt_ingredient_parser.py:37: in parse_with_mock_database
+    return await parser.parse_one(text)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+mealie_src/mealie/services/parser_services/ingredient_parser.py:42: in parse_one
+    bfi = brute.parse(ingredient_string, self)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+mealie_src/mealie/services/parser_services/brute/process.py:152: in parse
+    amount, unit, unit_note = parse_amount(tokens[0])
+                                           ^^^^^^^^^
+E   IndexError: list index out of range
+E   Failing test case: test_ingredient_parser_never_crashes(
+E       text='',
+E   )
+E   Explanation:
+E       These lines were always and only run by failing test cases:
+E           /app/mealie_src/mealie/services/parser_services/brute/process.py:150
+___________________ test_ingredient_parser_edge_cases[empty] ___________________
+tests/unit_tests/test_pbt_ingredient_parser.py:77: in test_ingredient_parser_edge_cases
+    assert isinstance(asyncio.run(parse_with_mock_database(text)), ParsedIngredient)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.14/asyncio/runners.py:205: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.14/asyncio/runners.py:128: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.14/asyncio/base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/unit_tests/test_pbt_ingredient_parser.py:37: in parse_with_mock_database
+    return await parser.parse_one(text)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+mealie_src/mealie/services/parser_services/ingredient_parser.py:42: in parse_one
+    bfi = brute.parse(ingredient_string, self)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+mealie_src/mealie/services/parser_services/brute/process.py:152: in parse
+    amount, unit, unit_note = parse_amount(tokens[0])
+                                           ^^^^^^^^^
+E   IndexError: list index out of range
+______________ test_ingredient_parser_edge_cases[whitespace-only] ______________
+tests/unit_tests/test_pbt_ingredient_parser.py:77: in test_ingredient_parser_edge_cases
+    assert isinstance(asyncio.run(parse_with_mock_database(text)), ParsedIngredient)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.14/asyncio/runners.py:205: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.14/asyncio/runners.py:128: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.14/asyncio/base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/unit_tests/test_pbt_ingredient_parser.py:37: in parse_with_mock_database
+    return await parser.parse_one(text)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+mealie_src/mealie/services/parser_services/ingredient_parser.py:42: in parse_one
+    bfi = brute.parse(ingredient_string, self)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+mealie_src/mealie/services/parser_services/brute/process.py:152: in parse
+    amount, unit, unit_note = parse_amount(tokens[0])
+                                           ^^^^^^^^^
+E   IndexError: list index out of range
+____________________ test_ingredient_parser_unit_at_end_bug ____________________
+mealie_src/mealie/services/parser_services/brute/process.py:152: in parse
+    amount, unit, unit_note = parse_amount(tokens[0])
+                              ^^^^^^^^^^^^^^^^^^^^^^^
+mealie_src/mealie/services/parser_services/brute/process.py:66: in parse_amount
+    amount = parse_fraction(ing_str[0])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+mealie_src/mealie/services/parser_services/brute/process.py:24: in parse_fraction
+    raise ValueError
+E   ValueError
+
+During handling of the above exception, another exception occurred:
+tests/unit_tests/test_pbt_ingredient_parser.py:88: in test_ingredient_parser_unit_at_end_bug
+    result = asyncio.run(parse_with_mock_database("a cup", units=[cup_unit]))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.14/asyncio/runners.py:205: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.14/asyncio/runners.py:128: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.14/asyncio/base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/unit_tests/test_pbt_ingredient_parser.py:37: in parse_with_mock_database
+    return await parser.parse_one(text)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+mealie_src/mealie/services/parser_services/ingredient_parser.py:42: in parse_one
+    bfi = brute.parse(ingredient_string, self)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+mealie_src/mealie/services/parser_services/brute/process.py:199: in parse
+    ingredient, note = parse_ingredient(tokens[index + 1 :])
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+mealie_src/mealie/services/parser_services/brute/process.py:110: in parse_ingredient
+    if tokens[-1].endswith(")"):
+       ^^^^^^^^^^
+E   IndexError: list index out of range
+__________ test_mealie_shopping_list_duplicate_ingredient_scaling_bug __________
+tests/unit_tests/test_pbt_scaling.py:510: in test_mealie_shopping_list_duplicate_ingredient_scaling_bug
+    @pytest.mark.xfail(
+                   ^^^
+tests/unit_tests/test_pbt_scaling.py:543: in test_mealie_shopping_list_duplicate_ingredient_scaling_bug
+    assert math.isclose(items[0].quantity, expected_total, rel_tol=1e-4, abs_tol=1e-4), (
+E   AssertionError: Lỗi Scaling Mealie tại shopping_lists.py:403: kỳ vọng 4.0, thực tế 3.0
+E   assert False
+E    +  where False = <built-in function isclose>(3.0, 4.0, rel_tol=0.0001, abs_tol=0.0001)
+E    +    where <built-in function isclose> = math.isclose
+E    +    and   3.0 = ShoppingListItemCreate(quantity=3.0, unit=None, food=None, referenced_recipe=None, note='', display='2', shopping_list_id=UUID('87875286-b341-46d8-b5e9-f2d296c53549'), checked=False, position=0, food_id=UUID('3f824d53-1c71-458b-80d1-fa5e865149bc'), label_id=None, unit_id=UUID('66def3ea-947c-4628-ba2b-d34a8d2772a2'), extras={}, id=None, recipe_references=[ShoppingListItemRecipeRefCreate(recipe_id=UUID('c7f1bd57-ae6d-4702-b723-f0d90807b84c'), recipe_quantity=2.0, recipe_scale=2.0, recipe_note=None)]).quantity
+E   Failing test case: test_mealie_shopping_list_duplicate_ingredient_scaling_bug(
+E       # The test always failed when commented parts were varied together.
+E       qty1=1.0,  # or any other generated value
+E       qty2=1.0,  # or any other generated value
+E       scale=2.0,  # or any other generated value
+E   )
+_________________________ test_move_parens_idempotent __________________________
+tests/unit_tests/test_pbt_string_utils.py:46: in test_move_parens_idempotent
+    @pytest.mark.xfail(
+                   ^^^
+/usr/local/lib/python3.14/site-packages/hypothesis/core.py:1730: in _raise_to_user
+    raise the_error_hypothesis_found
+tests/unit_tests/test_pbt_string_utils.py:76: in test_move_parens_idempotent
+    assert move_parens_to_end(once) == once
+E   AssertionError: assert '1    (aa) (bb)' == '1  (bb)  (aa)'
+E     
+E     - 1  (bb)  (aa)
+E     + 1    (aa) (bb)
+E   Failing explicit example: test_move_parens_idempotent(
+E       s='1 (aa) (bb) ',
+E   )
+=============================== warnings summary ===============================
+mealie_src/mealie/db/models/household/webhooks.py:31
+  /app/mealie_src/mealie/db/models/household/webhooks.py:31: SADeprecationWarning: Type object <class 'sqlalchemy.sql.sqltypes.String'> does not include operator 'or_' in its operator classes.  Using built-in operators (not including custom or overridden operators) outside of a type's stated operator classes is deprecated and will raise InvalidRequestError in a future release
+    scheduled_time: Mapped[time | None] = mapped_column(Time, default=lambda: datetime.now(UTC).time())
+
+tests/unit_tests/test_pbt_fraction.py::test_p5g_empty_and_whitespace_input
+  /usr/local/lib/python3.14/site-packages/pytest_asyncio/plugin.py:1216: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    return asyncio.get_event_loop_policy()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_never_crashes - IndexError: list index out of range
+Failing test case: test_ingredient_parser_never_crashes(
+    text='',
+)
+Explanation:
+    These lines were always and only run by failing test cases:
+        /app/mealie_src/mealie/services/parser_services/brute/process.py:150
+FAILED tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_edge_cases[empty] - IndexError: list index out of range
+FAILED tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_edge_cases[whitespace-only] - IndexError: list index out of range
+FAILED tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_unit_at_end_bug - IndexError: list index out of range
+FAILED tests/unit_tests/test_pbt_scaling.py::test_mealie_shopping_list_duplicate_ingredient_scaling_bug - AssertionError: Lỗi Scaling Mealie tại shopping_lists.py:403: kỳ vọng 4.0, thực tế 3.0
+assert False
+ +  where False = <built-in function isclose>(3.0, 4.0, rel_tol=0.0001, abs_tol=0.0001)
+ +    where <built-in function isclose> = math.isclose
+ +    and   3.0 = ShoppingListItemCreate(quantity=3.0, unit=None, food=None, referenced_recipe=None, note='', display='2', shopping_list_id=UUID('87875286-b341-46d8-b5e9-f2d296c53549'), checked=False, position=0, food_id=UUID('3f824d53-1c71-458b-80d1-fa5e865149bc'), label_id=None, unit_id=UUID('66def3ea-947c-4628-ba2b-d34a8d2772a2'), extras={}, id=None, recipe_references=[ShoppingListItemRecipeRefCreate(recipe_id=UUID('c7f1bd57-ae6d-4702-b723-f0d90807b84c'), recipe_quantity=2.0, recipe_scale=2.0, recipe_note=None)]).quantity
+Failing test case: test_mealie_shopping_list_duplicate_ingredient_scaling_bug(
+    # The test always failed when commented parts were varied together.
+    qty1=1.0,  # or any other generated value
+    qty2=1.0,  # or any other generated value
+    scale=2.0,  # or any other generated value
+)
+FAILED tests/unit_tests/test_pbt_string_utils.py::test_move_parens_idempotent - AssertionError: assert '1    (aa) (bb)' == '1  (bb)  (aa)'
+  
+  - 1  (bb)  (aa)
+  + 1    (aa) (bb)
+Failing explicit example: test_move_parens_idempotent(
+    s='1 (aa) (bb) ',
+)
+=========== 6 failed, 1 passed, 64 deselected, 2 warnings in 16.71s ============
+

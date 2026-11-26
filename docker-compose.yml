@@ -1,0 +1,31 @@
+# ==============================================================================
+# DOCKER COMPOSE CHẠY MEALIE v3.28.0 — ĐỒ ÁN KIỂM THỬ PHẦN MỀM (NHÓM 6)
+# Khởi chạy: docker compose up -d
+# Truy cập Web UI: http://localhost:9925
+# Dừng container: docker compose down
+# ==============================================================================
+
+services:
+  mealie:
+    image: ghcr.io/mealie-recipes/mealie:v3.28.0
+    container_name: mealie
+    restart: always
+    ports:
+      - "9925:9000"
+    deploy:
+      resources:
+        limits:
+          memory: 1000M
+    volumes:
+      - mealie-data:/app/data/
+    environment:
+      ALLOW_SIGNUP: "true"
+      PUID: 1000
+      PGID: 1000
+      TZ: Asia/Ho_Chi_Minh
+      MAX_WORKERS: 1
+      WEB_CONCURRENCY: 1
+      BASE_URL: http://localhost:9925
+
+volumes:
+  mealie-data:

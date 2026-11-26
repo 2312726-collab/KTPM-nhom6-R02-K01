@@ -1,0 +1,311 @@
+Command exited with code 0.
+
+Command output:
+ Container doancuoiky_nhom6-test-runner-run-fd6f176d242c Creating 
+ Container doancuoiky_nhom6-test-runner-run-fd6f176d242c Created 
+============================= test session starts ==============================
+platform linux -- Python 3.14.10, pytest-8.4.2, pluggy-1.7.0 -- /usr/local/bin/python3.14
+cachedir: .pytest_cache
+hypothesis profile 'dev' -> deadline=None, max_examples=50
+rootdir: /app
+configfile: pytest.ini
+plugins: hypothesis-6.170.17, cov-5.0.0, anyio-4.16.0, asyncio-0.26.0, mock-3.17.0, platformdirs-4.14.8
+asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 71 items
+
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_basic PASSED [  1%]
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_with_matched_db PASSED [  2%]
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_fractions_and_notes PASSED [  4%]
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_batch_parse PASSED [  5%]
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_edge_cases PASSED [  7%]
+tests/unit_tests/test_manh_m1_async_mock.py::test_data_matcher_lazy_loading_cache PASSED [  8%]
+tests/unit_tests/test_manh_m1_async_mock.py::test_demonstrate_magic_mock_vs_async_mock PASSED [  9%]
+tests/unit_tests/test_manh_m1_async_mock.py::test_async_mock_simulating_external_parser_service PASSED [ 11%]
+tests/unit_tests/test_pbt_fraction.py::test_p5a_regular_fraction_numeric_preservation PASSED [ 12%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\xbc-expected_fraction0] PASSED [ 14%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\xbd-expected_fraction1] PASSED [ 15%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\xbe-expected_fraction2] PASSED [ 16%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2150-expected_fraction3] PASSED [ 18%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2151-expected_fraction4] PASSED [ 19%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2152-expected_fraction5] PASSED [ 21%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2153-expected_fraction6] PASSED [ 22%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2154-expected_fraction7] PASSED [ 23%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2155-expected_fraction8] PASSED [ 25%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2156-expected_fraction9] PASSED [ 26%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2157-expected_fraction10] PASSED [ 28%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2158-expected_fraction11] PASSED [ 29%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2159-expected_fraction12] PASSED [ 30%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u215a-expected_fraction13] PASSED [ 32%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u215b-expected_fraction14] PASSED [ 33%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u215c-expected_fraction15] PASSED [ 35%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u215d-expected_fraction16] PASSED [ 36%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u215e-expected_fraction17] PASSED [ 38%]
+tests/unit_tests/test_pbt_fraction.py::test_p5c_mixed_vulgar_fraction_numeric_preservation PASSED [ 39%]
+tests/unit_tests/test_pbt_fraction.py::test_p5d_mixed_ascii_fraction_numeric_preservation PASSED [ 40%]
+tests/unit_tests/test_pbt_fraction.py::test_p5e_remaining_ingredient_text_preserved PASSED [ 42%]
+tests/unit_tests/test_pbt_fraction.py::test_p5f_vulgar_fraction_normalization_idempotent PASSED [ 43%]
+tests/unit_tests/test_pbt_fraction.py::test_p5g_zero_numerator_edge_case PASSED [ 45%]
+tests/unit_tests/test_pbt_fraction.py::test_p5g_zero_denominator_safe_handling PASSED [ 46%]
+tests/unit_tests/test_pbt_fraction.py::test_p5g_empty_and_whitespace_input PASSED [ 47%]
+tests/unit_tests/test_pbt_fraction.py::test_p5g_text_without_numbers PASSED [ 49%]
+tests/unit_tests/test_pbt_fraction.py::test_p5g_decimal_numbers_preservation PASSED [ 50%]
+tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_never_crashes XFAIL chuỗi rỗng hoặc chỉ có khoảng trắng
+(brute/process.py:152).)                                                 [ 52%]
+tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_edge_cases[empty] XFAILỗng.) [ 53%]
+tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_edge_cases[whitespace-only] XFAILoàn khoảng trắng.) [ 54%]
+tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_edge_cases[math-symbols] PASSED [ 56%]
+tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_edge_cases[long-unbroken-token] PASSED [ 57%]
+tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_edge_cases[null-byte] PASSED [ 59%]
+tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_unit_at_end_bug XFAILDB có đơn vị và chuỗi kết thúc bằng đơn
+vị ('a cup').)                                                           [ 60%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_recipe_ingredient_monotonicity PASSED [ 61%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_recipe_ingredient_reversibility_roundtrip PASSED [ 63%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_recipe_ingredient_transitivity PASSED [ 64%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_display_fraction_real_code PASSED [ 66%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_format_quantity_for_display_after_scaling PASSED [ 67%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_ingredient_none_and_zero_quantity PASSED [ 69%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_scaling_invalid_base_servings PASSED [ 70%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_scaling_negative_target_servings PASSED [ 71%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_shopping_list_scaling_monotonicity_real_service PASSED [ 73%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_shopping_list_subrecipe_recursive_scaling PASSED [ 74%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_shopping_list_duplicate_ingredient_scaling_bug XFAILệu giống nhau quên nhân scale cho
+dòng thứ 2)                                                              [ 76%]
+tests/unit_tests/test_pbt_string_utils.py::test_remove_footnote_idempotent PASSED [ 77%]
+tests/unit_tests/test_pbt_string_utils.py::test_move_parens_idempotent XFAILthetical notes.) [ 78%]
+tests/unit_tests/test_pbt_string_utils.py::test_convert_vulgar_fractions_crash_free PASSED [ 80%]
+tests/unit_tests/test_pbt_string_utils.py::test_convert_vulgar_fractions_no_remaining_unicode PASSED [ 81%]
+tests/unit_tests/test_pbt_unit_converter.py::test_gram_kilogram_roundtrip PASSED [ 83%]
+tests/unit_tests/test_pbt_unit_converter.py::test_ounce_gram_roundtrip PASSED [ 84%]
+tests/unit_tests/test_pbt_unit_converter.py::test_arbitrary_mass_roundtrip PASSED [ 85%]
+tests/unit_tests/test_pbt_unit_converter.py::test_milliliter_liter_roundtrip PASSED [ 87%]
+tests/unit_tests/test_pbt_unit_converter.py::test_teaspoon_tablespoon_roundtrip PASSED [ 88%]
+tests/unit_tests/test_pbt_unit_converter.py::test_arbitrary_volume_roundtrip PASSED [ 90%]
+tests/unit_tests/test_pbt_unit_converter.py::test_ounce_resolves_to_fluid_ounce_with_volume PASSED [ 91%]
+tests/unit_tests/test_pbt_unit_converter.py::test_incompatible_units_handling PASSED [ 92%]
+tests/unit_tests/test_pbt_unit_converter.py::test_unknown_unit_raises_unit_not_found PASSED [ 94%]
+tests/unit_tests/test_pbt_unit_converter.py::test_merge_commutativity_and_conservation PASSED [ 95%]
+tests/unit_tests/test_pbt_unit_converter.py::test_merge_quantity_and_unit_preserves_total PASSED [ 97%]
+tests/unit_tests/test_pbt_unit_converter.py::test_merge_quantity_and_unit_invalid_metadata_raises_value_error PASSED [ 98%]
+tests/unit_tests/test_pbt_unit_converter.py::test_private_registry_and_parsed_unit_idempotence PASSED [100%]
+
+=============================== warnings summary ===============================
+mealie_src/mealie/db/models/household/webhooks.py:31
+mealie_src/mealie/db/models/household/webhooks.py:31
+  /app/mealie_src/mealie/db/models/household/webhooks.py:31: SADeprecationWarning: Type object <class 'sqlalchemy.sql.sqltypes.String'> does not include operator 'or_' in its operator classes.  Using built-in operators (not including custom or overridden operators) outside of a type's stated operator classes is deprecated and will raise InvalidRequestError in a future release
+    scheduled_time: Mapped[time | None] = mapped_column(Time, default=lambda: datetime.now(UTC).time())
+
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_basic
+  /usr/local/lib/python3.14/site-packages/pytest_asyncio/plugin.py:1216: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    return asyncio.get_event_loop_policy()
+
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_basic
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_with_matched_db
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_fractions_and_notes
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_batch_parse
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_edge_cases
+tests/unit_tests/test_manh_m1_async_mock.py::test_data_matcher_lazy_loading_cache
+tests/unit_tests/test_manh_m1_async_mock.py::test_demonstrate_magic_mock_vs_async_mock
+tests/unit_tests/test_manh_m1_async_mock.py::test_async_mock_simulating_external_parser_service
+  /usr/local/lib/python3.14/site-packages/pytest_asyncio/plugin.py:874: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    _restore_event_loop_policy(asyncio.get_event_loop_policy()),
+
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_basic
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_with_matched_db
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_fractions_and_notes
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_batch_parse
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_edge_cases
+tests/unit_tests/test_manh_m1_async_mock.py::test_data_matcher_lazy_loading_cache
+tests/unit_tests/test_manh_m1_async_mock.py::test_demonstrate_magic_mock_vs_async_mock
+tests/unit_tests/test_manh_m1_async_mock.py::test_async_mock_simulating_external_parser_service
+  /usr/local/lib/python3.14/site-packages/pytest_asyncio/plugin.py:772: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    old_loop_policy = asyncio.get_event_loop_policy()
+
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_basic
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_with_matched_db
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_fractions_and_notes
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_batch_parse
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_edge_cases
+tests/unit_tests/test_manh_m1_async_mock.py::test_data_matcher_lazy_loading_cache
+tests/unit_tests/test_manh_m1_async_mock.py::test_demonstrate_magic_mock_vs_async_mock
+tests/unit_tests/test_manh_m1_async_mock.py::test_async_mock_simulating_external_parser_service
+  /usr/local/lib/python3.14/site-packages/pytest_asyncio/plugin.py:777: DeprecationWarning: 'asyncio.set_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    asyncio.set_event_loop_policy(policy)
+
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_basic
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_with_matched_db
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_fractions_and_notes
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_batch_parse
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_edge_cases
+tests/unit_tests/test_manh_m1_async_mock.py::test_data_matcher_lazy_loading_cache
+tests/unit_tests/test_manh_m1_async_mock.py::test_demonstrate_magic_mock_vs_async_mock
+tests/unit_tests/test_manh_m1_async_mock.py::test_async_mock_simulating_external_parser_service
+  /usr/local/lib/python3.14/site-packages/pytest_asyncio/plugin.py:1183: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    loop = asyncio.get_event_loop_policy().new_event_loop()
+
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_basic
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_with_matched_db
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_fractions_and_notes
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_batch_parse
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_edge_cases
+tests/unit_tests/test_manh_m1_async_mock.py::test_data_matcher_lazy_loading_cache
+tests/unit_tests/test_manh_m1_async_mock.py::test_demonstrate_magic_mock_vs_async_mock
+tests/unit_tests/test_manh_m1_async_mock.py::test_async_mock_simulating_external_parser_service
+  /usr/local/lib/python3.14/site-packages/pytest_asyncio/plugin.py:889: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    policy = asyncio.get_event_loop_policy()
+
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_basic
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_with_matched_db
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_fractions_and_notes
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_batch_parse
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_edge_cases
+tests/unit_tests/test_manh_m1_async_mock.py::test_data_matcher_lazy_loading_cache
+tests/unit_tests/test_manh_m1_async_mock.py::test_demonstrate_magic_mock_vs_async_mock
+tests/unit_tests/test_manh_m1_async_mock.py::test_async_mock_simulating_external_parser_service
+  /usr/local/lib/python3.14/site-packages/pytest_asyncio/plugin.py:794: DeprecationWarning: 'asyncio.set_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    asyncio.set_event_loop_policy(old_loop_policy)
+
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_basic
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_with_matched_db
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_fractions_and_notes
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_batch_parse
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_edge_cases
+tests/unit_tests/test_manh_m1_async_mock.py::test_data_matcher_lazy_loading_cache
+tests/unit_tests/test_manh_m1_async_mock.py::test_demonstrate_magic_mock_vs_async_mock
+tests/unit_tests/test_manh_m1_async_mock.py::test_async_mock_simulating_external_parser_service
+  /usr/local/lib/python3.14/site-packages/pytest_asyncio/plugin.py:942: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    policy = asyncio.get_event_loop_policy()
+
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_basic
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_with_matched_db
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_fractions_and_notes
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_batch_parse
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_edge_cases
+tests/unit_tests/test_manh_m1_async_mock.py::test_data_matcher_lazy_loading_cache
+tests/unit_tests/test_manh_m1_async_mock.py::test_demonstrate_magic_mock_vs_async_mock
+tests/unit_tests/test_manh_m1_async_mock.py::test_async_mock_simulating_external_parser_service
+  /usr/local/lib/python3.14/site-packages/pytest_asyncio/plugin.py:966: DeprecationWarning: 'asyncio.set_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    asyncio.set_event_loop_policy(previous_policy)
+
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_basic
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_parse_one_with_matched_db
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_fractions_and_notes
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_async_batch_parse
+tests/unit_tests/test_manh_m1_async_mock.py::test_brute_force_parser_edge_cases
+tests/unit_tests/test_manh_m1_async_mock.py::test_data_matcher_lazy_loading_cache
+tests/unit_tests/test_manh_m1_async_mock.py::test_demonstrate_magic_mock_vs_async_mock
+tests/unit_tests/test_manh_m1_async_mock.py::test_async_mock_simulating_external_parser_service
+  /usr/local/lib/python3.14/site-packages/pytest_asyncio/plugin.py:978: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    policy = asyncio.get_event_loop_policy()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+
+---------- coverage: platform linux, python 3.14.10-final-0 ----------
+Name                                                                      Stmts   Miss  Cover   Missing
+-------------------------------------------------------------------------------------------------------
+mealie_src/mealie/schema/recipe/recipe_ingredient.py                        322     51    84%   85, 125, 129, 133-136, 148, 153-175, 211, 238, 250-253, 336, 344, 355-360, 380, 385-388, 400, 407, 411-414, 424-425, 484-486, 501, 503
+mealie_src/mealie/services/household_services/shopping_lists.py             294    227    23%   55, 59-68, 84-128, 131-143, 146-152, 163-221, 227-308, 313-321, 334, 337-344, 364, 398, 408-410, 421-427, 442-471, 484-557, 560-572
+mealie_src/mealie/services/parser_services/__init__.py                        1      0   100%
+mealie_src/mealie/services/parser_services/_base.py                         117      9    92%   70-71, 92-93, 107, 119, 182-183, 187
+mealie_src/mealie/services/parser_services/brute/__init__.py                  2      0   100%
+mealie_src/mealie/services/parser_services/brute/process.py                 136     36    74%   19-20, 27-28, 46, 62, 67-68, 70-79, 83-84, 100-103, 113, 120, 123, 161, 170-173, 183-187, 200, 205-206, 209
+mealie_src/mealie/services/parser_services/ingredient_parser.py             168    111    34%   94-95, 105-116, 120-131, 135-137, 143-170, 187-197, 200-281, 284-297, 300, 316-320
+mealie_src/mealie/services/parser_services/openai/__init__.py                 2      2     0%   1-3
+mealie_src/mealie/services/parser_services/openai/parser.py                  83     83     0%   1-184
+mealie_src/mealie/services/parser_services/parser_utils/__init__.py           2      0   100%
+mealie_src/mealie/services/parser_services/parser_utils/string_utils.py      56      0   100%
+mealie_src/mealie/services/parser_services/parser_utils/unit_utils.py        81      1    99%   20
+-------------------------------------------------------------------------------------------------------
+TOTAL                                                                      1264    520    59%
+
+=========================== short test summary info ============================
+XFAIL tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_never_crashes - Mealie v3.28.0 DEF-03: BruteForceParser.parse_one() ném IndexError khi chuỗi rỗng hoặc chỉ có khoảng trắng (brute/process.py:152).
+XFAIL tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_edge_cases[empty] - Mealie v3.28.0 DEF-03: IndexError tại brute/process.py:152 với chuỗi rỗng.
+XFAIL tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_edge_cases[whitespace-only] - Mealie v3.28.0 DEF-03: IndexError tại brute/process.py:152 với chuỗi toàn khoảng trắng.
+XFAIL tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_unit_at_end_bug - Mealie v3.28.0 DEF-03: IndexError tại brute/process.py:199 -> 110 khi DB có đơn vị và chuỗi kết thúc bằng đơn vị ('a cup').
+XFAIL tests/unit_tests/test_pbt_scaling.py::test_mealie_shopping_list_duplicate_ingredient_scaling_bug - Bug thật của Mealie v3.28.0 tại shopping_lists.py:403: gộp 2 nguyên liệu giống nhau quên nhân scale cho dòng thứ 2
+XFAIL tests/unit_tests/test_pbt_string_utils.py::test_move_parens_idempotent - Mealie v3.28.0 move_parens_to_end is not idempotent for repeated parenthetical notes.
+================= 65 passed, 6 xfailed, 75 warnings in 53.42s ==================
+=== DOCKER MARKER PBT ===
+ Container doancuoiky_nhom6-test-runner-run-cfea5e7f740f Creating 
+ Container doancuoiky_nhom6-test-runner-run-cfea5e7f740f Created 
+============================= test session starts ==============================
+platform linux -- Python 3.14.10, pytest-8.4.2, pluggy-1.7.0 -- /usr/local/bin/python3.14
+cachedir: .pytest_cache
+hypothesis profile 'dev' -> deadline=None, max_examples=50
+rootdir: /app
+configfile: pytest.ini
+testpaths: tests
+plugins: hypothesis-6.170.17, cov-5.0.0, anyio-4.16.0, asyncio-0.26.0, mock-3.17.0, platformdirs-4.14.8
+asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 71 items / 19 deselected / 52 selected
+
+tests/unit_tests/test_pbt_fraction.py::test_p5a_regular_fraction_numeric_preservation PASSED [  1%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\xbc-expected_fraction0] PASSED [  3%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\xbd-expected_fraction1] PASSED [  5%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\xbe-expected_fraction2] PASSED [  7%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2150-expected_fraction3] PASSED [  9%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2151-expected_fraction4] PASSED [ 11%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2152-expected_fraction5] PASSED [ 13%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2153-expected_fraction6] PASSED [ 15%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2154-expected_fraction7] PASSED [ 17%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2155-expected_fraction8] PASSED [ 19%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2156-expected_fraction9] PASSED [ 21%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2157-expected_fraction10] PASSED [ 23%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2158-expected_fraction11] PASSED [ 25%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u2159-expected_fraction12] PASSED [ 26%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u215a-expected_fraction13] PASSED [ 28%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u215b-expected_fraction14] PASSED [ 30%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u215c-expected_fraction15] PASSED [ 32%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u215d-expected_fraction16] PASSED [ 34%]
+tests/unit_tests/test_pbt_fraction.py::test_p5b_vulgar_fraction_conversion_and_extraction[\u215e-expected_fraction17] PASSED [ 36%]
+tests/unit_tests/test_pbt_fraction.py::test_p5c_mixed_vulgar_fraction_numeric_preservation PASSED [ 38%]
+tests/unit_tests/test_pbt_fraction.py::test_p5d_mixed_ascii_fraction_numeric_preservation PASSED [ 40%]
+tests/unit_tests/test_pbt_fraction.py::test_p5e_remaining_ingredient_text_preserved PASSED [ 42%]
+tests/unit_tests/test_pbt_fraction.py::test_p5f_vulgar_fraction_normalization_idempotent PASSED [ 44%]
+tests/unit_tests/test_pbt_fraction.py::test_p5g_decimal_numbers_preservation PASSED [ 46%]
+tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_never_crashes XFAIL chuỗi rỗng hoặc chỉ có khoảng trắng
+(brute/process.py:152).)                                                 [ 48%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_recipe_ingredient_monotonicity PASSED [ 50%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_recipe_ingredient_reversibility_roundtrip PASSED [ 51%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_recipe_ingredient_transitivity PASSED [ 53%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_display_fraction_real_code PASSED [ 55%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_format_quantity_for_display_after_scaling PASSED [ 57%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_ingredient_none_and_zero_quantity PASSED [ 59%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_scaling_invalid_base_servings PASSED [ 61%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_scaling_negative_target_servings PASSED [ 63%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_shopping_list_scaling_monotonicity_real_service PASSED [ 65%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_shopping_list_subrecipe_recursive_scaling PASSED [ 67%]
+tests/unit_tests/test_pbt_scaling.py::test_mealie_shopping_list_duplicate_ingredient_scaling_bug XFAILệu giống nhau quên nhân scale cho
+dòng thứ 2)                                                              [ 69%]
+tests/unit_tests/test_pbt_string_utils.py::test_remove_footnote_idempotent PASSED [ 71%]
+tests/unit_tests/test_pbt_string_utils.py::test_move_parens_idempotent XFAILthetical notes.) [ 73%]
+tests/unit_tests/test_pbt_string_utils.py::test_convert_vulgar_fractions_crash_free PASSED [ 75%]
+tests/unit_tests/test_pbt_string_utils.py::test_convert_vulgar_fractions_no_remaining_unicode PASSED [ 76%]
+tests/unit_tests/test_pbt_unit_converter.py::test_gram_kilogram_roundtrip PASSED [ 78%]
+tests/unit_tests/test_pbt_unit_converter.py::test_ounce_gram_roundtrip PASSED [ 80%]
+tests/unit_tests/test_pbt_unit_converter.py::test_arbitrary_mass_roundtrip PASSED [ 82%]
+tests/unit_tests/test_pbt_unit_converter.py::test_milliliter_liter_roundtrip PASSED [ 84%]
+tests/unit_tests/test_pbt_unit_converter.py::test_teaspoon_tablespoon_roundtrip PASSED [ 86%]
+tests/unit_tests/test_pbt_unit_converter.py::test_arbitrary_volume_roundtrip PASSED [ 88%]
+tests/unit_tests/test_pbt_unit_converter.py::test_ounce_resolves_to_fluid_ounce_with_volume PASSED [ 90%]
+tests/unit_tests/test_pbt_unit_converter.py::test_incompatible_units_handling PASSED [ 92%]
+tests/unit_tests/test_pbt_unit_converter.py::test_unknown_unit_raises_unit_not_found PASSED [ 94%]
+tests/unit_tests/test_pbt_unit_converter.py::test_merge_commutativity_and_conservation PASSED [ 96%]
+tests/unit_tests/test_pbt_unit_converter.py::test_merge_quantity_and_unit_preserves_total PASSED [ 98%]
+tests/unit_tests/test_pbt_unit_converter.py::test_merge_quantity_and_unit_invalid_metadata_raises_value_error PASSED [100%]
+
+=============================== warnings summary ===============================
+mealie_src/mealie/db/models/household/webhooks.py:31
+  /app/mealie_src/mealie/db/models/household/webhooks.py:31: SADeprecationWarning: Type object <class 'sqlalchemy.sql.sqltypes.String'> does not include operator 'or_' in its operator classes.  Using built-in operators (not including custom or overridden operators) outside of a type's stated operator classes is deprecated and will raise InvalidRequestError in a future release
+    scheduled_time: Mapped[time | None] = mapped_column(Time, default=lambda: datetime.now(UTC).time())
+
+tests/unit_tests/test_pbt_fraction.py::test_p5a_regular_fraction_numeric_preservation
+  /usr/local/lib/python3.14/site-packages/pytest_asyncio/plugin.py:1216: DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16
+    return asyncio.get_event_loop_policy()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+XFAIL tests/unit_tests/test_pbt_ingredient_parser.py::test_ingredient_parser_never_crashes - Mealie v3.28.0 DEF-03: BruteForceParser.parse_one() ném IndexError khi chuỗi rỗng hoặc chỉ có khoảng trắng (brute/process.py:152).
+XFAIL tests/unit_tests/test_pbt_scaling.py::test_mealie_shopping_list_duplicate_ingredient_scaling_bug - Bug thật của Mealie v3.28.0 tại shopping_lists.py:403: gộp 2 nguyên liệu giống nhau quên nhân scale cho dòng thứ 2
+XFAIL tests/unit_tests/test_pbt_string_utils.py::test_move_parens_idempotent - Mealie v3.28.0 move_parens_to_end is not idempotent for repeated parenthetical notes.
+========== 49 passed, 19 deselected, 3 xfailed, 2 warnings in 50.39s ===========

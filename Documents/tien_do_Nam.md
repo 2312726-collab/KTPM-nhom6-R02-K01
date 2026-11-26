@@ -1,0 +1,247 @@
+# BẢNG THEO DÕI TIẾN ĐỘ CÔNG VIỆC — NGUYỄN PHẠM PHÚ NAM
+## ĐỒ ÁN KIỂM THỬ PHẦN MỀM (NHÓM 6 — R02 + K01)
+### PHẠM VI: PHẦN 1 — PHỤC VỤ ĐÁNH GIÁ GIỮA KỲ (MỐC 20/10)
+
+> **Thành viên:** Nguyễn Phạm Phú Nam — MSSV: 2312695
+> **Vai trò:** DevOps & Automation QA
+> **Nhánh làm việc chính thức:** `2312695-NguyenPhamPhuNam-Phan1` (tách riêng cho Phần 1, xây dựng trên nền `origin/develop`)
+> **Nguyên tắc quản lý:** Tiến độ được theo dõi trong file riêng này; không tự ý chỉnh sửa bảng phân công chung của nhóm để đưa dấu tích lên `main`.
+
+---
+
+## 📊 TỔNG HỢP TIẾN ĐỘ PHẦN 1 (GIỮA KỲ 20/10)
+
+| Nhóm việc | Nội dung chính | Tổng số mục | Đã hoàn thành | Chờ thẩm định | Trạng thái |
+|---|---|:---:|:---:|:---:|:---:|
+| **N1** | Thiết lập môi trường Docker Mealie SQLite v3.28.0 | 8 | 8 | 0 | **Đạt 100%** |
+| **N2** | Nạp dữ liệu mẫu (Seed Data) & Minh chứng 3 luồng | 7 | 7 | 0 | **Đạt 100%** |
+| **N3** | Soạn thảo Báo cáo On-boarding Phần C | 4 | 4 | 0 | **Đạt 100% (Phần việc của Nam)\*** |
+| **N4** | Lập trình PBT Property 5 & Docker Runner | 8 | 8 | 0 | **Đạt 100% (28/28 PASS, cov 86%)** |
+| **Tổng cộng** | **Toàn bộ nhiệm vụ của Nam** | **27** | **27** | **0** | **Đạt 100% phần việc của Nam** |
+
+*\* Ghi chú N3: Nam đã hoàn thành bàn giao và tiếp nhận biên bản phản hồi từ Hiếu; kết quả nghiệm thu chính thức phía Hiếu vẫn chờ xác nhận chéo trong buổi họp của nhóm.*
+
+---
+
+## 1. NHÓM VIỆC N1: THIẾT LẬP MÔI TRƯỜNG DOCKER MEALIE
+**Mục tiêu:** Dựng thành công Mealie v3.28.0 SQLite trên cổng 9925 bằng Docker Compose, thiết lập quyền Admin và ghi nhận minh chứng.
+
+- [x] **N1.1.1** — Tạo thư mục `mealie_docker/` trong repo.
+  - *Bằng chứng / File:* Thư mục [`mealie_docker/`](../mealie_docker/).
+  - *Kết quả kiểm tra:* Thư mục tồn tại, độc lập với thư mục gốc, cấu trúc sạch sẽ.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N1.1.2** — Tạo file `mealie_docker/docker-compose.yml` (SQLite) và `mealie_docker/.env.example` mở cổng `9925`.
+  - *Bằng chứng / File:* [`mealie_docker/docker-compose.yml`](../mealie_docker/docker-compose.yml), [`mealie_docker/.env.example`](../mealie_docker/.env.example).
+  - *Kết quả kiểm tra:* Image `ghcr.io/mealie-recipes/mealie:v3.28.0`, port host 9925 -> container 9000, biến môi trường mẫu đầy đủ.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N1.1.3** — Chạy container: `docker compose up -d`.
+  - *Bằng chứng / File:* Container `mealie` chạy ở chế độ nền trên Docker Engine 29.7.2.
+  - *Kết quả kiểm tra:* Trạng thái container `Up (healthy)`.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N1.1.4** — Kiểm tra log: `docker compose logs -f mealie` xác nhận FastAPI khởi động mượt mà.
+  - *Bằng chứng / File:* Log Docker ghi nhận `Application startup complete` và `Uvicorn running on http://0.0.0.0:9000`.
+  - *Kết quả kiểm tra:* Khởi động thành công, không phát sinh ngoại lệ runtime.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N1.1.5** — Truy cập `http://localhost:9925`, chụp ảnh Landing Page.
+  - *Bằng chứng / File:* File ảnh minh chứng `01_mealie_landing.png` (lưu trữ ngoại tuyến tại `backup_nam_ktpm_20261013/assets_nam_6_anh/`, phục vụ demo & nghiệm thu theo quy tắc `.gitignore` của nhóm).
+  - *Kết quả kiểm tra:* Ảnh chụp giao diện Landing page thật, kích thước 26.5 KB.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N1.2.1** — Cấu hình tài khoản Admin (`admin@nhom6.test` / `Admin123@`).
+  - *Bằng chứng / File:* Tài khoản quản trị khởi tạo từ giao diện Admin Panel sau khi đăng nhập ban đầu bằng `changeme@example.com` / `MyPassword`.
+  - *Kết quả kiểm tra:* Đăng nhập thành công, có quyền quản trị tối cao (Admin).
+  - *Việc còn thiếu:* Không.
+
+- [x] **N1.2.2** — Đăng nhập Dashboard thành công, chụp ảnh Dashboard.
+  - *Bằng chứng / File:* File ảnh minh chứng `02_mealie_dashboard.png` (lưu trữ ngoại tuyến phục vụ demo & nghiệm thu).
+  - *Kết quả kiểm tra:* Ảnh chụp Dashboard thật, kích thước 38.3 KB.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N1.2.3** — Commit cấu hình Docker Compose và credentials.
+  - *Bằng chứng / File:* Commit `f66d491` trên nhánh `2312695-NguyenPhamPhuNam-Phan1`.
+  - *Kết quả kiểm tra:* Đã commit thành công.
+  - *Việc còn thiếu:* Không.
+
+---
+
+## 2. NHÓM VIỆC N2: NẠP DỮ LIỆU MẪU & MINH CHỨNG 3 LUỒNG NGHIỆP VỤ
+**Mục tiêu:** Tạo tài khoản kiểm thử, nạp 10 công thức mẫu đa dạng, thực đơn 7 ngày và thu thập bằng chứng 3 luồng cốt lõi.
+
+- [x] **N2.1.1** — Tạo tài khoản kiểm thử thường (`test@nhom6.test` / `User123@`).
+  - *Bằng chứng / File:* Tài khoản thường tạo qua API/Register, quyền hạn người dùng thông thường.
+  - *Kết quả kiểm tra:* Xác nhận phân quyền đúng, không có quyền truy cập Admin Panel.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N2.1.2** — Tạo 10 công thức mẫu đa dạng (nguyên liệu đơn giản, phân số thường, phân số unicode `½`, chú thích, nhiều bước).
+  - *Bằng chứng / File:* [`mealie_docker/seed/recipes_nam.json`](../mealie_docker/seed/recipes_nam.json), script [`mealie_docker/seed/seed_data.py`](../mealie_docker/seed/seed_data.py).
+  - *Kết quả kiểm tra:* Script idempotent, tự kiểm tra trùng lặp slug trước khi tạo/cập nhật; 10 công thức mẫu `NAM-01` đến `NAM-10` đã có trong CSDL.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N2.1.3** — Tạo kế hoạch thực đơn (Meal Plan) 7 ngày tuần 06/10–12/10, chụp ảnh.
+  - *Bằng chứng / File:* File ảnh minh chứng `03_meal_plan.png` (lưu trữ ngoại tuyến phục vụ demo & nghiệm thu).
+  - *Kết quả kiểm tra:* Ảnh hiển thị thực đơn bữa sáng và bữa tối đầy đủ 7 ngày liên tục, kích thước 95.6 KB.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N2.2.1** — Luồng 1: Import công thức từ URL (nguồn mock server cục bộ).
+  - *Bằng chứng / File:* Script mock server [`mealie_docker/seed/mock_recipe_server.py`](../mealie_docker/seed/mock_recipe_server.py) và ảnh minh chứng ngoại tuyến `04_recipe_import.png`.
+  - *Kết quả kiểm tra:* Import thành công công thức Phở Bò qua URL Schema.org JSON-LD cục bộ mà không phụ thuộc internet bên ngoài.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N2.2.2** — Luồng 2: Phân tích nguyên liệu (Ingredient Parsing).
+  - *Bằng chứng / File:* File ảnh minh chứng ngoại tuyến `05_ingredient_parse.png`.
+  - *Kết quả kiểm tra:* Đối chiếu trực tiếp với ảnh thật: Modal bóc tách chuỗi `1 onion (finely chopped)` trong công thức `NAM-08 Súp Hành Tây Pháp`, trích xuất chính xác `Quantity=1`, `Unit=None`, `Food=onion` (gợi ý Create missing food: onion), `Note=finely chopped` với `Confidence Score=100.00%`.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N2.2.3** — Luồng 3: Nhân tỉ lệ khẩu phần ăn (Servings Scaling từ 4 lên 8).
+  - *Bằng chứng / File:* File ảnh minh chứng ngoại tuyến `06_servings_scale.png`.
+  - *Kết quả kiểm tra:* Đối chiếu trực tiếp với ảnh thật: Công thức `NAM-10 Bò Sốt Tiêu Khẩu Phần Chuẩn` (gốc 4 servings: 400g beef, 2 tbsp black pepper, 0.5 cup beef broth, 4 cloves garlic), khi đổi sang 8 servings (hệ số 2.0x) giao diện hiển thị chính xác gấp đôi: 800g beef, 4 tbsp black pepper, 1 cup beef broth, 8 cloves garlic.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N2.2.4** — Commit dữ liệu mẫu và minh chứng 3 luồng.
+  - *Bằng chứng / File:* Commit trên nhánh `2312695-NguyenPhamPhuNam-Phan1`.
+  - *Kết quả kiểm tra:* Đã commit thành công.
+  - *Việc còn thiếu:* Không.
+
+---
+
+## 3. NHÓM VIỆC N3: TÀI LIỆU ON-BOARDING PHẦN C
+**Mục tiêu:** Soạn thảo hoàn chỉnh tài liệu hướng dẫn cài đặt và vận hành môi trường kiểm thử `Documents/bao_cao_phan_C.md`.
+
+- [x] **N3.1.1** — Soạn thảo đầy đủ 5 mục chuẩn (C.1 Yêu cầu môi trường, C.2 Cài đặt chi tiết, C.3 Quản lý dịch vụ Docker, C.4 Nạp Seed Data, C.5 Xử lý sự cố).
+  - *Bằng chứng / File:* [`Documents/bao_cao_phan_C.md`](bao_cao_phan_C.md).
+  - *Kết quả kiểm tra:* Đủ 5 phần nội dung kỹ thuật, chính xác phiên bản máy thật, biến môi trường, đường dẫn và lệnh chạy.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N3.1.2** — Trình bày đầy đủ bộ 16 hình ảnh hướng dẫn thực tế C.1 đến C.16 trong báo cáo.
+  - *Bằng chứng / File:* Bộ 16 file ảnh thực tế tại [`Documents/images_huong_dan_C/`](images_huong_dan_C/) nhúng trực tiếp vào [`Documents/bao_cao_phan_C.md`](bao_cao_phan_C.md).
+  - *Kết quả kiểm tra:* 16 hình ảnh thực tế (C01 đến C16) hiển thị trực tiếp trên GitHub, dung lượng tối ưu (~530 KB), không có liên kết hỏng, mô tả chi tiết từng bước.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N3.1.3** — Bàn giao cho **Bùi Trung Hiếu** cài đặt thẩm định chéo trên máy sạch, tiếp thu góp ý để hoàn thiện.
+  - *Bằng chứng / File:* Đã bàn giao tài liệu và tiếp nhận phản hồi qua `Documents/bien_ban_tham_dinh_cheo_onboarding.md` (commit `6fe35aa` trên `origin/develop`) từ Bùi Trung Hiếu.
+  - *Kết quả kiểm tra:* Tài liệu và môi trường Docker của Nam được Hiếu thẩm định chéo độc lập; các bước B1–B6 (chuẩn bị env, docker compose up, Web UI 200 OK, admin setup, seed data 10 món, mock server import) đều được đánh giá ĐẠT.
+  - *Ghi chú:* Nam đã hoàn thành phần việc bàn giao và tiếp thu ý kiến khuyến nghị bổ sung; nghiệm thu chính thức phía Hiếu vẫn ở trạng thái chờ xác nhận chung của nhóm.
+  - *Việc còn thiếu:* Không (đã hoàn tất phần việc của Nam).
+
+- [x] **N3.1.4** — Commit tài liệu On-boarding Phần C và bảng tiến độ riêng.
+  - *Bằng chứng / File:* Nhánh `2312695-NguyenPhamPhuNam-Phan1`.
+  - *Kết quả kiểm tra:* Commit và push đúng quy trình.
+  - *Việc còn thiếu:* Không.
+
+---
+
+## 4. NHÓM VIỆC N4: LẬP TRÌNH KIỂM THỬ PBT — PROPERTY 5 (FRACTION NORMALIZATION)
+**Mục tiêu:** Xây dựng bộ kiểm thử tự động Property-Based Testing (Hypothesis) kiểm chứng tính chuẩn hóa phân số và bảo toàn giá trị số học cho module `string_utils.py`, đóng gói Docker Test Runner độc lập.
+
+- [x] **N4.1.1** — Nghiên cứu logic xử lý phân số trong `mealie/services/parser_services/parser_utils/string_utils.py`.
+  - *Bằng chứng / File:* Mã nguồn thực tế Mealie v3.28.0 tại [`mealie_src/mealie/services/parser_services/parser_utils/string_utils.py`](../mealie_src/mealie/services/parser_services/parser_utils/string_utils.py).
+  - *Kết quả phân tích:* Khảo sát chi tiết 2 hàm cốt lõi: `convert_vulgar_fractions_to_regular_fractions` (ánh xạ từ điển 18 ký tự Unicode sang ASCII `n/d`) và `extract_quantity_from_string` (bóc tách định lượng hỗn số, phân số thường, số thực, bọc trong `try...except ZeroDivisionError`).
+  - *Việc còn thiếu:* Không.
+
+- [x] **N4.1.2** — Xác định Invariant toán học:
+  - $\forall (n, d) \in \mathbb{N}^*, \quad |\text{parse}(f"{n}/{d}") - (n/d)| \le \epsilon = 10^{-4}$.
+  - Tính bảo toàn thông tin văn bản: phần nguyên liệu đi kèm sau lượng số không bị nuốt hay cắt xén.
+  - Tính lũy đẳng (Idempotence): $f(f(x)) == f(x)$ với hàm chuẩn hóa phân số Unicode.
+  - Tính bền bỉ (Crash-free): không ném Unhandled Exception với ca biên (tử số 0, mẫu số 0, chuỗi rỗng).
+  - *Việc còn thiếu:* Không.
+
+- [x] **N4.2.1** — Tạo nhánh kiểm thử & quản lý Git branch:
+  - *Bằng chứng / Lịch sử:* Ban đầu tạo nhánh `feat/nam-property-5-fraction`, sau đó đã chuyển hoàn toàn commit `1920f50` vào nhánh chính của Nam `2312695-NguyenPhamPhuNam-Phan1` bằng `git merge --ff-only`, đóng PR #10 (`CLOSED`) và xóa nhánh riêng cả local và remote theo chỉ đạo.
+  - *Kết quả kiểm tra:* Nhánh `2312695-NguyenPhamPhuNam-Phan1` đồng bộ tuyệt đối với `origin`, sạch sẽ, không phân nhánh dư thừa.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N4.2.2** — Thiết lập file kiểm thử `tests/unit_tests/test_pbt_fraction.py`:
+  - *Bằng chứng / File:* [`tests/unit_tests/test_pbt_fraction.py`](../tests/unit_tests/test_pbt_fraction.py).
+  - *Kỹ thuật:* Nạp linh hoạt qua `importlib.util` để cô lập khỏi chuỗi import SQLAlchemy trong `parser_services/__init__.py`. Kế thừa profile Hypothesis từ `tests/conftest.py`.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N4.2.3** — Hiện thực 6 nhóm kiểm thử PBT Property 5 & ca biên (28 test cases):
+  - **P5a:** Bảo toàn giá trị phân số thông thường (`n/d`) với sinh mẫu `st.integers(1, 999)`.
+  - **P5b:** Chuyển đổi và trích xuất chuẩn hóa toàn bộ 18 ký tự phân số Unicode (`¼`, `½`, `¾`, `⅐`, `⅑`, `⅒`, `⅓`, `⅔`, `⅕`, `⅖`, `⅗`, `⅘`, `⅙`, `⅚`, `⅛`, `⅜`, `⅝`, `⅞`).
+  - **P5c:** Bảo toàn giá trị hỗn số Unicode (`w½`, `w ½`).
+  - **P5d:** Bảo toàn giá trị hỗn số ASCII (`w n/d`).
+  - **P5e:** Bảo toàn văn bản tên nguyên liệu đi kèm (Remaining text preservation).
+  - **P5f:** Tính lũy đẳng của hàm chuẩn hóa ($f(f(x)) == f(x)$).
+  - **P5g:** Ca biên (tử số 0, mẫu số 0 an toàn không crash, chuỗi rỗng, chuỗi không số, số thập phân).
+  - *Việc còn thiếu:* Không.
+
+- [x] **N4.2.4** — Đóng gói và xác minh Docker Test Runner độc lập:
+  - *Bằng chứng / File:* [`Dockerfile.test`](../Dockerfile.test) và [`docker-compose.test.yml`](../docker-compose.test.yml).
+  - *Cơ chế:* Chạy test trong môi trường container `python:3.14-slim` độc lập, mount mã nguồn, trả exit code thật về host.
+  - *Kết quả thực thi thực tế trong Docker:*
+    - Lệnh thực thi: `docker compose -f docker-compose.test.yml run --rm test-runner`
+    - Kết quả kiểm thử: **28/28 test cases PASSED** trong `1.71s` (Exit code: **0**). Lưu ý: Chỉ xác nhận suite Property 5 trong Docker, chưa kiểm chứng toàn bộ test suite khác của dự án.
+    - Lệnh đo coverage trong Docker: `docker compose -f docker-compose.test.yml run --rm test-runner pytest tests/unit_tests/test_pbt_fraction.py -v --cov=mealie_string_utils --cov-report=term-missing`
+    - Kết quả coverage trong Docker: **86%** trên `string_utils.py` (56 statements, 8 miss, Exit code: **0**).
+  - *Việc còn thiếu:* Không.
+
+- [x] **N4.2.5** — Thực thi kiểm thử và đo Coverage thực tế:
+  - *Lệnh chạy:* `pytest tests/unit_tests/test_pbt_fraction.py -v --cov=mealie_string_utils --cov-report=term-missing`
+  - *Kết quả thực tế:* **28/28 test cases PASSED (100%)** trong `0.60s` trên host (1.71s trong Docker).
+  - *Coverage đạt được:* **86%** trên file mục tiêu `string_utils.py` (56 statements, chỉ miss các dòng thuộc P1 của Phước). Khi chạy phối hợp với P1 (`test_pbt_string_utils.py`), độ bao phủ đạt **91%**.
+  - *Việc còn thiếu:* Không.
+
+- [x] **N4.2.6** — Bàn giao Git và Pull Request:
+  - *Bằng chứng / Git:* Toàn bộ 4 file N4 (`test_pbt_fraction.py`, `Dockerfile.test`, `docker-compose.test.yml`, `Documents/tien_do_Nam.md`) đã được commit an toàn trong `1920f50`, tích hợp đầy đủ vào nhánh chính `2312695-NguyenPhamPhuNam-Phan1` và push lên GitHub.
+  - *Trạng thái PR:* PR #10 tạm thời đã được đóng (`CLOSED`), không còn duy trì nhánh riêng.
+  - *Việc còn thiếu:* Không.
+
+---
+
+## 5. BẰNG CHỨNG KIỂM CHỨNG THỰC NGHIỆM ĐỘC LẬP (MÔI TRƯỜNG SẠCH)
+
+Thực hiện kiểm chứng độc lập trên container `mealie-verify-clean` (cổng 9935, named volume hoàn toàn mới `mealie-verify-clean-volume`) để đảm bảo không phụ thuộc vào bất kỳ dữ liệu cũ nào:
+
+### 5.1. Quy trình cài đặt mới và kiểm chứng phân quyền RBAC (Yêu cầu 1 & 4)
+- **Quy trình:**
+  1. Khởi động container Mealie v3.28.0 SQLite với named volume mới trên cổng host `9935`.
+  2. Đăng nhập tài khoản ban đầu `changeme@example.com` / `MyPassword` (`HTTP 200`).
+  3. Tạo tài khoản Quản trị viên `admin@nhom6.test` (`admin: True`) qua `POST /api/admin/users` (`HTTP 201`).
+  4. Tạo tài khoản người dùng thường `test@nhom6.test` (`admin: False`) qua `POST /api/admin/users` (`HTTP 201`).
+- **Kết quả đo đạc phân quyền qua API:**
+  - `admin@nhom6.test`: admin flag = `True`. Gọi `GET /api/admin/users` -> **HTTP 200 OK** (trả về danh sách 3 tài khoản).
+  - `test@nhom6.test`: admin flag = `False`. Gọi `GET /api/admin/users` -> **HTTP 403 Forbidden** (`{"detail":"Forbidden"}`).
+  - `test@nhom6.test` gọi `POST /api/admin/users` (thử tạo user mới) -> **HTTP 403 Forbidden** (`{"detail":"Forbidden"}`).
+  - *Kết luận:* Cơ chế RBAC kiểm soát quyền hạn chính xác; tài khoản thường không thể truy cập tài nguyên quản trị.
+
+### 5.2. Kiểm chứng tính Idempotent của Seed Script qua 2 lần chạy liên tiếp (Yêu cầu 3)
+Chạy script `seed_data.py` hai lần liên tiếp trên môi trường sạch và truy vấn trực tiếp API:
+
+| Đối tượng đo đạc | Sau Lần 1 | Sau Lần 2 | Độ lệch (Tăng thêm) | Đánh giá |
+|---|:---:|:---:|:---:|:---:|
+| **Số tài khoản mẫu** | 3 users | 3 users | **+0** | Giữ nguyên danh sách người dùng |
+| **Số công thức NAM** | 10 công thức | 10 công thức | **+0** | Không nhân đôi bản ghi (`NAM-01`..`NAM-10`) |
+| **Số mục thực đơn** | 14 bữa ăn | 14 bữa ăn | **+0** | 7 ngày x 2 bữa không phát sinh trùng lặp |
+
+*Kết luận:* Script seed đạt 100% tính lũy đẳng (idempotent), tự động đối chiếu slug và ngày trước khi ghi.
+
+### 5.3. Kiểm chứng định lượng Servings Scaling của NAM-10 (Yêu cầu 4)
+- **Công thức:** `NAM-10 Bò Sốt Tiêu Khẩu Phần Chuẩn` (khẩu phần mặc định: 4 servings).
+- **Hệ số scale:** Đổi từ 4 lên 8 servings ($k = 8 / 4 = 2.0\times$).
+- **Định lượng trước/sau:**
+  - Thịt bò (Beef): `400 grams` -> `800 grams` ($2.0\times$).
+  - Tiêu đen (Black pepper): `2 tablespoons` -> `4 tablespoons` ($2.0\times$).
+  - Nước dùng bò (Beef broth): `1/2 cup` (`0.5 cup`) -> `1 cup` ($2.0\times$).
+  - Tỏi (Garlic): `4 cloves` -> `8 cloves` ($2.0\times$).
+- *Kết luận:* Giao diện Mealie tính toán tỷ lệ nhân 2 chính xác cho tất cả 4 nguyên liệu, khớp 100% với file ảnh minh chứng ngoại tuyến `06_servings_scale.png`.
+
+### 5.4. Đối chiếu 6 ảnh minh chứng trực tiếp (Yêu cầu 2)
+1. `01_mealie_landing.png`: Giao diện Sign In Mealie v3.28.0 chuẩn.
+2. `02_mealie_dashboard.png`: Dashboard người dùng Quản trị viên nhóm 6.
+3. `03_meal_plan.png`: Thực đơn 7 ngày tuần 06/10–12/10 (bữa sáng + tối).
+4. `04_recipe_import.png`: Import thành công món Phở Bò Hà Nội từ mock server cục bộ qua JSON-LD.
+5. `05_ingredient_parse.png`: Bóc tách `1 onion (finely chopped)` trong `NAM-08 Súp Hành Tây Pháp` thành `Qty=1`, `Unit=None`, `Food=onion`, `Note=finely chopped` (Confidence: 100.00%). Khớp ảnh thật.
+6. `06_servings_scale.png`: Món `NAM-10 Bò Sốt Tiêu Khẩu Phần Chuẩn` scale từ 4 lên 8 servings, nhân đôi 4 nguyên liệu. Khớp ảnh thật.
+
+### 5.5. Kết luận trạng thái nghiệm thu Phần 1 (Yêu cầu 5)
+- **Phần đã tự kiểm tra thực nghiệm đạt (27/27 mục hoàn thành phần việc của Nam):**
+  - Nhóm việc N1: Môi trường Docker Mealie SQLite v3.28.0, Admin setup, 2 ảnh minh chứng Landing/Dashboard (8/8 mục).
+  - Nhóm việc N2: Seed data 10 món NAM, thực đơn 7 ngày, 4 ảnh minh chứng 3 luồng, idempotent test đạt +0, scaling chính xác (7/7 mục).
+  - Nhóm việc N3: Tài liệu On-boarding C.1 đến C.5 đầy đủ, kết quả thực nghiệm môi trường sạch C.4.4, đã bàn giao và tiếp nhận biên bản phản hồi từ Hiếu (4/4 mục hoàn thành phần việc của Nam).
+  - Nhóm việc N4: Nghiên cứu P5, viết 28 test cases PBT, chạy 28/28 PASS, coverage 86%, Docker Test Runner độc lập (chạy P5 PASS 100%, exit code 0), bàn giao Git đầy đủ trên nhánh chính `2312695-NguyenPhamPhuNam-Phan1` (8/8 mục).
+- **Ghi chú nghiệm thu:**
+  - **N3.1.3:** Nam đã hoàn thành việc bàn giao và tiếp nhận biên bản phản hồi từ Hiếu (`Documents/bien_ban_tham_dinh_cheo_onboarding.md`). Phần nghiệm thu chính thức phía Hiếu vẫn chờ xác nhận chéo cuối cùng tại buổi họp nhóm theo quy trình.

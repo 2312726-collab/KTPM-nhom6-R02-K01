@@ -1,0 +1,60 @@
+# ==============================================================================
+# Dockerfile cho Test Runner — Đồ án Kiểm thử Phần mềm (Nhóm 6)
+# Mealie v3.28.0 + Property-Based Testing (Hypothesis)
+#
+# TRƯỚC KHI BUILD: mealie_src/ phải có sẵn trên host
+#   git clone https://github.com/mealie-recipes/mealie.git mealie_src
+#   cd mealie_src && git checkout 0552eaa4a80031b8572849cca0ed95d07f1be001 && cd ..
+#
+# Build image:
+#   docker compose -f docker-compose.test.yml build test-runner
+#
+# Chạy P5 riêng:
+#   docker compose -f docker-compose.test.yml run --rm test-runner
+#
+# Chạy toàn bộ suite:
+#   docker compose -f docker-compose.test.yml run --rm test-runner pytest tests/ -v --tb=long
+# ==============================================================================
+
+# Dùng Python 3.14-slim đồng bộ chính xác với Mealie v3.28.0 (requires-python >=3.14,<3.15)
+FROM python:3.14-slim
+
+LABEL maintainer="2312695-netizen"
+LABEL description="KTPM Nhom6 - PBT Test Runner for Mealie v3.28.0"
+LABEL mealie.version="v3.28.0"
+LABEL mealie.sha="0552eaa4a80031b8572849cca0ed95d07f1be001"
+
+# Không tạo .pyc và dùng cấu hình môi trường test sạch cho Mealie
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV TESTING=true
+ENV PRODUCTION=false
+ENV DATA_DIR=/tmp/mealie-test-data
+
+WORKDIR /app
+
+# Tạo thư mục DATA_DIR tạm có quyền ghi cho logger/app_dirs khi mealie_src mount :ro
+RUN mkdir -p /tmp/mealie-test-data
+
+# Sao chép requirements trước để tận dụng Docker layer cache
+COPY requirements-test.txt .
+
+# Cài đầy đủ dependencies kiểm thử + Mealie runtime tối thiểu cho cả 5 Properties
+RUN pip install --no-cache-dir -r requirements-test.txt
+
+# Sao chép cấu hình pytest
+COPY pytest.ini .
+
+# Sao chép toàn bộ tests/
+COPY tests/ tests/
+
+# Sao chép đầy đủ mã nguồn backend Mealie thật cần thiết cho cả 5 Properties
+# (bao gồm schema/, services/, lang/, db/, pkgs/, core/, repos/, assets/ cùng các __init__.py thật)
+# (mealie_src/ bị .gitignore — phải có sẵn trên host ở SHA 0552eaa4a80031b8572849cca0ed95d07f1be001 trước khi build)
+COPY mealie_src/mealie/ mealie_src/mealie/
+
+# Thêm mealie_src vào PYTHONPATH (tương tự pytest.ini pythonpath = . mealie_src)
+ENV PYTHONPATH="/app:/app/mealie_src"
+
+# Mặc định: chạy P5 với marker pbt, truyền exit code thật (không || true)
+CMD ["pytest", "tests/unit_tests/test_pbt_fraction.py", "-v", "--tb=long", "-m", "pbt"]
